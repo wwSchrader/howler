@@ -23,8 +23,19 @@ router.put('/register', (req: express.Request, res: express.Response) => {
       });
       return newUser.save((err) => {
         if (err) {
-          console.log(err);
-          res.status(200).json({ registrationStatus: false, reason: 'Some reason' });
+          console.log(err.errors.username.message);
+          let reasonMessage = null;
+          if (err.name === 'ValidationError') {
+            if (err.errors.username) {
+              reasonMessage = err.errors.username.message;
+            } else if (err.errors.email) {
+              reasonMessage = err.errors.email.message;
+            }
+          } else {
+            reasonMessage = 'Database error';
+          }
+
+          res.status(200).json({ registrationStatus: false, reason: reasonMessage });
         } else {
           console.log('User Saved');
           res.status(200).json({ registrationStatus: true });
