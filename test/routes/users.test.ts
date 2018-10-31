@@ -96,4 +96,29 @@ describe('User Registration', () => {
       })
       .catch((err: any) => done(err));
   });
+
+  it('register with no email', (done) => {
+    requester
+      .put('/api/users/register')
+      .set('content-type', 'application/x-www-form-urlencoded')
+      .send({
+        username: newUser.username,
+        email: null,
+        password: newUser.password,
+      })
+      .then((res: any) => {
+        should.exist(res);
+        res.should.have.status(200);
+        res.should.have.property('body');
+        res.body.should.be.an('object');
+        res.body.should.have.property('registrationStatus');
+        res.body.registrationStatus.should.be.a('boolean');
+        res.body.registrationStatus.should.equal(false);
+        res.body.should.have.property('reason');
+        res.body.reason.should.be.a('string');
+        res.body.reason.should.equal('Email is required!');
+        done();
+      })
+      .catch((err: any) => done(err));
+  });
 });

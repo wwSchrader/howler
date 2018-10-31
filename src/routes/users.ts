@@ -23,7 +23,7 @@ router.put('/register', (req: express.Request, res: express.Response) => {
       });
       return newUser.save((err) => {
         if (err) {
-          console.log(err.errors.username.message);
+          console.log(err.errors);
           let reasonMessage = null;
           if (err.name === 'ValidationError') {
             if (err.errors.username) {
