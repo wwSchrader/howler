@@ -9,7 +9,6 @@ router.put('/register', (req: express.Request, res: express.Response) => {
       console.log('username is already taken');
       res.status(200).json({ registrationStatus: false, reason: 'Username already taken!' });
     } else if (!req.body.password || req.body.password.length === 0) {
-      console.log('no password');
       res.status(200).json({ registrationStatus: false, reason: 'Need a password' });
     } else {
       const newUser = new User({
@@ -23,7 +22,6 @@ router.put('/register', (req: express.Request, res: express.Response) => {
       });
       return newUser.save((err) => {
         if (err) {
-          console.log(err.errors);
           let reasonMessage = null;
           if (err.name === 'ValidationError') {
             if (err.errors.username) {
@@ -37,7 +35,6 @@ router.put('/register', (req: express.Request, res: express.Response) => {
 
           res.status(200).json({ registrationStatus: false, reason: reasonMessage });
         } else {
-          console.log('User Saved');
           res.status(200).json({ registrationStatus: true });
         }
       });
