@@ -10,9 +10,10 @@
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
     "watch-ts": "tsc -w",
     "watch-node": "nodemon ./build/src/server.js",
-    "test": "mocha --require ts-node/register test/**/*.ts"
+    "test": "mocha --require ts-node/register test/**/*.ts --timeout 10000"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "connect-redis": "^3.4.0",
     "dotenv": "^6.1.0",
@@ -24,6 +25,7 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.6",
     "@types/chai-http": "^3.0.5",
     "@types/connect-flash": "^0.0.34",
