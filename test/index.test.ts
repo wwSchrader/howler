@@ -8,4 +8,7 @@ const importTest: (name: string, path: string) => void = (name: string, path: st
 
 describe('index', () => {
   importTest('User Route', './routes/users.test');
+  after(async () => {
+    await mongoose.disconnect();
+  });
 });
