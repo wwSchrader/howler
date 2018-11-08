@@ -13,12 +13,25 @@ const newUser = {
   password: 'newUserPassword123',
 };
 
+// existing user info
+const existingUser = {
+  username: 'existingUser987',
+  email: 'existingUserEmail@yahoo.com',
+  authentication: {
+    local: {
+      password: 'existingUserPassword546',
+    },
+  },
+};
+
 describe('User Registration', () => {
   let requester: any = null;
 
   beforeEach(async () => {
     // start server before each test
     requester = await chai.request(app).keepOpen();
+    const newExistingUser = new User(existingUser);
+    await newExistingUser.save();
   });
 
   afterEach(async () => {
@@ -117,6 +130,30 @@ describe('User Registration', () => {
         res.body.should.have.property('reason');
         res.body.reason.should.be.a('string');
         res.body.reason.should.equal('Email is required!');
+        done();
+      })
+      .catch((err: any) => done(err));
+  });
+
+  it('attempt to register with existing username', (done) => {
+    requester
+      .put('/api/users/register')
+      .set('content-type', 'application/x-www-form-urlencoded')
+      .send({
+        username: existingUser.username,
+        email: existingUser.email,
+        password: existingUser.authentication.local.password,
+      })
+      .then((res: any) => {
+        should.exist(res);
+        res.should.have.status(200);
+        res.should.have.property('body');
+        res.body.should.be.an('object');
+        res.body.should.have.property('registrationStatus');
+        res.body.registrationStatus.should.be.a('boolean');
+        res.body.should.have.property('reason');
+        res.body.reason.should.be.a('string');
+        res.body.reason.should.equal('Username already taken!');
         done();
       })
       .catch((err: any) => done(err));
