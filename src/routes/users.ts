@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import { default as User } from '../models/user';
 import bcrypt from 'bcrypt';
+import passport from 'passport';
 const saltRounds = 10;
 
 const router = express.Router();
@@ -50,5 +51,19 @@ router.put('/register', (req: express.Request, res: express.Response) => {
     res.status(200).json({ registrationStatus: false, reason: 'Error in search' });
   });
 });
+
+router.post(
+  '/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+      if (!user) {
+        res.status(401).json({ isLoggedIn: false, authMessage: info.authMessage });
+      } else if (!err && user) {
+        res.json({ isLoggedIn: true });
+      } else {
+        res.status(500).send();
+      }
+    })(req, res, next);
+  },
+);
 
 export const users: Router = router;

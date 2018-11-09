@@ -1,11 +1,12 @@
-import connectFlash from 'connect-flash';
 import connectRedis = require('connect-redis');
+import cookieParser from 'cookie-parser';
 import 'dotenv';
 import express from 'express';
 import expressSession from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import { default as User } from './models/user';
+import bcrypt from 'bcrypt';
 
 const REDIS_STORE = connectRedis(expressSession);
 const LOCAL_STRATEGY = passportLocal.Strategy;
@@ -16,9 +17,11 @@ export const setupPassport: (app: express.Application) => void = (app: express.A
     saveUninitialized: false,
     secret: process.env.SESSION_SECRET as string,
     store: new REDIS_STORE({
-      url: process.env.REDIS_URL as string,
+      url: process.env.PORT,
     }),
   }));
+
+  app.use(cookieParser());
 
   passport.serializeUser<any, any>((user, done) => {
     done(undefined, user._id);
@@ -30,26 +33,34 @@ export const setupPassport: (app: express.Application) => void = (app: express.A
     });
   });
 
-  app.use(connectFlash());
   app.use(passport.initialize());
   app.use(passport.session());
 
   /**
    * Sign in using Email and Password.
    */
-  passport.use(new LOCAL_STRATEGY({ usernameField: 'email' }, (email, password, done) => {
-    User.findOne({ email: email.toLowerCase() }, (err, user: any) => {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(undefined, false, { message: `Email ${email} not found.` });
-      }
-      user.comparePassword(password, (errObj: Error, isMatch: boolean) => {
-        if (errObj) { return done(errObj); }
-        if (isMatch) {
-          return done(undefined, user);
+  passport.use(new LOCAL_STRATEGY(
+    { passReqToCallback: true }, (req: any, usernm: string, password: string, done: any) => {
+      User.findOne({ username: usernm }, (err, user: any) => {
+        if (err) { return done(err); }
+        if (!user) {
+          console.log('username not found');
+          return done(undefined, false, { authMessage: 'Username not found!' });
         }
-        return done(undefined, false, { message: 'Invalid email or password.' });
+        bcrypt.compare(password, user.authentication.local.password)
+        .then((res) => {
+          if (res) {
+            console.log('username and password match');
+            return done(undefined, user);
+          }
+          console.log('"password not found"');
+          return done(undefined, false, { authMessage: 'Incorrect password!' });
+        })
+        .catch((error: any) => {
+          console.log('"Error in authentication!"');
+          return done(error);
+        });
       });
-    });
-  }));
+    }),
+  );
 };
