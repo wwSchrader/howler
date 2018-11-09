@@ -243,4 +243,20 @@ describe('User Registration', () => {
       })
       .catch((err: any) => done(err));
   });
+
+  it('logout user', (done) => {
+    requester
+      .get('/api/users/logout')
+      .then((res: any) => {
+        should.exist(res);
+        res.should.have.status(200);
+        res.should.have.property('body');
+        res.body.should.be.an('object');
+        res.body.should.have.property('isLoggedIn');
+        res.body.isLoggedIn.should.be.a('boolean');
+        res.body.isLoggedIn.should.equal(false);
+        done();
+      })
+      .catch((err: any) => done(err));
+  });
 });

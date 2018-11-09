@@ -66,4 +66,9 @@ router.post(
   },
 );
 
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.json({ isLoggedIn: false });
+});
+
 export const users: Router = router;
