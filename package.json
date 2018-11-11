@@ -10,7 +10,7 @@
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
     "watch-ts": "tsc -w",
     "watch-node": "set DEBUG=express:* & nodemon ./build/src/server.js",
-    "test": "mocha --require ts-node/register test/**/*.ts"
+    "test": "mocha --require ts-node/register test/**/*.ts --exit"
   },
   "dependencies": {
     "bcrypt": "^3.0.2",

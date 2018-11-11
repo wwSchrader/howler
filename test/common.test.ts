@@ -1,7 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../src/server';
-import user from '../src/models/user';
 
 chai.use(chaiHttp);
 
@@ -15,5 +14,4 @@ export {
   assert,
   expect,
   should,
-  user,
 };
