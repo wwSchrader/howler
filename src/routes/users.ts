@@ -1,8 +1,8 @@
 import express, { Router } from 'express';
 import { default as User } from '../models/user';
 import bcrypt from 'bcrypt';
-import passport from 'passport';
-const saltRounds = 10;
+import { passport } from '../component-passport';
+const saltRounds = 12;
 
 const router = express.Router();
 
@@ -10,39 +10,40 @@ router.put('/register', (req: express.Request, res: express.Response) => {
   User.findOne({ username: req.body.username })
   .then((returnedUser) => {
     if (returnedUser) {
-      console.log('username is already taken');
       res.status(200).json({ registrationStatus: false, reason: 'Username already taken!' });
     } else if (!req.body.password || req.body.password.length === 0) {
-      res.status(200).json({ registrationStatus: false, reason: 'Need a password' });
+      res.status(200).json({ registrationStatus: false, reason: 'Need a password!' });
     } else {
       return bcrypt.hash(req.body.password, saltRounds)
       .then((hashedPassword) => {
-        const newUser = new User({
-          username: req.body.username,
-          email: req.body.email,
-          authentication: {
-            local: {
-              password: hashedPassword,
+        return User.create(
+          {
+            username: req.body.username,
+            email: req.body.email,
+            authentication: {
+              local: {
+                password: hashedPassword,
+              },
             },
           },
-        });
-        return newUser.save((err) => {
-          if (err) {
-            let reasonMessage = null;
-            if (err.name === 'ValidationError') {
-              if (err.errors.username) {
-                reasonMessage = err.errors.username.message;
-              } else if (err.errors.email) {
-                reasonMessage = err.errors.email.message;
-              }
-            } else {
-              reasonMessage = 'Database error';
+        );
+      })
+      .then((err: any) => {
+        if (err) {
+          let reasonMessage = null;
+          if (err.name === 'ValidationError') {
+            if (err.errors.username) {
+              reasonMessage = err.errors.username.message;
+            } else if (err.errors.email) {
+              reasonMessage = err.errors.email.message;
             }
-            res.status(200).json({ registrationStatus: false, reason: reasonMessage });
           } else {
-            res.status(200).json({ registrationStatus: true });
+            reasonMessage = 'Database error';
           }
-        });
+          res.status(200).json({ registrationStatus: false, reason: reasonMessage });
+        } else {
+          res.status(200).json({ registrationStatus: true });
+        }
       });
     }
   })

@@ -1,262 +1,359 @@
-import mongoose from 'mongoose';
 import * as common from '../common.test';
-import bcrypt from 'bcrypt';
+import sinon, { SinonStub } from 'sinon';
+import { passport } from '../../src/component-passport';
+import { default as User } from '../../src/models/user';
 
 const app = common.server;
 const chai = common.chai;
 const should = common.should;
-const User = common.user;
-const saltRounds = 10;
-
-// new user info for testing
-const newUser = {
-  username: 'newUser123',
-  email: 'newUserEmail@gmail.com',
-  password: 'newUserPassword123',
-};
-
-// existing user info
-const existingUser = {
-  username: 'existingUser987',
-  email: 'existingUserEmail@yahoo.com',
-  authentication: {
-    local: {
-      password: 'existingUserPassword546',
-    },
-  },
-};
 
 describe('User Registration', () => {
   let requester: any = null;
+  let authenticate: SinonStub;
 
-  beforeEach((done) => {
-    // start server before each test
-    bcrypt.hash(existingUser.authentication.local.password, saltRounds)
-      .then((hashedPassword) => {
-        const existUser = new User({
-          username: existingUser.username,
-          email: existingUser.email,
-          authentication: {
-            local: {
-              password: hashedPassword,
-            },
-          },
+  before(async () => {
+    requester = await chai.request(app).keepOpen();
+  });
+
+  beforeEach(() => {
+    authenticate = sinon.stub(passport, 'authenticate').returns(() => undefined);
+  });
+
+  after(() => {
+    requester.close();
+  });
+
+  afterEach(() => {
+    authenticate.restore();
+  });
+
+  describe('PUT /api/users/register', () => {
+    let findOneQuery: SinonStub;
+    let createUser: SinonStub;
+
+    beforeEach(() => {
+      findOneQuery = sinon.stub(User, 'findOne').resolves(null);
+      createUser = sinon.stub(User, 'create').resolves(null);
+    });
+
+    afterEach(() => {
+      findOneQuery.restore();
+      createUser.restore();
+    });
+
+    it('register a user normally', (done) => {
+      const newUser = {
+        username: 'newUser',
+        password: 'password123',
+        email: 'newUser42@gmail.com',
+      };
+      requester
+        .put('/api/users/register')
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .send(newUser)
+        .then((res: any) => {
+          should.exist(res);
+          res.should.have.status(200);
+          res.should.have.property('body');
+          res.body.should.be.an('object');
+          res.body.should.have.property('registrationStatus');
+          res.body.registrationStatus.should.be.a('boolean');
+          res.body.registrationStatus.should.equal(true);
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
         });
-        return existUser.save();
-      })
-      .then(() => {
-        return requester = chai.request(app).keepOpen();
-      })
-      .then(() => done());
+    });
   });
 
-  afterEach(async () => {
-    // close database and server after each test
-    await mongoose.connection.db.dropDatabase();
-    await requester.close();
-  });
+  describe('PUT /api/users/register', () => {
+    let findOneQuery: SinonStub;
 
-  it('register a user normally', (done) => {
-    requester
-      .put('/api/users/register')
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send(newUser)
-      .then((res: any) => {
-        should.exist(res);
-        res.should.have.status(200);
-        res.should.have.property('body');
-        res.body.should.be.an('object');
-        res.body.should.have.property('registrationStatus');
-        res.body.registrationStatus.should.be.a('boolean');
-        res.body.registrationStatus.should.equal(true);
-        done();
-      })
-      .catch((err: any) => {
-        done(err);
-      });
-  });
+    beforeEach(() => {
+      findOneQuery = sinon.stub(User, 'findOne').resolves(null);
+    });
 
-  it('register with no password', (done) => {
-    requester
-      .put('/api/users/register')
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send({
-        username: newUser.username,
-        email: newUser.email,
+    afterEach(() => {
+      findOneQuery.restore();
+    });
+
+    it('register with no password', (done) => {
+      const newUser = {
+        username: 'newUser',
         password: '',
-      })
-      .then((res: any) => {
-        should.exist(res);
-        res.should.have.status(200);
-        res.should.have.property('body');
-        res.body.should.be.an('object');
-        res.body.should.have.property('registrationStatus');
-        res.body.registrationStatus.should.be.a('boolean');
-        res.body.registrationStatus.should.equal(false);
-        res.body.should.have.property('reason');
-        res.body.reason.should.be.a('string');
-        res.body.reason.should.equal('Need a password');
-        done();
-      })
-      .catch((err: any) => done(err));
+        email: 'newUser42@gmail.com',
+      };
+      requester
+        .put('/api/users/register')
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .send(newUser)
+        .then((res: any) => {
+          should.exist(res);
+          res.should.have.status(200);
+          res.should.have.property('body');
+          res.body.should.be.an('object');
+          res.body.should.have.property('registrationStatus');
+          res.body.registrationStatus.should.be.a('boolean');
+          res.body.registrationStatus.should.equal(false);
+          res.body.should.have.property('reason');
+          res.body.reason.should.be.a('string');
+          res.body.reason.should.equal('Need a password!');
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
+        });
+    });
   });
 
-  it('register with no username', (done) => {
-    requester
-      .put('/api/users/register')
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send({
-        username: null,
-        email: newUser.email,
-        password: newUser.password,
-      })
-      .then((res: any) => {
-        should.exist(res);
-        res.should.have.status(200);
-        res.should.have.property('body');
-        res.body.should.be.an('object');
-        res.body.should.have.property('registrationStatus');
-        res.body.registrationStatus.should.be.a('boolean');
-        res.body.registrationStatus.should.equal(false);
-        res.body.should.have.property('reason');
-        res.body.reason.should.be.a('string');
-        res.body.reason.should.equal('Username is required!');
-        done();
-      })
-      .catch((err: any) => done(err));
+  describe('PUT /api/users/register', () => {
+    let findOneQuery: SinonStub;
+    let createUser: SinonStub;
+
+    beforeEach(() => {
+      findOneQuery = sinon.stub(User, 'findOne').resolves(null);
+      createUser = sinon.stub(User, 'create').resolves(
+        { name: 'ValidationError', errors: { email: { message: 'Username is required!' } } },
+      );
+    });
+
+    afterEach(() => {
+      findOneQuery.restore();
+      createUser.restore();
+    });
+
+    it('register with no username', (done) => {
+      const newUser = {
+        username: '',
+        password: 'password123',
+        email: 'newUser42@gmail.com',
+      };
+      requester
+        .put('/api/users/register')
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .send(newUser)
+        .then((res: any) => {
+          should.exist(res);
+          res.should.have.status(200);
+          res.should.have.property('body');
+          res.body.should.be.an('object');
+          res.body.should.have.property('registrationStatus');
+          res.body.registrationStatus.should.be.a('boolean');
+          res.body.registrationStatus.should.equal(false);
+          res.body.should.have.property('reason');
+          res.body.reason.should.be.a('string');
+          res.body.reason.should.equal('Username is required!');
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
+        });
+    });
   });
 
-  it('register with no email', (done) => {
-    requester
-      .put('/api/users/register')
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send({
-        username: newUser.username,
-        email: null,
-        password: newUser.password,
-      })
-      .then((res: any) => {
-        should.exist(res);
-        res.should.have.status(200);
-        res.should.have.property('body');
-        res.body.should.be.an('object');
-        res.body.should.have.property('registrationStatus');
-        res.body.registrationStatus.should.be.a('boolean');
-        res.body.registrationStatus.should.equal(false);
-        res.body.should.have.property('reason');
-        res.body.reason.should.be.a('string');
-        res.body.reason.should.equal('Email is required!');
-        done();
-      })
-      .catch((err: any) => done(err));
+  describe('PUT /api/users/register', () => {
+    let findOneQuery: SinonStub;
+    let createUser: SinonStub;
+
+    beforeEach(() => {
+      findOneQuery = sinon.stub(User, 'findOne').resolves(null);
+      createUser = sinon.stub(User, 'create').resolves(
+        { name: 'ValidationError', errors: { email: { message: 'Email is required!' } } },
+      );
+    });
+
+    afterEach(() => {
+      findOneQuery.restore();
+      createUser.restore();
+    });
+
+    it('register with no email', (done) => {
+      const newUser = {
+        username: 'newUser42',
+        password: 'password123',
+        email: '',
+      };
+      requester
+        .put('/api/users/register')
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .send(newUser)
+        .then((res: any) => {
+          should.exist(res);
+          res.should.have.status(200);
+          res.should.have.property('body');
+          res.body.should.be.an('object');
+          res.body.should.have.property('registrationStatus');
+          res.body.registrationStatus.should.be.a('boolean');
+          res.body.registrationStatus.should.equal(false);
+          res.body.should.have.property('reason');
+          res.body.reason.should.be.a('string');
+          res.body.reason.should.equal('Email is required!');
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
+        });
+    });
   });
 
-  it('attempt to register with existing username', (done) => {
-    requester
-      .put('/api/users/register')
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send({
-        username: existingUser.username,
-        email: existingUser.email,
-        password: existingUser.authentication.local.password,
-      })
-      .then((res: any) => {
-        should.exist(res);
-        res.should.have.status(200);
-        res.should.have.property('body');
-        res.body.should.be.an('object');
-        res.body.should.have.property('registrationStatus');
-        res.body.registrationStatus.should.be.a('boolean');
-        res.body.should.have.property('reason');
-        res.body.reason.should.be.a('string');
-        res.body.reason.should.equal('Username already taken!');
-        done();
-      })
-      .catch((err: any) => done(err));
+  describe('PUT /api/users/register', () => {
+    let findOneQuery: SinonStub;
+
+    beforeEach(() => {
+      findOneQuery = sinon.stub(User, 'findOne').resolves({ username: 'newUser' });
+    });
+
+    afterEach(() => {
+      findOneQuery.restore();
+    });
+
+    it('should fail at registering with existing username', (done) => {
+      const newUser = {
+        username: 'newUser',
+        password: 'password123',
+        email: 'newUser42@gmail.com',
+      };
+      requester
+        .put('/api/users/register')
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .send(newUser)
+        .then((res: any) => {
+          should.exist(res);
+          res.should.have.status(200);
+          res.should.have.property('body');
+          res.body.should.be.an('object');
+          res.body.should.have.property('registrationStatus');
+          res.body.registrationStatus.should.be.a('boolean');
+          res.body.registrationStatus.should.equal(false);
+          res.body.should.have.property('reason');
+          res.body.reason.should.be.a('string');
+          res.body.reason.should.equal('Username already taken!');
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
+        });
+    });
   });
 
-  it('login user', (done) => {
-    requester
-      .post('/api/users/login')
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send({
-        username: existingUser.username,
-        password: existingUser.authentication.local.password,
-      })
-      .then((res: any) => {
-        should.exist(res);
-        res.should.have.status(200);
-        res.should.have.property('body');
-        res.body.should.be.an('object');
-        res.body.should.have.property('isLoggedIn');
-        res.body.isLoggedIn.should.be.a('boolean');
-        res.body.isLoggedIn.should.equal(true);
-        done();
-      })
-      .catch((err: any) => done(err));
+  describe('POST /api/users/login', () => {
+
+    beforeEach(() => {
+      authenticate.yields(null, { id: 1 });
+    });
+
+    it('should login user', (done) => {
+      const newUser = {
+        username: 'newUser',
+        password: 'password123',
+        email: 'newUser42@gmail.com',
+      };
+      requester
+        .post('/api/users/login')
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .send(newUser)
+        .then((res: any) => {
+          should.exist(res);
+          res.should.have.status(200);
+          res.should.have.property('body');
+          res.body.should.be.an('object');
+          res.body.should.have.property('isLoggedIn');
+          res.body.isLoggedIn.should.be.a('boolean');
+          res.body.isLoggedIn.should.equal(true);
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
+        });
+    });
   });
 
-  it('attemp login user with wrong password', (done) => {
-    requester
-      .post('/api/users/login')
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send({
-        username: existingUser.username,
-        password: 'wrongpassword',
-      })
-      .then((res: any) => {
-        should.exist(res);
-        res.should.have.status(401);
-        res.should.have.property('body');
-        res.body.should.be.an('object');
-        res.body.should.have.property('isLoggedIn');
-        res.body.isLoggedIn.should.be.a('boolean');
-        res.body.isLoggedIn.should.equal(false);
-        res.body.should.have.property('authMessage');
-        res.body.authMessage.should.be.a('string');
-        res.body.authMessage.should.equal('Incorrect password!');
-        done();
-      })
-      .catch((err: any) => done(err));
+  describe('POST /api/users/login', () => {
+
+    beforeEach(() => {
+      authenticate.yields(null, null, { authMessage: 'Incorrect Password!' });
+    });
+
+    it('should fail to login with wrong password', (done) => {
+      const newUser = {
+        username: 'newUser',
+        password: 'password123',
+        email: 'newUser42@gmail.com',
+      };
+      requester
+        .post('/api/users/login')
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .send(newUser)
+        .then((res: any) => {
+          should.exist(res);
+          res.should.have.status(401);
+          res.should.have.property('body');
+          res.body.should.be.an('object');
+          res.body.should.have.property('isLoggedIn');
+          res.body.isLoggedIn.should.be.a('boolean');
+          res.body.isLoggedIn.should.equal(false);
+          res.body.should.have.property('authMessage');
+          res.body.authMessage.should.be.a('string');
+          res.body.authMessage.should.equal('Incorrect Password!');
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
+        });
+    });
   });
 
-  it('attemp login user with wrong username', (done) => {
-    requester
-      .post('/api/users/login')
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send({
-        username: 'wrongUsername',
-        password: 'wrongpassword',
-      })
-      .then((res: any) => {
-        should.exist(res);
-        res.should.have.status(401);
-        res.should.have.property('body');
-        res.body.should.be.an('object');
-        res.body.should.have.property('isLoggedIn');
-        res.body.isLoggedIn.should.be.a('boolean');
-        res.body.isLoggedIn.should.equal(false);
-        res.body.should.have.property('authMessage');
-        res.body.authMessage.should.be.a('string');
-        res.body.authMessage.should.equal('Username not found!');
-        done();
-      })
-      .catch((err: any) => done(err));
+  describe('POST /api/users/login', () => {
+
+    beforeEach(() => {
+      authenticate.yields(null, null, { authMessage: 'Username not found!' });
+    });
+
+    it('should fail to login with wrong username', (done) => {
+      const newUser = {
+        username: 'newUser',
+        password: 'password123',
+        email: 'newUser42@gmail.com',
+      };
+      requester
+        .post('/api/users/login')
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .send(newUser)
+        .then((res: any) => {
+          should.exist(res);
+          res.should.have.status(401);
+          res.should.have.property('body');
+          res.body.should.be.an('object');
+          res.body.should.have.property('isLoggedIn');
+          res.body.isLoggedIn.should.be.a('boolean');
+          res.body.isLoggedIn.should.equal(false);
+          res.body.should.have.property('authMessage');
+          res.body.authMessage.should.be.a('string');
+          res.body.authMessage.should.equal('Username not found!');
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
+        });
+    });
   });
 
-  it('logout user', (done) => {
-    requester
-      .get('/api/users/logout')
-      .then((res: any) => {
-        should.exist(res);
-        res.should.have.status(200);
-        res.should.have.property('body');
-        res.body.should.be.an('object');
-        res.body.should.have.property('isLoggedIn');
-        res.body.isLoggedIn.should.be.a('boolean');
-        res.body.isLoggedIn.should.equal(false);
-        done();
-      })
-      .catch((err: any) => done(err));
+  describe('GET /api/users/login', () => {
+    it('logout user', (done) => {
+      requester
+        .get('/api/users/logout')
+        .then((res: any) => {
+          should.exist(res);
+          res.should.have.status(200);
+          res.should.have.property('body');
+          res.body.should.be.an('object');
+          res.body.should.have.property('isLoggedIn');
+          res.body.isLoggedIn.should.be.a('boolean');
+          res.body.isLoggedIn.should.equal(false);
+          done();
+        })
+        .catch((err: any) => done(err));
+    });
   });
 });

@@ -11,7 +11,7 @@ import bcrypt from 'bcrypt';
 const REDIS_STORE = connectRedis(expressSession);
 const LOCAL_STRATEGY = passportLocal.Strategy;
 
-export const setupPassport: (app: express.Application) => void = (app: express.Application) => {
+const setupPassport: (app: express.Application) => void = (app: express.Application) => {
   app.use(expressSession({
     resave: false,
     saveUninitialized: false,
@@ -63,4 +63,9 @@ export const setupPassport: (app: express.Application) => void = (app: express.A
       });
     }),
   );
+};
+
+export {
+  setupPassport,
+  passport,
 };
