@@ -1,7 +1,7 @@
 import connectRedis = require('connect-redis');
 import cookieParser from 'cookie-parser';
 import 'dotenv';
-import express from 'express';
+import express, { NextFunction } from 'express';
 import expressSession from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
@@ -65,7 +65,16 @@ const setupPassport: (app: express.Application) => void = (app: express.Applicat
   );
 };
 
+const ensureAuthenticated = (req: any, res: any, next: NextFunction) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  res.sendStatus(401);
+};
+
 export {
   setupPassport,
   passport,
+  ensureAuthenticated,
 };
