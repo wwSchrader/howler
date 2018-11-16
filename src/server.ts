@@ -8,4 +8,4 @@ const server = app.listen(app.get('port'), () => {
   );
 });
 
-export default server;
+module.exports = server;

@@ -1,7 +1,7 @@
-import * as common from '../common.test';
 import { default as Tweet, ITweet } from '../../src/models/tweet';
+import chai from 'chai';
 
-const should = common.should;
+const should = chai.should();
 
 describe('Tweet Model', () => {
   describe('saving a tweet with valid inputs', () => {

@@ -1,8 +1,5 @@
-import * as common from './common.test';
 import sinon, { SinonStub, SinonSpy } from 'sinon';
 import { ensureAuthenticated } from '../src/component-passport';
-
-const should = common.should;
 
 describe('Passport Component', () => {
   describe('Ensure Authenticated handling', () => {

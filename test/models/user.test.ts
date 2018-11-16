@@ -1,7 +1,7 @@
-import * as common from '../common.test';
 import { default as User } from '../../src/models/user';
+import chai from 'chai';
 
-const should = common.should;
+const should = chai.should();
 
 describe('User Model', () => {
   describe('saving with username & email', () => {

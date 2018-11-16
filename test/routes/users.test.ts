@@ -1,17 +1,21 @@
-import * as common from '../common.test';
 import sinon, { SinonStub } from 'sinon';
 import { passport } from '../../src/component-passport';
 import { default as User } from '../../src/models/user';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
 
-const app = common.server;
-const chai = common.chai;
-const should = common.should;
+const should = chai.should();
+
+let app;
+
+chai.use(chaiHttp);
 
 describe('User Registration', () => {
   let requester: any = null;
   let authenticate: SinonStub;
 
   before(async () => {
+    app = require('../../src/server');
     requester = await chai.request(app).keepOpen();
   });
 
