@@ -139,4 +139,54 @@ describe('Tweet Route', () => {
         });
     });
   });
+
+  describe(' GET /api/tweets/all', () => {
+    let getTweet: SinonStub;
+    const firstTweet = {
+      message: 'This tweet is awesome #great @me',
+      ownerId: '123',
+      date: Date.now(),
+      retweetId: null,
+      hashtags: ['#great'],
+      mentions: ['@me'],
+      deleted: false,
+    };
+
+    const secondTweet = {
+      message: 'Antother cool #tweet @anyone',
+      ownerId: '321',
+      date: Date.now(),
+      retweetId: null,
+      hashtags: ['#tweet'],
+      mentions: ['@anyone'],
+      deleted: false,
+    };
+
+    beforeEach(() => {
+      getTweet = sinon.stub(Tweet, 'find').resolves([firstTweet, secondTweet]);
+    });
+
+    afterEach(() => {
+      getTweet.restore();
+    });
+
+    it('get all tweets without error', (done) => {
+      requester
+        .get(`${apiBaseRoute}all`)
+        .then((res: any) => {
+          should.exist(res);
+          res.should.have.status(200);
+          res.should.have.property('body');
+          res.body.should.be.an('object');
+          res.body.should.have.property('tweets');
+          res.body.tweets.should.be.an('array');
+          res.body.tweets[0].should.eql(firstTweet);
+          res.body.tweets[1].should.eql(secondTweet);
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
+        });
+    });
+  });
 });

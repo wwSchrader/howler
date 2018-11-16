@@ -24,4 +24,15 @@ router.put('/add', ensureAuthenticated, (req, res) => {
   });
 });
 
+router.get('/all', (req, res) => {
+  Tweet.find({})
+  .then((tweetArray) => {
+    res.json({ tweets: tweetArray });
+  })
+  .catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
+  });
+});
+
 export const tweets: Router = router;
