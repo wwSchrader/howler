@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { userIsLoggedIn } from './User';
+import { userIsLoggedIn } from './user';
 
 const howlerApp = combineReducers({
   userIsLoggedIn,

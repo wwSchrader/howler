@@ -8,3 +8,12 @@ export function userIsLoggedIn(state = false, action: any) {
       return state;
   };
 };
+
+export function setUsername(state: undefined|null|string = null, action: any) {
+  switch (action.type) {
+    case Types.USERNAME:
+      return action.username;
+    default:
+      return state;
+  };
+};

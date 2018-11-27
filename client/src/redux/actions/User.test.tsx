@@ -15,7 +15,7 @@ describe('User actions', () => {
   it('should create an action to set username', () => {
     const usernam = 'user123';
     const expectedAction = {
-      type: types.USER_NAME,
+      type: types.USERNAME,
       username: usernam,
     };
 
