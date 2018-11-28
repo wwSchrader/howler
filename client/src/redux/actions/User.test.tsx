@@ -38,6 +38,16 @@ describe('User actions', () => {
     expect(actions.setRegistrationFailedMessage(message)).toEqual(expectedAction);
   });
 
+  it('should create an action to set login failed message', () => {
+    const message = 'Login Failed!';
+    const expectedAction = {
+      failedLoginMessage: message,
+      type: types.LOGIN_FAILED_MESSAGE,
+    };
+
+    expect(actions.setLoginFailedMessage(message)).toEqual(expectedAction);
+  });
+
   describe('registerUser thunk action', () => {
     afterEach(() => {
       fetchMock.restore()

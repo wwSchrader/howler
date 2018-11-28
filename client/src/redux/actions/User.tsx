@@ -21,6 +21,13 @@ export function setRegistrationFailedMessage(message: string|null) {
   };
 };
 
+export function setLoginFailedMessage(message: string|null) {
+  return {
+    failedLoginMessage: message,
+    type: Types.LOGIN_FAILED_MESSAGE,
+  };
+};
+
 export function registerUser(usernam: string, userEmail: string, userPassword: string) {
   return (dispatch: any) => {
     return fetch('/api/users/register', {
