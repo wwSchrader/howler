@@ -23,4 +23,14 @@ describe('User reducers', () => {
       expect(User.setUsername('Someusername', {type: Types.USERNAME, username: 'Anotherusername'})).toEqual('Anotherusername');
     });
   });
+
+  describe('setFailedRegistrationMessage', () => {
+    it('should return intial state', () => {
+      expect(User.setFailedRegistrationMessage(null, {})).toEqual(null);
+    });
+
+    it('should hande the failed registration message', () => {
+      expect(User.setFailedRegistrationMessage(null, {type: Types.REGISTRATION_FAILED_MESSAGE, failedRegistrationMessage: 'No password!'})).toEqual('No password!');
+    });
+  });
 });

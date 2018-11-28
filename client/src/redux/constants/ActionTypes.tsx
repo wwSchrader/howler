@@ -1,3 +1,4 @@
 // User actions
 export const USER_LOGIN = 'USER_LOGIN';
 export const USERNAME = 'USERNAME';
+export const REGISTRATION_FAILED_MESSAGE = 'REGISTRATION_FAILED_MESSAGE';

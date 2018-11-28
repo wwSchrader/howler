@@ -17,3 +17,12 @@ export function setUsername(state: undefined|null|string = null, action: any) {
       return state;
   };
 };
+
+export function setFailedRegistrationMessage(state: null = null, action: any) {
+  switch (action.type) {
+    case Types.REGISTRATION_FAILED_MESSAGE:
+      return action.failedRegistrationMessage;
+    default:
+      return state;
+  };
+};
