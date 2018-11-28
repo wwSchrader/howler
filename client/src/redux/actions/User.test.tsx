@@ -28,6 +28,16 @@ describe('User actions', () => {
     expect(actions.setUsername(usernam)).toEqual(expectedAction);
   });
 
+  it('should create an action to set registration failed message', () => {
+    const message = 'Registration failed!';
+    const expectedAction = {
+      failedRegistrationMessage: message,
+      type: types.REGISTRATION_FAILED_MESSAGE,
+    };
+
+    expect(actions.setRegistrationFailedMessage(message)).toEqual(expectedAction);
+  });
+
   describe('registerUser thunk action', () => {
     afterEach(() => {
       fetchMock.restore()
@@ -35,31 +45,43 @@ describe('User actions', () => {
 
     it('creates USER_LOGIN when fetching register user has been done', () => {
       const store = mockStore({});
-      const expectedAction = [{
+      const expectedActions = [
+        {
         type: types.USER_LOGIN,
         userLoginStatus: true,
-      }];
+        },
+        {
+          failedRegistrationMessage: null,
+          type: types.REGISTRATION_FAILED_MESSAGE,
+        },
+      ];
   
       fetchMock.postOnce('/api/users/register', {isRegistered: true});
   
       return store.dispatch<any>(actions.registerUser('someusername', 'someemail', 'somepassword'))
       .then(() => {
-        expect(store.getActions()).toEqual(expectedAction);
+        expect(store.getActions()).toEqual(expectedActions);
       });
     });
 
     it('create USER_LOGIN as false when fetching register user has been done', () => {
       const store = mockStore({});
-      const expectedAction = [{
+      const expectedActions = [
+        {
         type: types.USER_LOGIN,
         userLoginStatus: false,
-      }];
+        },
+        {
+          failedRegistrationMessage: 'Username already taken!',
+          type: types.REGISTRATION_FAILED_MESSAGE,
+        }
+      ];
 
-      fetchMock.postOnce('/api/users/register', {isRegistered: false});
+      fetchMock.postOnce('/api/users/register', {isRegistered: false, reason: 'Username already taken!'});
 
       return store.dispatch<any>(actions.registerUser('anoterusername', 'anotheremail', 'anotherpassword'))
       .then(() => {
-        expect(store.getActions()).toEqual(expectedAction);
+        expect(store.getActions()).toEqual(expectedActions);
       });
     });
   });

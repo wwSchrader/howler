@@ -14,6 +14,13 @@ export function setUsername(usernam: string) {
   };
 };
 
+export function setRegistrationFailedMessage(message: string|null) {
+  return {
+    failedRegistrationMessage: message,
+    type: Types.REGISTRATION_FAILED_MESSAGE,
+  };
+};
+
 export function registerUser(usernam: string, userEmail: string, userPassword: string) {
   return (dispatch: any) => {
     return fetch('/api/users/register', {
@@ -32,13 +39,16 @@ export function registerUser(usernam: string, userEmail: string, userPassword: s
     .then(resp => resp.json())
     .then(body => {
       if (body.isRegistered) {
-        return dispatch(isLoggedIn(true));
+        dispatch(isLoggedIn(true));
+        return dispatch(setRegistrationFailedMessage(null));
       } else {
-        return dispatch(isLoggedIn(false));
+        dispatch(isLoggedIn(false));
+        return dispatch(setRegistrationFailedMessage(body.reason));
       };
     })
     .catch(err => {
-      return dispatch(isLoggedIn(false));
+      dispatch(isLoggedIn(false));
+      return dispatch(setRegistrationFailedMessage(err));
     });
   }
 }
