@@ -85,4 +85,40 @@ describe('User actions', () => {
       });
     });
   });
+
+  describe('loginUser thunk action', () => {
+    afterEach(() => {
+      fetchMock.restore()
+    });
+
+    it('should create a true userlogin action upon successful login', () => {
+      const store = mockStore({});
+      const expectedActions = [
+        {
+          type: types.USER_LOGIN,
+          userLoginStatus: true,
+        },
+      ];
+
+      fetchMock.postOnce('/api/users/login', {isLoggedIn: true});
+
+      return store.dispatch<any>(actions.loginUser('sampleusername', 'samplepassword'))
+      .then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+
+    it('should create a false userlogin action upon failed login', () => {
+      const store = mockStore({});
+      const expectedActions = [
+        {
+          type: types.USER_LOGIN,
+          userLoginStatus: false,
+        },
+      ];
+
+      fetchMock.postOnce('/api/users/login', {isLoggedIn: false});
+
+      return store.dispatch<any>(actions.loginUser('sampleusername', 'samplepassword'))
+      .then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+  });
 });

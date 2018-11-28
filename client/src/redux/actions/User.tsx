@@ -52,3 +52,30 @@ export function registerUser(usernam: string, userEmail: string, userPassword: s
     });
   }
 }
+
+export function loginUser(usernam: string, userPassword: string) {
+  return (dispatch: any) => {
+    return fetch('/api/users/login', {
+      body: JSON.stringify({username: usernam, password: userPassword}),
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST'
+    })
+    .then((response) => {
+      if(!response.ok) {
+        throw Error(response.statusText);
+      }
+
+      return response;
+    })
+    .then((resp) => resp.json())
+    .then((body) => {
+      if(body.isLoggedIn) {
+        return dispatch(isLoggedIn(true));
+      } else {
+        return dispatch(isLoggedIn(false));
+      }
+    })
+    .catch((err) => dispatch(isLoggedIn(false)));
+  }
+}
