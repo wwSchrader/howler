@@ -86,3 +86,30 @@ export function loginUser(usernam: string, userPassword: string) {
     .catch((err) => dispatch(isLoggedIn(false)));
   }
 }
+
+export function logoutUser() {
+  return (dispatch: any) => {
+    return fetch('/api/users/logout', {
+      credentials: 'include',
+      method: 'GET',
+    })
+    .then((response) => {
+      if(!response.ok) {
+        throw Error(response.statusText);
+      }
+
+      return response;
+    })
+    .then((resp) => resp.json())
+    .then((body) => {
+      if(!body.isLoggedIn) {
+        return dispatch(isLoggedIn(false));
+      } else {
+        throw Error('Something went wroing: ' + body);
+      }
+    })
+    .catch((err) => {
+      return err;
+    });
+  };
+}

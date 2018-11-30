@@ -131,4 +131,25 @@ describe('User actions', () => {
       .then(() => expect(store.getActions()).toEqual(expectedActions));
     });
   });
+
+  describe('logout thunk action', () => {
+    afterEach(() => {
+      fetchMock.restore()
+    });
+
+    it('should create a false userlogin action', () => {
+      const store = mockStore({});
+      const expectedActions = [
+        {
+          type: types.USER_LOGIN,
+          userLoginStatus: false,
+        },
+      ];
+      
+      fetchMock.getOnce('/api/users/logout', {isLoggedIn: false});
+
+      return store.dispatch<any>(actions.logoutUser())
+      .then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+  });
 });
