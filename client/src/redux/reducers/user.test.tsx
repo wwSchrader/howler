@@ -33,4 +33,18 @@ describe('User reducers', () => {
       expect(User.setFailedRegistrationMessage(null, {type: Types.REGISTRATION_FAILED_MESSAGE, failedRegistrationMessage: 'No password!'})).toEqual('No password!');
     });
   });
+
+  describe('setFailedLoginMessage', () => {
+    it('should return initial state', () => {
+      expect(User.setFailedLoginMessage(null, {})).toEqual(null);
+    });
+
+    it('should handle the failed registration message', () => {
+      expect(User.setFailedLoginMessage(null, {type: Types.LOGIN_FAILED_MESSAGE, failedLoginMessage: 'Password doesn\'t match!'})).toEqual('Password doesn\'t match!');
+    });
+
+    it('should handle nulling the failed registration message', () => {
+      expect(User.setFailedLoginMessage('Password doesn\'t match!', {type: Types.LOGIN_FAILED_MESSAGE, failedLoginMessage: null})).toEqual(null);
+    });
+  });
 });

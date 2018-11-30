@@ -26,3 +26,12 @@ export function setFailedRegistrationMessage(state: null = null, action: any) {
       return state;
   };
 };
+
+export function setFailedLoginMessage(state: null|string = null, action: any) {
+  switch (action.type) {
+    case Types.LOGIN_FAILED_MESSAGE:
+      return action.failedLoginMessage;
+    default:
+      return state;
+  };
+};
