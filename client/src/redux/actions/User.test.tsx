@@ -66,7 +66,7 @@ describe('User actions', () => {
         },
       ];
   
-      fetchMock.postOnce('/api/users/register', {isRegistered: true});
+      fetchMock.putOnce('/api/users/register', {isRegistered: true});
   
       return store.dispatch<any>(actions.registerUser('someusername', 'someemail', 'somepassword'))
       .then(() => {
@@ -87,7 +87,7 @@ describe('User actions', () => {
         }
       ];
 
-      fetchMock.postOnce('/api/users/register', {isRegistered: false, reason: 'Username already taken!'});
+      fetchMock.putOnce('/api/users/register', {isRegistered: false, reason: 'Username already taken!'});
 
       return store.dispatch<any>(actions.registerUser('anoterusername', 'anotheremail', 'anotherpassword'))
       .then(() => {

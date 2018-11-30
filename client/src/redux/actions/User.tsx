@@ -34,7 +34,7 @@ export function registerUser(usernam: string, userEmail: string, userPassword: s
       body: JSON.stringify({username: usernam, email: userEmail, password: userPassword}),
       credentials: 'include',
       headers: {'Content-Type': 'application/json'},
-      method: 'POST'
+      method: 'PUT'
     })
     .then(response => {
       if(!response.ok) {
