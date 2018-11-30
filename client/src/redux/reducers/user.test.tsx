@@ -32,6 +32,10 @@ describe('User reducers', () => {
     it('should hande the failed registration message', () => {
       expect(User.setFailedRegistrationMessage(null, {type: Types.REGISTRATION_FAILED_MESSAGE, failedRegistrationMessage: 'No password!'})).toEqual('No password!');
     });
+
+    it('should nullify the failed registration message', () => {
+      expect(User.setFailedRegistrationMessage('No password!', {type: Types.REGISTRATION_FAILED_MESSAGE, failedRegistrationMessage: null})).toEqual(null);
+    });
   });
 
   describe('setFailedLoginMessage', () => {
