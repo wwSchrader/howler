@@ -1,10 +1,11 @@
 import * as React from 'react';
+import NavigationBar from './NavigationBar';
 
 class App extends React.Component {
   public render() {
     return (
       <div>
-        <h1>Howler App</h1>
+        <NavigationBar />
       </div>
     );
   };
