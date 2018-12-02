@@ -1,9 +1,14 @@
+import {shallow, ShallowWrapper} from 'enzyme';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import '../setupTests';
 import App from './App';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+describe('App', () => {
+  let wrapper: ShallowWrapper;
+
+  beforeEach(() => wrapper = shallow(<App />));
+
+  it('should render a <div />', () => {
+    expect(wrapper.find('div').length).toEqual(1);
+  });
 });
