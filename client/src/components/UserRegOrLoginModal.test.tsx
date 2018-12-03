@@ -3,6 +3,7 @@ import * as React from 'react';
 import {Button} from 'reactstrap';
 import '../setupTests';
 import LoginForm from './LoginForm';
+import RegistrationForm from './RegistrationForm';
 import UserRegOrLoginModal from './UserRegOrLoginModal';
 
 describe('UserRegOrLoginModal', () => {
@@ -33,6 +34,11 @@ describe('UserRegOrLoginModal', () => {
   it('should render a <LoginForm />', () => {
     wrapper.setState({isLoginModal: true});
     expect(wrapper.containsMatchingElement(<LoginForm />)).toEqual(true);
+  });
+
+  it('should render a <RegistrationForm />', () => {
+    wrapper.setState({isLoginModal: false});
+    expect(wrapper.containsMatchingElement(<RegistrationForm />)).toEqual(true);
   });
 
   describe('switchStatus function', () => {
