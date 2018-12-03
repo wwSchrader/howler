@@ -2,6 +2,7 @@ import {shallow, ShallowWrapper} from 'enzyme';
 import * as React from 'react';
 import {Button} from 'reactstrap';
 import '../setupTests';
+import LoginForm from './LoginForm';
 import UserRegOrLoginModal from './UserRegOrLoginModal';
 
 describe('UserRegOrLoginModal', () => {
@@ -27,6 +28,11 @@ describe('UserRegOrLoginModal', () => {
 
   it('should render a <Button />', () => {
     expect(wrapper.find('Button').length).toEqual(1);
+  });
+
+  it('should render a <LoginForm />', () => {
+    wrapper.setState({isLoginModal: true});
+    expect(wrapper.containsMatchingElement(<LoginForm />)).toEqual(true);
   });
 
   describe('switchStatus function', () => {

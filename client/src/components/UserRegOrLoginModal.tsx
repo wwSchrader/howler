@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Button, Modal, ModalBody, ModalHeader} from 'reactstrap';
 import ModalFooter from 'reactstrap/lib/ModalFooter';
+import LoginForm from './LoginForm';
 
 class UserRegOrLoginModal extends React.Component<{}, {isLoginModal: boolean}> {
   constructor(props: any) {
@@ -19,7 +20,7 @@ class UserRegOrLoginModal extends React.Component<{}, {isLoginModal: boolean}> {
       <Modal isOpen={true}>
         <ModalHeader>{this.decideModalHeaderText()}</ModalHeader>
         <ModalBody>
-          Modal Body here.
+          {this.state.isLoginModal ? <LoginForm /> : null}
         </ModalBody>
         <ModalFooter>
           {this.decideWhichButtonToRender()}
