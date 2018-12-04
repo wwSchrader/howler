@@ -35,3 +35,12 @@ export function setFailedLoginMessage(state: null|string = null, action: any) {
       return state;
   };
 };
+
+export function setShowingUserRegOrLogin(state = false, action: any) {
+  switch (action.type) {
+    case Types.SHOW_USER_OR_REG_LOGIN_MODAL:
+      return action.showUserRegOrLoginModal;
+    default:
+      return state;
+  };
+};

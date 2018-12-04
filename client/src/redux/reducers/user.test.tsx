@@ -51,4 +51,14 @@ describe('User reducers', () => {
       expect(User.setFailedLoginMessage('Password doesn\'t match!', {type: Types.LOGIN_FAILED_MESSAGE, failedLoginMessage: null})).toEqual(null);
     });
   });
+
+  describe('setShowingUserRegOrLogin Component', () => {
+    it('should return initial state', () => {
+      expect(User.setShowingUserRegOrLogin(false, {})).toEqual(false);
+    });
+
+    it('should handle setting the showingUserRegOrLogin', () => {
+      expect(User.setShowingUserRegOrLogin(false, {type: Types.SHOW_USER_OR_REG_LOGIN_MODAL, showUserRegOrLoginModal: true})).toEqual(true);
+    });
+  });
 });
