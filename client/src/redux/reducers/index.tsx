@@ -1,7 +1,21 @@
 import { combineReducers } from 'redux';
-import { userIsLoggedIn } from './user';
+import {
+  setTweetArray,
+} from './tweet';
+import {
+  setFailedLoginMessage,
+  setFailedRegistrationMessage,
+  setShowingUserRegOrLogin,
+  setUsername,
+  userIsLoggedIn,
+} from './user';
 
 const howlerApp = combineReducers({
+  setFailedLoginMessage,
+  setFailedRegistrationMessage,
+  setShowingUserRegOrLogin,
+  setTweetArray,
+  setUsername,
   userIsLoggedIn,
 });
 
