@@ -28,6 +28,13 @@ export function setLoginFailedMessage(message: string|null) {
   };
 };
 
+export function setShowUserRegOrLoginModal(toShow: boolean) {
+  return {
+    showUserRegOrLoginModal: toShow,
+    type: Types.SHOW_USER_OR_REG_LOGIN_MODAL,
+  };
+};
+
 export function registerUser(usernam: string, userEmail: string, userPassword: string) {
   return (dispatch: any) => {
     return fetch('/api/users/register', {

@@ -48,6 +48,15 @@ describe('User actions', () => {
     expect(actions.setLoginFailedMessage(message)).toEqual(expectedAction);
   });
 
+  it('should create an action to set the showing of UserRegOrLoginModal', () => {
+    const expectedAction = {
+      showUserRegOrLoginModal: true,
+      type: types.SHOW_USER_OR_REG_LOGIN_MODAL,
+    };
+
+    expect(actions.setShowUserRegOrLoginModal(true)).toEqual(expectedAction);
+  });
+
   describe('registerUser thunk action', () => {
     afterEach(() => {
       fetchMock.restore()
