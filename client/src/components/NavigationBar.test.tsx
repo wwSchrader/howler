@@ -8,7 +8,10 @@ describe('NavigationBar', () => {
   let props: any;
 
   beforeEach(() => {
-    props = {setShowUserRegOrLoginModal: jest.fn()}
+    props = {
+      setShowAddTweetModal: jest.fn(),
+      setShowUserRegOrLoginModal: jest.fn(),
+    }
     wrapper = shallow(<NavigationBar {...props}/>)
   });
 
@@ -25,11 +28,11 @@ describe('NavigationBar', () => {
   });
 
   it('should render <NavItem />', () => {
-    expect(wrapper.find('NavItem').length).toEqual(2);
+    expect(wrapper.find('NavItem').length).toEqual(3);
   });
 
   it('should render <NavLink />', () => {
-    expect(wrapper.find('NavLink').length).toEqual(2);
+    expect(wrapper.find('NavLink').length).toEqual(3);
   });
 
   describe('handleLoginClick function', () => {
@@ -41,6 +44,18 @@ describe('NavigationBar', () => {
     it('should call the setShowUserRegOrLoginModal redux action', () => {
       instance.handleLoginClick();
       expect(props.setShowUserRegOrLoginModal.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('handleAddTweetClick function', () => {
+    let instance: NavigationBar;
+    beforeEach(() => {
+      instance = wrapper.instance() as NavigationBar;
+    });
+
+    it('should call the setShowUserRegOrLoginModal redux action', () => {
+      instance.handleAddTweetClick();
+      expect(props.setShowAddTweetModal.mock.calls.length).toEqual(1);
     });
   });
 });

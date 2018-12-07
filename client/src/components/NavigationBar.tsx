@@ -7,15 +7,21 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
+import {setShowAddTweetModal} from '../redux/actions/tweet';
 import {setShowUserRegOrLoginModal} from '../redux/actions/user';
 
 export interface IProps {
+  setShowAddTweetModal: (bool: boolean) => void,
   setShowUserRegOrLoginModal: (bool: boolean) => void,
 }
 
 export class NavigationBar extends React.Component<IProps> {
   public handleLoginClick = () => {
     this.props.setShowUserRegOrLoginModal(true);
+  };
+
+  public handleAddTweetClick = () => {
+    this.props.setShowAddTweetModal(true);
   };
 
   public render() {
@@ -29,6 +35,9 @@ export class NavigationBar extends React.Component<IProps> {
         </Nav>
         <Nav navbar={true}>
           <NavItem>
+            <NavLink onClick={this.handleAddTweetClick}>Add Tweet</NavLink>
+          </NavItem>
+          <NavItem>
             <NavLink onClick={this.handleLoginClick}>Login</NavLink>
           </NavItem>
         </Nav>
@@ -39,6 +48,7 @@ export class NavigationBar extends React.Component<IProps> {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
+    setShowAddTweetModal: (bool: boolean) => dispatch(setShowAddTweetModal(bool)),
     setShowUserRegOrLoginModal: (bool: boolean) => dispatch(setShowUserRegOrLoginModal(bool)),
   };
 };
