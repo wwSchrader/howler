@@ -73,4 +73,13 @@ describe('Tweet actions', () => {
       .then(() => expect(store.getActions()).toEqual(expectedActions));
     });
   });
+
+  describe('setShowAddTweetModal action', () => {
+    const expectedAction = {
+      showAddTweetModal: true,
+      type: types.SHOW_USER_OR_REG_LOGIN_MODAL,
+    };
+
+    expect(actions.setShowAddTweetModal(true)).toEqual(expectedAction);
+  });
 });

@@ -7,3 +7,4 @@ export const SHOW_USER_OR_REG_LOGIN_MODAL = 'SHOW_USER_OR_REG_LOGIN_MODAL';
 
 // Tweet actions
 export const TWEET_ARRAY = 'TWEET_ARRAY';
+export const SHOW_ADD_TWEET_MODAL = 'SHOW_ADD_TWEET_MODAL';

@@ -7,6 +7,13 @@ export function setTweetArray(tweetArray: any) {
   };
 };
 
+export function setShowAddTweetModal(bool: boolean) {
+  return {
+    showAddTweetModal: bool,
+    type: Types.SHOW_USER_OR_REG_LOGIN_MODAL,
+  };
+};
+
 export function getAllTweetsApi() {
   return (dispatch: any) => {
     return fetch('/api/tweets/all', {
