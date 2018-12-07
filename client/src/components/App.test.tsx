@@ -1,6 +1,7 @@
 import {shallow, ShallowWrapper} from 'enzyme';
 import * as React from 'react';
 import '../setupTests';
+import AddTweetModal from './AddTweetModal';
 import App from './App';
 import NavigationBar from './NavigationBar';
 import UserRegOrLoginModal from './UserRegOrLoginModal';
@@ -20,5 +21,9 @@ describe('App', () => {
 
   it('should render the UserRegOrLoginModal component', () => {
     expect(wrapper.containsMatchingElement(<UserRegOrLoginModal />)).toEqual(true);
+  });
+
+  it('should render the AddTweetModal', () => {
+    expect(wrapper.containsMatchingElement(<AddTweetModal />)).toEqual(true);
   });
 });

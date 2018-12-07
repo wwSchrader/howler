@@ -1,4 +1,5 @@
 import * as React from 'react';
+import AddTweetModal from './AddTweetModal';
 import NavigationBar from './NavigationBar';
 import UserRegOrLoginModal from './UserRegOrLoginModal';
 
@@ -8,6 +9,7 @@ class App extends React.Component {
       <div>
         <NavigationBar />
         <UserRegOrLoginModal />
+        <AddTweetModal />
       </div>
     );
   };
