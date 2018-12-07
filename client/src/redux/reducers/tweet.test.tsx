@@ -48,7 +48,7 @@ describe('Tweet reducers', () => {
     it('should return true', () => {
       const testAction = {
         showAddTweetModal: true,
-        type: Types.SHOW_USER_OR_REG_LOGIN_MODAL,
+        type: Types.SHOW_ADD_TWEET_MODAL,
       }
       expect(Tweet.showAddTweetModal(false, testAction)).toEqual(true);
     });

@@ -11,7 +11,7 @@ export function setTweetArray(state = [], action: any) {
 
 export function showAddTweetModal(state = false, action: any) {
   switch (action.type) {
-    case Types.SHOW_USER_OR_REG_LOGIN_MODAL:
+    case Types.SHOW_ADD_TWEET_MODAL:
       return action.showAddTweetModal;
     default:
       return state;

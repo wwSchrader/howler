@@ -10,7 +10,7 @@ export function setTweetArray(tweetArray: any) {
 export function setShowAddTweetModal(bool: boolean) {
   return {
     showAddTweetModal: bool,
-    type: Types.SHOW_USER_OR_REG_LOGIN_MODAL,
+    type: Types.SHOW_ADD_TWEET_MODAL,
   };
 };
 
