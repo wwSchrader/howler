@@ -8,3 +8,12 @@ export function setTweetArray(state = [], action: any) {
       return state;
   };
 };
+
+export function showAddTweetModal(state = false, action: any) {
+  switch (action.type) {
+    case Types.SHOW_USER_OR_REG_LOGIN_MODAL:
+      return action.showAddTweetModal;
+    default:
+      return state;
+  };
+};

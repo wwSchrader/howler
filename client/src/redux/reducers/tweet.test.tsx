@@ -39,4 +39,18 @@ describe('Tweet reducers', () => {
       expect(Tweet.setTweetArray([],testAction)).toEqual(testTweets);
     });
   });
+
+  describe('showAddTweetModal', () => {
+    it('should return initial state', () => {
+      expect(Tweet.showAddTweetModal(false, {})).toEqual(false);
+    });
+
+    it('should return true', () => {
+      const testAction = {
+        showAddTweetModal: true,
+        type: Types.SHOW_USER_OR_REG_LOGIN_MODAL,
+      }
+      expect(Tweet.showAddTweetModal(false, testAction)).toEqual(true);
+    });
+  });
 });

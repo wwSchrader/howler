@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import {
   setTweetArray,
+  showAddTweetModal,
 } from './tweet';
 import {
   setFailedLoginMessage,
@@ -16,6 +17,7 @@ const howlerApp = combineReducers({
   setShowingUserRegOrLogin,
   setTweetArray,
   setUsername,
+  showAddTweetModal,
   userIsLoggedIn,
 });
 
