@@ -5,12 +5,37 @@ import {AddTweetModal} from './AddTweetModal';
 
 describe('AddTweetModal', () => {
   let wrapper: ShallowWrapper;
+  let props: any;
 
   beforeEach(() => {
-    wrapper = shallow(<AddTweetModal />);
+    props = {
+      setShowAddTweetModal: jest.fn(),
+      showAddTweetModal: false,
+    }
+    wrapper = shallow(<AddTweetModal {...props}/>);
   });
 
-  it('should render a <div />', () => {
-    expect(wrapper.find('div').length).toEqual(1);
+  it('should render a <Modal />', () => {
+    expect(wrapper.find('Modal').length).toEqual(1);
+  });
+
+  it('should render a <ModalHeader />', () => {
+    expect(wrapper.find('ModalHeader').length).toEqual(1);
+  });
+
+  it('should render a <ModalBody />', () => {
+    expect(wrapper.find('ModalBody').length).toEqual(1);
+  });
+
+  describe('toogleModal function', () => {
+    let instance: AddTweetModal;
+    beforeEach(() => {
+      instance = wrapper.instance() as AddTweetModal;
+    });
+
+    it('Should call the setShowAddTweetModal', () => {
+      instance.toogleModal();
+      expect(props.setShowAddTweetModal.mock.calls.length).toEqual(1);
+    });
   });
 });
