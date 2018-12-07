@@ -4,12 +4,19 @@ import {Button} from 'reactstrap';
 import '../setupTests';
 import LoginForm from './LoginForm';
 import RegistrationForm from './RegistrationForm';
-import UserRegOrLoginModal from './UserRegOrLoginModal';
+import {UserRegOrLoginModal} from './UserRegOrLoginModal';
 
 describe('UserRegOrLoginModal', () => {
   let wrapper: ShallowWrapper;
+  let dispatches: any;
   
-  beforeEach(() => wrapper = shallow(<UserRegOrLoginModal />));
+  beforeEach(() => {
+    dispatches = {
+      setShowUserRegOrLoginModal: jest.fn(),
+      showUserRegOrLoginModal: true,
+    }
+    wrapper = shallow(<UserRegOrLoginModal {...dispatches}/>);
+  });
 
   it('should render a <Modal />', () => {
     expect(wrapper.find('Modal').length).toEqual(1);
@@ -44,7 +51,7 @@ describe('UserRegOrLoginModal', () => {
   describe('switchStatus function', () => {
     let instance: UserRegOrLoginModal;
     beforeEach(() => {
-      wrapper = shallow(<UserRegOrLoginModal />)
+      wrapper = shallow(<UserRegOrLoginModal {...dispatches}/>)
       instance = wrapper.instance() as UserRegOrLoginModal;
     });
 
@@ -64,7 +71,7 @@ describe('UserRegOrLoginModal', () => {
   describe('decideWhichButtonToRender function', () => {
     let instance: UserRegOrLoginModal;
     beforeEach(() => {
-      wrapper = shallow(<UserRegOrLoginModal />)
+      wrapper = shallow(<UserRegOrLoginModal {...dispatches}/>)
       instance = wrapper.instance() as UserRegOrLoginModal;
     });
 
@@ -84,7 +91,7 @@ describe('UserRegOrLoginModal', () => {
   describe('decideModalHeaderText function', () => {
     let instance: UserRegOrLoginModal;
     beforeEach(() => {
-      wrapper = shallow(<UserRegOrLoginModal />)
+      wrapper = shallow(<UserRegOrLoginModal {...dispatches}/>);
       instance = wrapper.instance() as UserRegOrLoginModal;
     });
 
@@ -96,6 +103,19 @@ describe('UserRegOrLoginModal', () => {
     it('should return string Register', () => {
       wrapper.setState({isLoginModal: false});
       expect(instance.decideModalHeaderText()).toEqual('Register');
+    });
+  });
+
+  describe('toggleModal function', () => {
+    let instance: UserRegOrLoginModal;
+    beforeEach(() => {
+      wrapper = shallow(<UserRegOrLoginModal {...dispatches}/>);
+      instance = wrapper.instance() as UserRegOrLoginModal;
+    });
+
+    it('should call the setShowUserRegOrLoginModal redux action', () => {
+      instance.toggleModal();
+      expect(dispatches.setShowUserRegOrLoginModal.mock.calls.length).toBe(1);
     });
   });
 });

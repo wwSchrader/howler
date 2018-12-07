@@ -1,10 +1,21 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {Button, Modal, ModalBody, ModalHeader} from 'reactstrap';
 import ModalFooter from 'reactstrap/lib/ModalFooter';
+import {setShowUserRegOrLoginModal} from '../redux/actions/user';
 import LoginForm from './LoginForm';
 import RegistrationForm from './RegistrationForm';
 
-class UserRegOrLoginModal extends React.Component<{}, {isLoginModal: boolean}> {
+export interface IDispatchFromProps {
+  setShowUserRegOrLoginModal: (bool: boolean) => void,
+  showUserRegOrLoginModal: boolean,
+};
+
+export interface IStateFromProps {
+  isLoginModal: boolean,
+};
+
+export class UserRegOrLoginModal extends React.Component<IDispatchFromProps, IStateFromProps> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -14,12 +25,13 @@ class UserRegOrLoginModal extends React.Component<{}, {isLoginModal: boolean}> {
     this.switchStatus = this.switchStatus.bind(this);
     this.decideWhichButtonToRender = this.decideWhichButtonToRender.bind(this);
     this.decideModalHeaderText = this.decideModalHeaderText.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   public render() {
     return (
-      <Modal isOpen={true}>
-        <ModalHeader>{this.decideModalHeaderText()}</ModalHeader>
+      <Modal isOpen={this.props.showUserRegOrLoginModal}>
+        <ModalHeader toggle={this.toggleModal}>{this.decideModalHeaderText()}</ModalHeader>
         <ModalBody>
           {this.state.isLoginModal ? <LoginForm /> : <RegistrationForm />}
         </ModalBody>
@@ -28,6 +40,10 @@ class UserRegOrLoginModal extends React.Component<{}, {isLoginModal: boolean}> {
         </ModalFooter>
       </Modal>
     );
+  }
+
+  public toggleModal = () => {
+    this.props.setShowUserRegOrLoginModal(!this.props.showUserRegOrLoginModal);
   }
 
   public switchStatus = () => {
@@ -54,4 +70,16 @@ class UserRegOrLoginModal extends React.Component<{}, {isLoginModal: boolean}> {
   }
 }
 
-export default UserRegOrLoginModal;
+const mapStateToProps = (state: any) => {
+  return {
+    showUserRegOrLoginModal: state.setShowingUserRegOrLogin,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setShowUserRegOrLoginModal: (bool: boolean) => dispatch(setShowUserRegOrLoginModal(bool)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserRegOrLoginModal);
