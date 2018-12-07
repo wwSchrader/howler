@@ -77,7 +77,7 @@ describe('Tweet actions', () => {
   describe('setShowAddTweetModal action', () => {
     const expectedAction = {
       showAddTweetModal: true,
-      type: types.SHOW_USER_OR_REG_LOGIN_MODAL,
+      type: types.SHOW_ADD_TWEET_MODAL,
     };
 
     expect(actions.setShowAddTweetModal(true)).toEqual(expectedAction);
