@@ -1,7 +1,19 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {Button, Form, FormGroup, Input, Label} from 'reactstrap';
+import {loginUser} from '../redux/actions/user';
 
-class LoginForm extends React.Component<{}, {password: string, username: string, loginButtonPressed: boolean}> {
+export interface IPropsFromRedux {
+  loginUser: (usernam: string, userPassword: string) => void,
+}
+
+export interface IProps {
+  password: string,
+  username: string,
+  loginButtonPressed: boolean
+};
+
+export class LoginForm extends React.Component<IPropsFromRedux, IProps> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -28,7 +40,7 @@ class LoginForm extends React.Component<{}, {password: string, username: string,
     this.setState({loginButtonPressed: true});
 
     if(this.state.username.length > 0 && this.state.password.length > 0) {
-      // insert redux action call here
+      this.props.loginUser(this.state.username, this.state.password);
     };
   };
 
@@ -59,4 +71,10 @@ class LoginForm extends React.Component<{}, {password: string, username: string,
   };
 };
 
-export default LoginForm;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    loginUser: (usernam: string, userPassword: string) => dispatch(loginUser(usernam, userPassword)),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(LoginForm);

@@ -1,13 +1,27 @@
 import {shallow, ShallowWrapper} from 'enzyme';
 import * as React from 'react';
 import '../setupTests';
-import LoginForm from './LoginForm';
+import {LoginForm} from './LoginForm';
 
 describe('LoginForm', () => {
   let wrapper: ShallowWrapper;
   let instance: LoginForm;
+  let reduxProps: any;
+  let props: any;
 
-  beforeEach(() => wrapper = shallow(<LoginForm />));
+  beforeEach(() => {
+    reduxProps = {
+      loginUser: jest.fn(),
+    };
+
+    props = {
+      loginButtonPressed: false,
+      password: '',
+      username: '',
+    };
+
+    wrapper = shallow(<LoginForm {...reduxProps} {...props}/>)
+  });
 
   it('should render a <Form />', () => {
     expect(wrapper.find('Form').length).toEqual(1);
@@ -63,11 +77,47 @@ describe('LoginForm', () => {
     });
 
     it('should handle valid submission', () => {
-      wrapper.setState({loginButtonPressed: false});
+      const testState = {
+        loginButtonPressed: false,
+        password: 'validPassword',
+        username: 'validusername',
+      }
+      wrapper.setState(testState);
       
       instance.handleSubmit({preventDefault: mockPreventDefault});
       expect(mockPreventDefault.mock.calls.length).toEqual(1);
       expect(wrapper.state('loginButtonPressed')).toEqual(true);
+      expect(reduxProps.loginUser.mock.calls.length).toEqual(1);
+      expect(reduxProps.loginUser.mock.calls[0][0]).toBe(testState.username);
+      expect(reduxProps.loginUser.mock.calls[0][1]).toBe(testState.password);
+    });
+
+    it('should reject no username submission', () => {
+      const testState = {
+        loginButtonPressed: false,
+        password: 'validPassword',
+        username: '',
+      }
+      wrapper.setState(testState);
+      
+      instance.handleSubmit({preventDefault: mockPreventDefault});
+      expect(mockPreventDefault.mock.calls.length).toEqual(1);
+      expect(wrapper.state('loginButtonPressed')).toEqual(true);
+      expect(reduxProps.loginUser.mock.calls.length).toEqual(0);
+    });
+
+    it('should reject no password submission', () => {
+      const testState = {
+        loginButtonPressed: false,
+        password: '',
+        username: 'validusername',
+      }
+      wrapper.setState(testState);
+      
+      instance.handleSubmit({preventDefault: mockPreventDefault});
+      expect(mockPreventDefault.mock.calls.length).toEqual(1);
+      expect(wrapper.state('loginButtonPressed')).toEqual(true);
+      expect(reduxProps.loginUser.mock.calls.length).toEqual(0);
     });
   });
 });
