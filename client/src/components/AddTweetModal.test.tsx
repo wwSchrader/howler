@@ -1,6 +1,7 @@
 import {shallow, ShallowWrapper} from 'enzyme';
 import * as React from 'react';
 import '../setupTests';
+import {AddTweetForm} from './AddTweetForm';
 import {AddTweetModal} from './AddTweetModal';
 
 describe('AddTweetModal', () => {
@@ -25,6 +26,10 @@ describe('AddTweetModal', () => {
 
   it('should render a <ModalBody />', () => {
     expect(wrapper.find('ModalBody').length).toEqual(1);
+  });
+
+  it('should render <AddTweetForm />', () => {
+    expect(wrapper.containsMatchingElement(<AddTweetForm />)).toEqual(true);
   });
 
   describe('toogleModal function', () => {

@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Modal, ModalBody, ModalHeader} from 'reactstrap';
 import {setShowAddTweetModal} from '../redux/actions/tweet';
+import AddTweetForm from './AddTweetForm';
 
 export interface IDispatchFromProps {
   setShowAddTweetModal: (bool: boolean) => void,
@@ -26,7 +27,7 @@ export class AddTweetModal extends React.Component<IDispatchFromProps> {
           Howl your thoughts
         </ModalHeader>
         <ModalBody>
-          Howl for goes here
+          <AddTweetForm />
         </ModalBody>
       </Modal>
     );
