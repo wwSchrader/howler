@@ -1,7 +1,20 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {Button, Form, FormGroup, Input, Label} from 'reactstrap';
+import {registerUser} from '../redux/actions/user';
 
-class RegistrationForm extends React.Component<{}, {email: string, registerButtonPressed: boolean, username: string, password: string}> {
+export interface IPropsFromRedux {
+  registerUser: (usernam: string, email: string, password: string) => void,
+}
+
+export interface IProps {
+  email: string,
+  registerButtonPressed: boolean,
+  username: string,
+  password: string
+}
+
+export class RegistrationForm extends React.Component<IPropsFromRedux, IProps> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -27,6 +40,17 @@ class RegistrationForm extends React.Component<{}, {email: string, registerButto
   public handleSubmit = (e: any) => {
     e.preventDefault();
     this.setState({registerButtonPressed: true});
+
+    if(this.state.username.length > 0 &&
+      this.state.email.length > 0 &&
+      this.state.password.length > 0
+    ) {
+      this.props.registerUser(
+        this.state.username,
+        this.state.email,
+        this.state.password
+      );
+    };
   };
 
   public render() {
@@ -65,4 +89,13 @@ class RegistrationForm extends React.Component<{}, {email: string, registerButto
   };
 };
 
-export default RegistrationForm;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    registerUser:
+      (usernam: string, userEmail: string, userPassword: string) => dispatch(
+        registerUser(usernam, userEmail, userPassword)
+      ),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(RegistrationForm);

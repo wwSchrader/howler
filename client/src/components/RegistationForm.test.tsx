@@ -1,13 +1,26 @@
 import {shallow, ShallowWrapper} from 'enzyme';
 import * as React from 'react';
 import '../setupTests';
-import RegistrationForm from './RegistrationForm';
+import {RegistrationForm} from './RegistrationForm';
 
 describe('RegistrationForm', () => {
   let wrapper: ShallowWrapper;
   let instance: RegistrationForm;
+  let reduxProps: any;
+  let props: any;
 
-  beforeEach(() => wrapper= shallow(<RegistrationForm />));
+  beforeEach(() => {
+    reduxProps = {
+      registerUser: jest.fn(),
+    };
+    props = {
+      email: '',
+      password: '',
+      registerButtonPressed: false,
+      username: '',
+    };
+    wrapper= shallow(<RegistrationForm {...reduxProps}{...props}/>)
+  });
 
   it('should render <Form />', () => {
     expect(wrapper.find('Form').length).toEqual(1);
@@ -76,11 +89,70 @@ describe('RegistrationForm', () => {
     });
 
     it('should handle valid submission', () => {
-      wrapper.setState({registerButtonPressed: false});
-      
+      const testState = {
+        email: 'validemail@gmail.com',
+        password: 'anungussablepassword',
+        registerButtonPressed: false,
+        username: 'TestUsername',
+      };
+
+      wrapper.setState(testState);
+
       instance.handleSubmit({preventDefault: mockPreventDefault});
       expect(mockPreventDefault.mock.calls.length).toEqual(1);
       expect(wrapper.state('registerButtonPressed')).toEqual(true);
+      expect(reduxProps.registerUser.mock.calls.length).toEqual(1);
+      expect(reduxProps.registerUser.mock.calls[0][0]).toBe(testState.username);
+      expect(reduxProps.registerUser.mock.calls[0][1]).toBe(testState.email);
+      expect(reduxProps.registerUser.mock.calls[0][2]).toBe(testState.password);
+    });
+
+    it('should reject no username submission', () => {
+      const testState = {
+        email: 'validemail@gmail.com',
+        password: 'anungussablepassword',
+        registerButtonPressed: false,
+        username: '',
+      };
+
+      wrapper.setState(testState);
+
+      instance.handleSubmit({preventDefault: mockPreventDefault});
+      expect(mockPreventDefault.mock.calls.length).toEqual(1);
+      expect(wrapper.state('registerButtonPressed')).toEqual(true);
+      expect(reduxProps.registerUser.mock.calls.length).toEqual(0);
+    });
+
+    it('should reject no password submission', () => {
+      const testState = {
+        email: 'validemail@gmail.com',
+        password: '',
+        registerButtonPressed: false,
+        username: 'TestUsername',
+      };
+
+      wrapper.setState(testState);
+
+      instance.handleSubmit({preventDefault: mockPreventDefault});
+      expect(mockPreventDefault.mock.calls.length).toEqual(1);
+      expect(wrapper.state('registerButtonPressed')).toEqual(true);
+      expect(reduxProps.registerUser.mock.calls.length).toEqual(0);
+    });
+
+    it('should reject no email submission', () => {
+      const testState = {
+        email: '',
+        password: 'anungussablepassword',
+        registerButtonPressed: false,
+        username: 'TestUsername',
+      };
+  
+      wrapper.setState(testState);
+
+      instance.handleSubmit({preventDefault: mockPreventDefault});
+      expect(mockPreventDefault.mock.calls.length).toEqual(1);
+      expect(wrapper.state('registerButtonPressed')).toEqual(true);
+      expect(reduxProps.registerUser.mock.calls.length).toEqual(0);
     });
   });
 });
