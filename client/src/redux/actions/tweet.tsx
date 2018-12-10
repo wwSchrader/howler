@@ -36,3 +36,30 @@ export function getAllTweetsApi() {
     });
   };
 };
+
+export function addTweetApi(tweet: string) {
+  return (dispatch: any) => {
+    return fetch('/api/tweets/add', {
+      body: JSON.stringify({tweetMessage: tweet}),
+      credentials: 'include',
+      method: 'PUT',
+    })
+    .then((resp: any) => {
+      if(!resp.ok) {
+        throw new Error(resp.statusText);
+      }
+      return resp.json();
+    })
+    .then((response) => {
+      if (response.tweetPosted) {
+        // if successful, close modal
+        return dispatch(setShowAddTweetModal(false));
+      } else {
+        // handle errors here
+      }
+    })
+    .catch((err) => {
+      // handle errors here
+    });
+  };
+};

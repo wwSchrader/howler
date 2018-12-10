@@ -1,5 +1,5 @@
 import fetchMock from 'fetch-mock';
-import configureMockStore from 'redux-mock-store';
+import configureMockStore, {MockStore} from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as types from '../constants/ActionTypes';
 import * as actions from './tweet';
@@ -81,5 +81,32 @@ describe('Tweet actions', () => {
     };
 
     expect(actions.setShowAddTweetModal(true)).toEqual(expectedAction);
+  });
+
+  describe('addTweetApi thunk action', () => {
+    let store: MockStore;
+    beforeEach(() => {
+      store = mockStore({});
+    });
+
+    afterEach(() => {
+      fetchMock.restore();
+    });
+
+    it('should handle successful tweet add', () => {
+      const testTweet = 'this is a test tweet #great @everyone';
+
+      const expectedActions = [{
+        showAddTweetModal: false,
+        type: types.SHOW_ADD_TWEET_MODAL,
+      }];
+
+      fetchMock.putOnce('/api/tweets/add', {tweetPosted: true});
+
+      return store.dispatch<any>(actions.addTweetApi(testTweet))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
   });
 });
