@@ -6,9 +6,15 @@ import {AddTweetForm} from './AddTweetForm';
 describe('AddTweetForm', () => {
   let wrapper: ShallowWrapper;
   let instance: AddTweetForm;
+  let props: any;
 
   beforeEach(() => {
-    wrapper = shallow(<AddTweetForm />);
+    props = {
+      addTweetApi: jest.fn(),
+      tweet: '',
+    };
+
+    wrapper = shallow(<AddTweetForm {...props}/>);
   });
 
   it('should render a <Form />', () => {
@@ -36,6 +42,20 @@ describe('AddTweetForm', () => {
       const testTweet = 'This is a test tweet #test';
       instance.handleOnTweetTextChange({target: {value: testTweet}});
       expect(wrapper.state('tweet')).toEqual(testTweet);
+    });
+  });
+
+  describe('onSubmit function', () => {
+    beforeEach(() => {
+      instance = wrapper.instance() as AddTweetForm;
+    });
+
+    it('should handle a valid tweet submission', () => {
+      const testTweet = 'This is a valid tweet @everyone #test';
+      wrapper.setState({tweet: testTweet});
+      instance.onSubmit({preventDefault: jest.fn()});
+      expect(props.addTweetApi.mock.calls.length).toEqual(1);
+      expect(props.addTweetApi.mock.calls[0][0]).toBe(testTweet);
     });
   });
 });
