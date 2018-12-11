@@ -1,7 +1,7 @@
 import {shallow, ShallowWrapper} from 'enzyme';
 import * as React from 'react';
 import '../setupTests';
-import {AddTweetForm} from './AddTweetForm';
+import AddTweetForm from './AddTweetForm';
 import {AddTweetModal} from './AddTweetModal';
 
 describe('AddTweetModal', () => {
