@@ -11,6 +11,7 @@ describe('Home', () => {
 
   beforeEach(() => {
     props = {
+      getAllTweetsApi: jest.fn(),
       tweetArray: [
         {
           _id: 'dlsdkjflskjdf',
