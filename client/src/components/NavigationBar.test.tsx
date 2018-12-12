@@ -9,8 +9,10 @@ describe('NavigationBar', () => {
 
   beforeEach(() => {
     props = {
+      logoutUser: jest.fn(),
       setShowAddTweetModal: jest.fn(),
       setShowUserRegOrLoginModal: jest.fn(),
+      userIsLoggedIn: false,
     }
     wrapper = shallow(<NavigationBar {...props}/>)
   });
@@ -44,6 +46,18 @@ describe('NavigationBar', () => {
     it('should call the setShowUserRegOrLoginModal redux action', () => {
       instance.handleLoginClick();
       expect(props.setShowUserRegOrLoginModal.mock.calls.length).toEqual(1);
+    });
+  });
+
+  describe('handle LogoutClick function', () => {
+    let instance: NavigationBar;
+    beforeEach(() => {
+      instance = wrapper.instance() as NavigationBar;
+    });
+
+    it('should call the setShowUserRegOrLoginModal redux action', () => {
+      instance.handleLogoutClick();
+      expect(props.logoutUser.mock.calls.length).toEqual(1);
     });
   });
 

@@ -8,20 +8,34 @@ import {
   NavLink,
 } from 'reactstrap';
 import {setShowAddTweetModal} from '../redux/actions/tweet';
-import {setShowUserRegOrLoginModal} from '../redux/actions/user';
+import {logoutUser, setShowUserRegOrLoginModal} from '../redux/actions/user';
 
 export interface IProps {
+  logoutUser: () => void,
   setShowAddTweetModal: (bool: boolean) => void,
   setShowUserRegOrLoginModal: (bool: boolean) => void,
-}
+  userIsLoggedIn: boolean,
+};
 
 export class NavigationBar extends React.Component<IProps> {
   public handleLoginClick = () => {
     this.props.setShowUserRegOrLoginModal(true);
   };
 
+  public handleLogoutClick = () => {
+    this.props.logoutUser();
+  };
+
   public handleAddTweetClick = () => {
     this.props.setShowAddTweetModal(true);
+  };
+
+  public determineToShowLoginOrLogoutButton = () => {
+    if (this.props.userIsLoggedIn) {
+      return <NavLink onClick={this.handleLogoutClick}>Logout</NavLink>;
+    }
+
+    return <NavLink onClick={this.handleLoginClick}>Login</NavLink>;
   };
 
   public render() {
@@ -38,7 +52,7 @@ export class NavigationBar extends React.Component<IProps> {
             <NavLink onClick={this.handleAddTweetClick}>Add Tweet</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink onClick={this.handleLoginClick}>Login</NavLink>
+            {this.determineToShowLoginOrLogoutButton()}
           </NavItem>
         </Nav>
       </Navbar>
@@ -46,11 +60,18 @@ export class NavigationBar extends React.Component<IProps> {
   };
 };
 
+const mapStateToProps = (state: any) => {
+  return {
+    userIsLoggedIn: state.userIsLoggedIn,
+  };
+};
+
 const mapDispatchToProps = (dispatch: any) => {
   return {
+    logoutUser: () => dispatch(logoutUser()),
     setShowAddTweetModal: (bool: boolean) => dispatch(setShowAddTweetModal(bool)),
     setShowUserRegOrLoginModal: (bool: boolean) => dispatch(setShowUserRegOrLoginModal(bool)),
   };
 };
 
-export default connect(null, mapDispatchToProps)(NavigationBar);
+export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);
