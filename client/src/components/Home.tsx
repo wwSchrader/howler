@@ -1,8 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {getAllTweetsApi} from '../redux/actions/tweet';
 import TweetTemplate from './TweetTemplate';
 
 interface IProps {
+  getAllTweetsApi: () => void,
   tweetArray: [{
     _id: string,
     date: Date,
@@ -12,6 +14,10 @@ interface IProps {
 };
 
 export class Home extends React.Component<IProps> {
+  public componentDidMount() {
+    this.props.getAllTweetsApi();
+  };
+
   public render() {
     return (
       <div>
@@ -36,4 +42,10 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-export default connect(mapStateToProps, null)(Home);
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    getAllTweetsApi: () => dispatch(getAllTweetsApi()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
