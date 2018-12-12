@@ -62,12 +62,16 @@ describe('User actions', () => {
       fetchMock.restore()
     });
 
-    it('creates USER_LOGIN when fetching register user has been done', () => {
+    it('creates USER_LOGIN and and showUserRegOrLoginModal as false when fetching register user has been done', () => {
       const store = mockStore({});
       const expectedActions = [
         {
         type: types.USER_LOGIN,
         userLoginStatus: true,
+        },
+        {
+          showUserRegOrLoginModal: false,
+          type: types.SHOW_USER_OR_REG_LOGIN_MODAL,
         },
         {
           failedRegistrationMessage: null,
@@ -110,9 +114,13 @@ describe('User actions', () => {
       fetchMock.restore()
     });
 
-    it('should create a true userlogin action upon successful login', () => {
+    it('should create a true userlogin and setShowUserRegOrLoginModal action upon successful login', () => {
       const store = mockStore({});
       const expectedActions = [
+        {
+          showUserRegOrLoginModal: false,
+          type: types.SHOW_USER_OR_REG_LOGIN_MODAL,
+        },
         {
           type: types.USER_LOGIN,
           userLoginStatus: true,

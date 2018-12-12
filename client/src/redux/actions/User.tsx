@@ -54,6 +54,7 @@ export function registerUser(usernam: string, userEmail: string, userPassword: s
     .then(body => {
       if (body.isRegistered) {
         dispatch(isLoggedIn(true));
+        dispatch(setShowUserRegOrLoginModal(false));
         return dispatch(setRegistrationFailedMessage(null));
       } else {
         dispatch(isLoggedIn(false));
@@ -85,6 +86,7 @@ export function loginUser(usernam: string, userPassword: string) {
     .then((resp) => resp.json())
     .then((body) => {
       if(body.isLoggedIn) {
+        dispatch(setShowUserRegOrLoginModal(false));
         return dispatch(isLoggedIn(true));
       } else {
         return dispatch(isLoggedIn(false));
