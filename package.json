@@ -10,7 +10,8 @@
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
     "watch-ts": "tsc -w",
     "watch-node": "set DEBUG=express:* & nodemon ./build/src/server.js",
-    "test": "mocha --require ts-node/register test/**/*.ts --exit"
+    "test": "mocha --require ts-node/register test/**/*.ts --exit",
+    "heroku-postbuild": "cd client && yarn --production=false && yarn run build"
   },
   "dependencies": {
     "bcrypt": "^3.0.2",
