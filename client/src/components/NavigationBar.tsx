@@ -49,7 +49,7 @@ export class NavigationBar extends React.Component<IProps> {
         </Nav>
         <Nav navbar={true}>
           <NavItem>
-            <NavLink onClick={this.handleAddTweetClick}>Add Tweet</NavLink>
+            {this.props.userIsLoggedIn ? <NavLink onClick={this.handleAddTweetClick}>Add Tweet</NavLink> : null}            
           </NavItem>
           <NavItem>
             {this.determineToShowLoginOrLogoutButton()}
