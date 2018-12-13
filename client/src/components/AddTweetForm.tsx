@@ -18,6 +18,8 @@ export class AddTweetForm extends React.Component<IPropsFromRedux, IProps> {
     this.state = {
       tweet: '',
     };
+
+    this.onSubmit = this.onSubmit.bind(this);
   };
 
   public handleOnTweetTextChange = (e: any) => {
@@ -34,7 +36,7 @@ export class AddTweetForm extends React.Component<IPropsFromRedux, IProps> {
 
   public render() {
     return (
-      <Form>
+      <Form onSubmit={this.onSubmit}>
         <FormGroup>
           <Input 
             type='textarea'
@@ -42,7 +44,7 @@ export class AddTweetForm extends React.Component<IPropsFromRedux, IProps> {
             onChange={this.handleOnTweetTextChange}
           />
         </FormGroup>
-        <Button>
+        <Button type='submit'>
           Howl
         </Button>
       </Form>
