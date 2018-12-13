@@ -5,6 +5,7 @@ import AddTweetModal from './AddTweetModal';
 import App from './App';
 import NavigationBar from './NavigationBar';
 import UserRegOrLoginModal from './UserRegOrLoginModal';
+import Home from './Home';
 
 describe('App', () => {
   let wrapper: ShallowWrapper;
@@ -25,5 +26,9 @@ describe('App', () => {
 
   it('should render the AddTweetModal', () => {
     expect(wrapper.containsMatchingElement(<AddTweetModal />)).toEqual(true);
+  });
+
+  it('should render the AddTweetModal', () => {
+    expect(wrapper.containsMatchingElement(<Home />)).toEqual(true);
   });
 });
