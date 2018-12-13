@@ -42,6 +42,7 @@ export function addTweetApi(tweet: string) {
     return fetch('/api/tweets/add', {
       body: JSON.stringify({tweetMessage: tweet}),
       credentials: 'include',
+      headers: {'Content-Type': 'application/json'},
       method: 'PUT',
     })
     .then((resp: any) => {

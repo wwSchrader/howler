@@ -59,6 +59,12 @@ router.post(
       if (!user) {
         res.status(401).json({ isLoggedIn: false, authMessage: info.authMessage });
       } else if (!err && user) {
+        req.logIn(user, (error: any) => {
+          if (error) {
+            console.log('Error in logIn');
+            throw error;
+          }
+        });
         res.json({ isLoggedIn: true });
       } else {
         res.status(500).send();

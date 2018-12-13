@@ -13,11 +13,13 @@ const LOCAL_STRATEGY = passportLocal.Strategy;
 
 const setupPassport: (app: express.Application) => void = (app: express.Application) => {
   app.use(expressSession({
+    cookie: { maxAge: 86400000 },
+    name: 'sessionId',
     resave: false,
     saveUninitialized: false,
     secret: process.env.SESSION_SECRET as string,
     store: new REDIS_STORE({
-      url: process.env.PORT,
+      url: process.env.REDIS_URL,
     }),
   }));
 
