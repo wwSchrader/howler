@@ -52,7 +52,7 @@ export function registerUser(usernam: string, userEmail: string, userPassword: s
     })
     .then(resp => resp.json())
     .then(body => {
-      if (body.isRegistered) {
+      if (body.registrationStatus) {
         dispatch(isLoggedIn(true));
         dispatch(setShowUserRegOrLoginModal(false));
         return dispatch(setRegistrationFailedMessage(null));

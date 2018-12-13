@@ -79,7 +79,7 @@ describe('User actions', () => {
         },
       ];
   
-      fetchMock.putOnce('/api/users/register', {isRegistered: true});
+      fetchMock.putOnce('/api/users/register', {registrationStatus: true});
   
       return store.dispatch<any>(actions.registerUser('someusername', 'someemail', 'somepassword'))
       .then(() => {
