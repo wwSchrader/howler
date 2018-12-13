@@ -3,9 +3,9 @@ import * as React from 'react';
 import '../setupTests';
 import AddTweetModal from './AddTweetModal';
 import App from './App';
+import Home from './Home';
 import NavigationBar from './NavigationBar';
 import UserRegOrLoginModal from './UserRegOrLoginModal';
-import Home from './Home';
 
 describe('App', () => {
   let wrapper: ShallowWrapper;
