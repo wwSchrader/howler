@@ -13,7 +13,9 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../client/build')));
-console.log(path.join(__dirname, '../client/build')););
+const pathString = path.join(__dirname, '../client/build'));
+
+console.log(pathString);
 
 app.set('port', process.env.PORT || 3000);
 
