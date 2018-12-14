@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {getAllTweetsApi} from '../redux/actions/tweet';
+import {getAllTweetsApi} from '../redux/actions/Tweet';
 import TweetTemplate from './TweetTemplate';
 
 interface IProps {

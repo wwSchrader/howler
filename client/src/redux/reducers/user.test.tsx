@@ -1,5 +1,5 @@
 import * as Types from '../constants/ActionTypes';
-import * as User from './user';
+import * as User from './User';
 
 describe('User reducers', () => {
   describe('userIsLoggedIn', () => {

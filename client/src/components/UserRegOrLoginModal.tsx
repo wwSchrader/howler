@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {Button, Modal, ModalBody, ModalHeader} from 'reactstrap';
 import ModalFooter from 'reactstrap/lib/ModalFooter';
-import {setShowUserRegOrLoginModal} from '../redux/actions/user';
+import {setShowUserRegOrLoginModal} from '../redux/actions/User';
 import LoginForm from './LoginForm';
 import RegistrationForm from './RegistrationForm';
 

@@ -7,8 +7,8 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
-import {setShowAddTweetModal} from '../redux/actions/tweet';
-import {logoutUser, setShowUserRegOrLoginModal} from '../redux/actions/user';
+import {setShowAddTweetModal} from '../redux/actions/Tweet';
+import {logoutUser, setShowUserRegOrLoginModal} from '../redux/actions/User';
 
 export interface IProps {
   logoutUser: () => void,

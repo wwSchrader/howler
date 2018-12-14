@@ -2,7 +2,7 @@ import fetchMock from 'fetch-mock';
 import configureMockStore, {MockStore} from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as types from '../constants/ActionTypes';
-import * as actions from './tweet';
+import * as actions from './Tweet';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Button, Form, FormGroup, Input, Label} from 'reactstrap';
-import {loginUser} from '../redux/actions/user';
+import {loginUser} from '../redux/actions/User';
 
 export interface IPropsFromRedux {
   loginUser: (usernam: string, userPassword: string) => void,

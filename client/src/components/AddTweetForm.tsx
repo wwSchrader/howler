@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Button, Form, FormGroup, Input} from 'reactstrap';
-import {addTweetApi} from '../redux/actions/tweet';
+import {addTweetApi} from '../redux/actions/Tweet';
 
 export interface IPropsFromRedux {
   addTweetApi: (tweet: string) => void,

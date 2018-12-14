@@ -1,5 +1,5 @@
 import * as Types from '../constants/ActionTypes';
-import * as Tweet from './tweet';
+import * as Tweet from './Tweet';
 
 describe('Tweet reducers', () => {
   describe('tweetArray', () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Modal, ModalBody, ModalHeader} from 'reactstrap';
-import {setShowAddTweetModal} from '../redux/actions/tweet';
+import {setShowAddTweetModal} from '../redux/actions/Tweet';
 import AddTweetForm from './AddTweetForm';
 
 export interface IDispatchFromProps {

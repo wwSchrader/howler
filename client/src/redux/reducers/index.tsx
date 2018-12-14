@@ -2,14 +2,14 @@ import { combineReducers } from 'redux';
 import {
   setTweetArray,
   showAddTweetModal,
-} from './tweet';
+} from './Tweet';
 import {
   setFailedLoginMessage,
   setFailedRegistrationMessage,
   setShowingUserRegOrLogin,
   setUsername,
   userIsLoggedIn,
-} from './user';
+} from './User';
 
 const howlerApp = combineReducers({
   setFailedLoginMessage,
