@@ -14,6 +14,7 @@
     "heroku-postbuild": "yarn build-ts && cd client && yarn --production=false && yarn run build"
   },
   "dependencies": {
+    "@types/node": "^10.12.15",
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
@@ -42,7 +43,6 @@
     "@types/mocha": "^5.2.5",
     "@types/mongoose": "^5.2.20",
     "@types/morgan": "^1.7.35",
-    "@types/node": "^10.12.15",
     "@types/passport": "^0.4.6",
     "@types/passport-local": "^1.0.33",
     "@types/sinon": "^5.0.5",
