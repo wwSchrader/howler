@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import { setupMongoose } from './component-mongo';
 import { index } from './routes/index';
 import { setupPassport } from './component-passport';
+import path from 'path';
 
 const app: express.Application = express();
 app.use(morgan('dev'));
