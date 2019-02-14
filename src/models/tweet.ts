@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 export interface ITweet extends mongoose.Document {
   message: string;
   ownerId: string;
-  date: Date;
+  date: number;
   retweetId: string;
   hashtags: string[];
   mentions: string[];
@@ -22,7 +22,7 @@ const tweetSchema = new Schema({
     required: [true, 'User id required!'],
   },
   date: {
-    type: Date,
+    type: Number,
     default: Date.now(),
   },
   retweetId: {

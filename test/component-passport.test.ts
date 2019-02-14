@@ -1,42 +1,45 @@
-import sinon, { SinonStub, SinonSpy } from 'sinon';
 import { ensureAuthenticated } from '../src/component-passport';
 
 describe('Passport Component', () => {
   describe('Ensure Authenticated handling', () => {
+    let nextSpy: jest.Mock;
+    let responseSpy: jest.SpyInstance;
     let reqObject: any;
     let resObject: any;
-    let nextSpy: SinonSpy;
-    let responseSpy: SinonSpy;
-
     beforeEach(() => {
-      nextSpy = sinon.spy();
+      nextSpy = jest.fn();
+    });
+
+    afterEach(() => {
+      nextSpy.mockRestore();
     });
 
     describe('successful authentication', () => {
-      before(() => {
+      beforeAll(() => {
         reqObject = { isAuthenticated() { return true; } };
         resObject = {};
       });
       it('successful authentication should call next once', (done) => {
-        ensureAuthenticated(reqObject, {}, nextSpy);
+        ensureAuthenticated(reqObject, resObject, nextSpy);
 
-        nextSpy.calledOnce.should.equal(true);
+        expect(nextSpy.mock.calls.length).toBe(1);
         done();
       });
     });
 
     describe('failed authentication', () => {
-      before(() => {
+      beforeAll(() => {
         reqObject = { isAuthenticated() { return false; } };
         resObject = { sendStatus(statusCode: number) { return 'something here!'; } };
-        responseSpy = sinon.spy(resObject, 'sendStatus');
+        responseSpy = jest.spyOn(resObject, 'sendStatus');
       });
 
       it('failed authentication should return 401 response', (done) => {
         ensureAuthenticated(reqObject, resObject, nextSpy);
-        nextSpy.calledOnce.should.equal(false);
-        responseSpy.calledWith(401).should.equal(true);
-        responseSpy.restore();
+        expect(nextSpy).not.toHaveBeenCalled();
+        expect(responseSpy).toHaveBeenCalled();
+        expect(responseSpy).toHaveBeenCalledWith(401);
+        responseSpy.mockRestore();
         done();
       });
     });

@@ -1,4 +1,4 @@
-import connectRedis = require('connect-redis');
+import { connectRedis } from './session';
 import cookieParser from 'cookie-parser';
 import 'dotenv';
 import express, { NextFunction } from 'express';
@@ -10,6 +10,8 @@ import bcrypt from 'bcrypt';
 
 const REDIS_STORE = connectRedis(expressSession);
 const LOCAL_STRATEGY = passportLocal.Strategy;
+
+const authenticate = passport.authenticate;
 
 const setupPassport: (app: express.Application) => void = (app: express.Application) => {
   app.use(expressSession({
@@ -26,11 +28,13 @@ const setupPassport: (app: express.Application) => void = (app: express.Applicat
   app.use(cookieParser());
 
   passport.serializeUser<any, any>((user, done) => {
+    console.log('serialize user');
     done(undefined, user._id);
   });
 
   passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => {
+      console.log('deserialize user');
       done(err, user ? user : undefined);
     });
   });
@@ -43,6 +47,7 @@ const setupPassport: (app: express.Application) => void = (app: express.Applicat
    */
   passport.use(new LOCAL_STRATEGY(
     { passReqToCallback: true }, (req: any, usernm: string, password: string, done: any) => {
+      console.log('Local Strategy called');
       User.findOne({ username: usernm }, (err, user: any) => {
         if (err) { return done(err); }
         if (!user) {
@@ -75,8 +80,22 @@ const ensureAuthenticated = (req: any, res: any, next: NextFunction) => {
   res.sendStatus(401);
 };
 
+const loginUser = (req: any, res: any, next: NextFunction) => {
+  console.log('loginUser called');
+  req.logIn(req.user, (error: any) => {
+    if (error) {
+      console.log('Error in logIn');
+      throw error;
+    } else {
+      res.json({ isLoggedIn: true });
+    }
+  });
+};
+
 export {
   setupPassport,
   passport,
   ensureAuthenticated,
+  loginUser,
+  authenticate,
 };

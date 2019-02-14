@@ -1,61 +1,60 @@
-import sinon, { SinonStub } from 'sinon';
 import { default as Tweet } from '../../src/models/tweet';
 import * as componentPassport from '../../src/component-passport';
-import chai from 'chai';
-import chaiHttp from 'chai-http';
+import { default as requester } from 'supertest';
 
 const apiBaseRoute = '/api/tweets/';
-const should = chai.should();
 
-let app;
-
-chai.use(chaiHttp);
+let app: any;
+let ensureAuthenticated: jest.Mock;
 
 describe('Tweet Route', () => {
-  let requester: any;
-  let authenticate: SinonStub;
 
-  before(async () => {
-    authenticate = sinon
-    .stub(componentPassport, 'ensureAuthenticated')
-    .callsFake((req, res, next) => {
+  beforeAll(async () => {
+    ensureAuthenticated = jest
+    .spyOn(componentPassport, 'ensureAuthenticated')
+    .mockImplementation((req, res, next) => {
+      console.log('Fake!');
       req.user = { _id: '123' };
       next();
     });
 
-    app = require('../../src/server');
-    requester = await chai.request(app).keepOpen();
+    app = await require('../../src/server');
   });
 
-  after(() => {
-    authenticate.restore();
-    requester.close();
+  afterEach(async () => {
+    await app.close();
+  });
+
+  afterAll(() => {
+    ensureAuthenticated.mockRestore();
   });
 
   describe(' PUT /api/tweets/add', () => {
-    let createTweet: SinonStub;
+    let createTweet: jest.Mock;
 
     beforeEach(() => {
-      createTweet = sinon.stub(Tweet, 'create').resolves(null);
+      createTweet = jest.spyOn(Tweet, 'create').mockImplementation(() => Promise.resolve(null),
+      );
     });
 
     afterEach(() => {
-      createTweet.restore();
+      createTweet.mockRestore();
     });
 
     it('should add Tweet with no error', (done) => {
       const tweetMessage = { tweetMessage: 'This is a new tweet. I like #howling @someone' };
-      requester
+
+      requester(app)
         .put(`${apiBaseRoute}add`)
         .send(tweetMessage)
         .then((res: any) => {
-          should.exist(res);
-          res.should.have.status(200);
-          res.should.have.property('body');
-          res.body.should.be.an('object');
-          res.body.should.have.property('tweetPosted');
-          res.body.tweetPosted.should.be.a('boolean');
-          res.body.tweetPosted.should.equal(true);
+          expect(res).toBeDefined();
+          expect(res.statusCode).toBe(200);
+          expect(res).toHaveProperty('body');
+          expect(typeof res.body).toBe('object');
+          expect(res.body).toHaveProperty('tweetPosted');
+          expect(typeof res.body.tweetPosted).toBe('boolean');
+          expect(res.body.tweetPosted).toBe(true);
           done();
         })
         .catch((err: any) => {
@@ -65,34 +64,38 @@ describe('Tweet Route', () => {
   });
 
   describe(' PUT /api/tweets/add', () => {
-    let createTweet: SinonStub;
+    let createTweet: jest.Mock;
 
     beforeEach(() => {
-      createTweet = sinon.stub(Tweet, 'create').rejects({
-        errors: {
-          message: 'Text in message is required!',
-        },
-      });
+      createTweet = jest.spyOn(Tweet, 'create').mockImplementation(() =>
+        Promise.reject(
+          {
+            errors: {
+              message: 'Text in message is required!',
+            },
+          },
+        ),
+      );
     });
 
     afterEach(() => {
-      createTweet.restore();
+      createTweet.mockRestore();
     });
 
     it('should throw error due to no message', (done) => {
       const tweetMessage = { tweetMessage: '' };
-      requester
+      requester(app)
         .put(`${apiBaseRoute}add`)
         .set('content-type', 'application/x-www-form-urlencoded')
         .send(tweetMessage)
         .then((res: any) => {
-          should.exist(res);
-          res.should.have.status(500);
-          res.should.have.property('body');
-          res.body.should.be.an('object');
-          res.body.should.have.property('reason');
-          res.body.reason.should.be.a('string');
-          res.body.reason.should.equal('Text in message is required!');
+          expect(res).toBeDefined();
+          expect(res.statusCode).toBe(500);
+          expect(res).toHaveProperty('body');
+          expect(typeof res.body).toBe('object');
+          expect(res.body).toHaveProperty('reason');
+          expect(typeof res.body.reason).toBe('string');
+          expect(res.body.reason).toBe('Text in message is required!');
           done();
         })
         .catch((err: any) => {
@@ -102,36 +105,38 @@ describe('Tweet Route', () => {
   });
 
   describe(' PUT /api/tweets/add', () => {
-    let createTweet: SinonStub;
+    let createTweet: jest.Mock;
 
     beforeEach(() => {
-      createTweet = sinon.stub(Tweet, 'create').rejects({
-        errors: {
-          message: 'Text in message exceeds 150 characters',
-        },
-      });
+      createTweet = jest.spyOn(Tweet, 'create').mockImplementation(() =>
+        Promise.reject({
+          errors: {
+            message: 'Text in message exceeds 150 characters',
+          },
+        }),
+      );
     });
 
     afterEach(() => {
-      createTweet.restore();
+      createTweet.mockRestore();
     });
 
     it('should throw error due to message exceeding 150 characters', (done) => {
       const tweetMessage = { tweetMessage: `6Y4uLtQQ7FQe6zJFjy3qpwVg1s573WBtW37I
       7n9MJMgoLDO9TCP15HQo3eAKaZXcNG47YUP5542OVh6KyxruxMC9n7lz3H80dyiREF664jkUU0
       6MhnFhOBx3rsFx06qX4c867kZoAP167T4kEahnp34`};
-      requester
+      requester(app)
         .put(`${apiBaseRoute}add`)
         .set('content-type', 'application/x-www-form-urlencoded')
         .send(tweetMessage)
         .then((res: any) => {
-          should.exist(res);
-          res.should.have.status(500);
-          res.should.have.property('body');
-          res.body.should.be.an('object');
-          res.body.should.have.property('reason');
-          res.body.reason.should.be.a('string');
-          res.body.reason.should.equal('Text in message exceeds 150 characters');
+          expect(res).toBeDefined();
+          expect(res.statusCode).toBe(500);
+          expect(res).toHaveProperty('body');
+          expect(typeof res.body).toBe('object');
+          expect(res.body).toHaveProperty('reason');
+          expect(typeof res.body.reason).toBe('string');
+          expect(res.body.reason).toBe('Text in message exceeds 150 characters');
           done();
         })
         .catch((err: any) => {
@@ -141,7 +146,7 @@ describe('Tweet Route', () => {
   });
 
   describe(' GET /api/tweets/all', () => {
-    let getTweet: SinonStub;
+    let getTweet: jest.Mock;
     const firstTweet = {
       message: 'This tweet is awesome #great @me',
       ownerId: '123',
@@ -153,7 +158,7 @@ describe('Tweet Route', () => {
     };
 
     const secondTweet = {
-      message: 'Antother cool #tweet @anyone',
+      message: 'Another cool #tweet @anyone',
       ownerId: '321',
       date: Date.now(),
       retweetId: null,
@@ -163,25 +168,25 @@ describe('Tweet Route', () => {
     };
 
     beforeEach(() => {
-      getTweet = sinon.stub(Tweet, 'find').resolves([firstTweet, secondTweet]);
+      getTweet = jest.spyOn(Tweet, 'find').mockResolvedValue([firstTweet, secondTweet]);
     });
 
     afterEach(() => {
-      getTweet.restore();
+      getTweet.mockRestore();
     });
 
     it('get all tweets without error', (done) => {
-      requester
+      requester(app)
         .get(`${apiBaseRoute}all`)
         .then((res: any) => {
-          should.exist(res);
-          res.should.have.status(200);
-          res.should.have.property('body');
-          res.body.should.be.an('object');
-          res.body.should.have.property('tweets');
-          res.body.tweets.should.be.an('array');
-          res.body.tweets[0].should.eql(firstTweet);
-          res.body.tweets[1].should.eql(secondTweet);
+          expect(res).toBeDefined();
+          expect(res.statusCode).toBe(200);
+          expect(res).toHaveProperty('body');
+          expect(typeof res.body).toBe('object');
+          expect(res.body).toHaveProperty('tweets');
+          expect(typeof res.body.tweets).toBe('object');
+          expect(res.body.tweets[0]).toEqual(firstTweet);
+          expect(res.body.tweets[1]).toEqual(secondTweet);
           done();
         })
         .catch((err: any) => {
