@@ -241,7 +241,7 @@ describe('User Route', () => {
   describe('POST /api/users/login', () => {
 
     beforeEach(() => {
-      authenticate = jest.spyOn(componentPassport, 'authenticate')
+      authenticate = jest.spyOn(componentPassport.passport, 'authenticate')
       .mockImplementation((strategy, cb) => {
         cb(null, { id: 1 }, null);
       });
@@ -280,7 +280,7 @@ describe('User Route', () => {
   describe('POST /api/users/login', () => {
 
     beforeEach(() => {
-      authenticate = jest.spyOn(componentPassport, 'authenticate')
+      authenticate = jest.spyOn(componentPassport.passport, 'authenticate')
       .mockImplementation((strategy, cb) => {
         cb(null, null, { authMessage: 'Incorrect Password!' });
       });
@@ -322,7 +322,7 @@ describe('User Route', () => {
   describe('POST /api/users/login', () => {
 
     beforeEach(() => {
-      authenticate = jest.spyOn(componentPassport, 'authenticate')
+      authenticate = jest.spyOn(componentPassport.passport, 'authenticate')
       .mockImplementation((strategy, cb) => {
         cb(null, null, { authMessage: 'Username not found!' });
       });
