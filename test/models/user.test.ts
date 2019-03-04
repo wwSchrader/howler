@@ -1,7 +1,5 @@
 import { default as User } from '../../src/models/user';
-import chai from 'chai';
-
-const should = chai.should();
+import { type } from 'os';
 
 describe('User Model', () => {
   describe('saving with username & email', () => {
@@ -12,7 +10,7 @@ describe('User Model', () => {
       });
 
       newUser.validate((err) => {
-        should.not.exist(err);
+        expect(err).toBeNull();
         done();
       });
     });
@@ -26,14 +24,15 @@ describe('User Model', () => {
       });
 
       newUser.validate((err) => {
-        should.exist(err);
-        err.should.have.property('errors');
-        err.should.be.an('object');
-        err.errors.should.have.property('username');
-        err.errors.username.should.be.a('object');
-        err.errors.username.should.have.property('message');
-        err.errors.username.message.should.be.a('String');
-        err.errors.username.message.should.equal('Username is required!');
+        expect(err).toBeDefined();
+        expect(typeof err).toBe('object');
+        expect(err).toHaveProperty('errors');
+        expect(typeof err.errors).toBe('object');
+        expect(err.errors).toHaveProperty('username');
+        expect(typeof err.errors.username).toBe('object');
+        expect(err.errors.username).toHaveProperty('message');
+        expect(typeof err.errors.username.message).toBe('string');
+        expect(err.errors.username.message).toBe('Username is required!');
         done();
       });
     });
@@ -47,14 +46,15 @@ describe('User Model', () => {
       });
 
       newUser.validate((err) => {
-        should.exist(err);
-        err.should.have.property('errors');
-        err.should.be.an('object');
-        err.errors.should.have.property('email');
-        err.errors.email.should.be.a('object');
-        err.errors.email.should.have.property('message');
-        err.errors.email.message.should.be.a('String');
-        err.errors.email.message.should.equal('Email is required!');
+        expect(err).toBeDefined();
+        expect(typeof err).toBe('object');
+        expect(err).toHaveProperty('errors');
+        expect(typeof err.errors).toBe('object');
+        expect(err.errors).toHaveProperty('email');
+        expect(typeof err.errors.email).toBe('object');
+        expect(err.errors.email).toHaveProperty('message');
+        expect(typeof err.errors.email.message).toBe('string');
+        expect(err.errors.email.message).toBe('Email is required!');
         done();
       });
     });
