@@ -1,7 +1,4 @@
 import { default as Tweet, ITweet } from '../../src/models/tweet';
-import chai from 'chai';
-
-const should = chai.should();
 
 describe('Tweet Model', () => {
   describe('saving a tweet with valid inputs', () => {
@@ -12,15 +9,15 @@ describe('Tweet Model', () => {
       });
 
       newTweet.validate((err: Error) => {
-        should.not.exist(err);
-        newTweet.should.have.property('hashtags');
-        newTweet.hashtags.should.be.an('array');
-        newTweet.hashtags[0].should.be.a('string');
-        newTweet.hashtags[0].should.equal('#first1st');
-        newTweet.should.have.property('mentions');
-        newTweet.mentions.should.be.an('array');
-        newTweet.mentions[0].should.be.a('string');
-        newTweet.mentions[0].should.equal('@me');
+        expect(err).toBeNull();
+        expect(newTweet).toHaveProperty('hashtags');
+        expect(typeof newTweet.hashtags).toBe('object');
+        expect(typeof newTweet.hashtags[0]).toBe('string');
+        expect(newTweet.hashtags[0]).toBe('#first1st');
+        expect(newTweet).toHaveProperty('mentions');
+        expect(typeof newTweet.mentions).toBe('object');
+        expect(typeof newTweet.mentions[0]).toBe('string');
+        expect(newTweet.mentions[0]).toBe('@me');
         done();
       });
     });
@@ -34,15 +31,15 @@ describe('Tweet Model', () => {
       });
 
       newTweet.validate((err: any) => {
-        should.exist(err);
-        err.should.be.an('object');
-        err.should.have.property('errors');
-        err.errors.should.be.an('object');
-        err.errors.should.have.property('ownerId');
-        err.errors.ownerId.should.be.an('object');
-        err.errors.ownerId.should.have.property('message');
-        err.errors.ownerId.message.should.be.a('string');
-        err.errors.ownerId.message.should.equal('User id required!');
+        expect(err).toBeDefined();
+        expect(typeof err).toBe('object');
+        expect(err).toHaveProperty('errors');
+        expect(typeof err.errors).toBe('object');
+        expect(err.errors).toHaveProperty('ownerId');
+        expect(typeof err.errors.ownerId).toBe('object');
+        expect(err.errors.ownerId).toHaveProperty('message');
+        expect(typeof err.errors.ownerId.message).toBe('string');
+        expect(err.errors.ownerId.message).toBe('User id required!');
         done();
       });
     });
@@ -56,15 +53,15 @@ describe('Tweet Model', () => {
       });
 
       newTweet.validate((err: any) => {
-        should.exist(err);
-        err.should.be.an('object');
-        err.should.have.property('errors');
-        err.errors.should.be.an('object');
-        err.errors.should.have.property('message');
-        err.errors.message.should.be.an('object');
-        err.errors.message.should.have.property('message');
-        err.errors.message.message.should.be.a('string');
-        err.errors.message.message.should.equal('Text in message is required!');
+        expect(err).toBeDefined();
+        expect(typeof err).toBe('object');
+        expect(err).toHaveProperty('errors');
+        expect(typeof err.errors).toBe('object');
+        expect(err.errors).toHaveProperty('message');
+        expect(typeof err.errors.message).toBe('object');
+        expect(err.errors.message).toHaveProperty('message');
+        expect(typeof err.errors.message.message).toBe('string');
+        expect(err.errors.message.message).toBe('Text in message is required!');
         done();
       });
     });
@@ -83,15 +80,15 @@ describe('Tweet Model', () => {
       });
 
       newTweet.validate((err: any) => {
-        should.exist(err);
-        err.should.be.an('object');
-        err.should.have.property('errors');
-        err.errors.should.be.an('object');
-        err.errors.should.have.property('message');
-        err.errors.message.should.be.an('object');
-        err.errors.message.should.have.property('message');
-        err.errors.message.message.should.be.a('string');
-        err.errors.message.message.should.equal('Text in message exceeds 150 characters');
+        expect(err).toBeDefined();
+        expect(typeof err).toBe('object');
+        expect(err).toHaveProperty('errors');
+        expect(typeof err.errors).toBe('object');
+        expect(err.errors).toHaveProperty('message');
+        expect(typeof err.errors.message).toBe('object');
+        expect(err.errors.message).toHaveProperty('message');
+        expect(typeof err.errors.message.message).toBe('string');
+        expect(err.errors.message.message).toBe('Text in message exceeds 150 characters');
         done();
       });
     });
