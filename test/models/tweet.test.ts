@@ -10,6 +10,9 @@ describe('Tweet Model', () => {
 
       newTweet.validate((err: Error) => {
         expect(err).toBeNull();
+        expect(newTweet).toHaveProperty('message');
+        expect(typeof newTweet.message).toBe('string');
+        expect(newTweet.message).toBe('First tweet! #first1st #second2nd #third #3434 @me @you2');
         expect(newTweet).toHaveProperty('hashtags');
         expect(typeof newTweet.hashtags).toBe('object');
         expect(typeof newTweet.hashtags[0]).toBe('string');
