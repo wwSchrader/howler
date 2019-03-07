@@ -6,14 +6,10 @@ describe('Tweet Model', () => {
       const newTweet: any = new Tweet({
         message: 'First tweet! #first1st #second2nd #third #3434 @me @you2',
         ownerId: 'warren',
-        ownerName: 'Warren Awesomeness',
       });
 
       newTweet.validate((err: Error) => {
         expect(err).toBeNull();
-        expect(newTweet).toHaveProperty('ownerName');
-        expect(typeof newTweet.ownerName).toBe('string');
-        expect(newTweet.ownerName).toBe('Warren Awesomeness');
         expect(newTweet).toHaveProperty('message');
         expect(typeof newTweet.message).toBe('string');
         expect(newTweet.message).toBe('First tweet! #first1st #second2nd #third #3434 @me @you2');
@@ -35,7 +31,6 @@ describe('Tweet Model', () => {
       const newTweet: any = new Tweet({
         message: 'First tweet! #first1st #second2nd #third #3434 @me @you2',
         ownerId: '',
-        ownerName: 'John Doe',
       });
 
       newTweet.validate((err: any) => {
@@ -53,35 +48,11 @@ describe('Tweet Model', () => {
     });
   });
 
-  describe('saving a tweet with no username', () => {
-    it('should throw an error that username is missing', (done) => {
-      const newTweet: any = new Tweet({
-        message: 'First tweet! #first1st #second2nd #third #3434 @me @you2',
-        ownerId: 'joeDoe',
-        ownerName: '',
-      });
-
-      newTweet.validate((err: any) => {
-        expect(err).toBeDefined();
-        expect(typeof err).toBe('object');
-        expect(err).toHaveProperty('errors');
-        expect(typeof err.errors).toBe('object');
-        expect(err.errors).toHaveProperty('ownerName');
-        expect(typeof err.errors.ownerName).toBe('object');
-        expect(err.errors.ownerName).toHaveProperty('message');
-        expect(typeof err.errors.ownerName.message).toBe('string');
-        expect(err.errors.ownerName.message).toBe('Username is required!');
-        done();
-      });
-    });
-  });
-
   describe('saving a tweet with no text in message', () => {
     it('should throw an error that text in message is missing', (done) => {
       const newTweet: any = new Tweet({
         message: '',
         ownerId: 'bob',
-        ownerName: 'Bob Doe',
       });
 
       newTweet.validate((err: any) => {
@@ -109,7 +80,6 @@ describe('Tweet Model', () => {
       const newTweet: any = new Tweet({
         message: tweetMessageTooLong,
         ownerId: 'bob',
-        ownerName: 'Bob Smith',
       });
 
       newTweet.validate((err: any) => {

@@ -21,10 +21,6 @@ const tweetSchema = new Schema({
     type: String,
     required: [true, 'User id required!'],
   },
-  ownerName: {
-    type: String,
-    required: [true, 'Username is required!'],
-  },
   date: {
     type: Number,
     default: Date.now(),
