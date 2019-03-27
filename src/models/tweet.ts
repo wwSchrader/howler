@@ -49,5 +49,5 @@ tweetSchema.pre<ITweet>('validate', function (next) {
   next();
 });
 
-const Tweet = mongoose.model('Tweet', tweetSchema);
+const Tweet = mongoose.model<ITweet>('Tweet', tweetSchema);
 export default Tweet;

@@ -1,4 +1,5 @@
 import { default as Tweet } from '../../src/models/tweet';
+import { default as User } from '../../src/models/user';
 import * as componentPassport from '../../src/component-passport';
 import { default as requester } from 'supertest';
 
@@ -147,6 +148,7 @@ describe('Tweet Route', () => {
 
   describe(' GET /api/tweets/all', () => {
     let getTweet: jest.Mock;
+    let findUser: jest.Mock;
     const firstTweet = {
       message: 'This tweet is awesome #great @me',
       ownerId: '123',
@@ -169,6 +171,10 @@ describe('Tweet Route', () => {
 
     beforeEach(() => {
       getTweet = jest.spyOn(Tweet, 'find').mockResolvedValue([firstTweet, secondTweet]);
+
+      findUser = jest.spyOn(User, 'findById').mockImplementation(() =>
+        Promise.resolve('Warren Awesomeness'),
+      );
     });
 
     afterEach(() => {
