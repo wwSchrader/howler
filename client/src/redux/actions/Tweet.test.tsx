@@ -20,6 +20,7 @@ describe('Tweet actions', () => {
           ownerId: 'abc123',
           retweet: null,
           retweetId: null,
+          username: 'JoeAwesomeness',
         }
       ];
 
@@ -49,6 +50,7 @@ describe('Tweet actions', () => {
           ownerId: 'abc123',
           retweet: null,
           retweetId: null,
+          username: 'JoeAwesomeness',
         },
         {
           date: 5165465165,
@@ -59,6 +61,7 @@ describe('Tweet actions', () => {
           ownerId: '5464jhfgd',
           retweet: null,
           retweetId: null,
+          username: 'CaralCoolness',
         }
       ];
 

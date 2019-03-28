@@ -17,13 +17,13 @@ describe('Home', () => {
           _id: 'dlsdkjflskjdf',
           date: Date.now(),
           message: 'This is a tweet! #yay',
-          ownerId: 'aproductiveuser123'
+          username: 'aproductiveuser123'
         },
         {
           _id: 'mifnjjklj',
           date: Date.now(),
           message: 'Just another message @everyone',
-          ownerId: 'anotherUser888'
+          username: 'anotherUser888'
         },
       ]
     }
@@ -41,7 +41,7 @@ describe('Home', () => {
             key={prop._id}
             date={prop.date}
             tweetMessage={prop.message}
-            username={prop.ownerId}
+            username={prop.username}
         />
       );
     });

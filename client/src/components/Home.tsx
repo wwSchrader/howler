@@ -11,7 +11,7 @@ interface IProps {
     _id: string,
     date: Date,
     message: string,
-    ownerId: string
+    username: string
   }],
 };
 
@@ -31,7 +31,7 @@ export class Home extends React.Component<IProps> {
                   key={tweet._id}
                   date={tweet.date}
                   tweetMessage={tweet.message}
-                  username={tweet.ownerId}
+                  username={tweet.username}
                 />
               </ div>
             )
