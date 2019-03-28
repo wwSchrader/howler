@@ -13,13 +13,18 @@ export class TweetTemplate extends React.Component<IProps> {
         <div className='TweetHeader'>
           <span>
             <b>{this.props.username}</b>
-            <p>{this.props.date}</p>
+            <p>{new Date(this.props.date).toDateString()}</p>
           </span>
         </div>
         <div className='TweetBody'>
           <span>
             <p>{this.props.tweetMessage}</p>
           </span>
+        </div>
+        <div>
+          <button>Reply</button>
+          <button>Retweet</button>
+          <button>Like</button>
         </div>
       </div>
     );
