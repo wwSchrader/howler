@@ -26,27 +26,31 @@ router.put('/add', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/all', (req, res) => {
-  Tweet.find({})
-  .then((tweetArray) => {
-    const results = tweetArray.map((tweet) => {
-      return User.findById(tweet.ownerId)
+  Tweet.find({}).lean().exec()
+  .then(async (tweetArray) => {
+    const results = tweetArray.map(async (tweet: any) => {
+      return await User.findById(tweet.ownerId)
       .then((ownerObject) => {
         if (ownerObject) {
-          return { ...tweet, ownerName: ownerObject.username };
+          return { ...tweet, username: ownerObject.username };
         }
 
         // return tweet with null owner name if not found for some reason
-        return { ...tweet, ownerName: null };
+        return { ...tweet, username: null };
       });
     });
 
     // wait to resolve all of the .map promises
-    return Promise.all(results).then(completed => completed);
+    return await Promise.all(results)
+    .then((finishedTweetArray) => {
+      return finishedTweetArray;
+    });
   })
   .then((tweetArray) => {
     res.json({ tweets: tweetArray });
   })
   .catch((err) => {
+    console.log('SOMETHING WENT WRONG!!!!!!');
     console.log(err);
     res.sendStatus(500);
   });

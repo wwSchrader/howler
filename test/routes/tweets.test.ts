@@ -169,11 +169,39 @@ describe('Tweet Route', () => {
       deleted: false,
     };
 
+    const usernameObj = {
+      username: 'Warren Awesomeness',
+    };
+
+    const finalFirstTweet = {
+      ...firstTweet,
+      ...usernameObj,
+    };
+
+    const finalSecondTweet = {
+      ...secondTweet,
+      ...usernameObj,
+    };
+
     beforeEach(() => {
-      getTweet = jest.spyOn(Tweet, 'find').mockResolvedValue([firstTweet, secondTweet]);
+      const findTweetArrayResult = new Promise((resolve, reject) => {
+        resolve([firstTweet, secondTweet]);
+      });
+      const findTweetArrayStub = jest.fn(() => {
+        return findTweetArrayResult;
+      });
+      const execStub = { exec: findTweetArrayStub };
+      const leanResult = jest.fn(() => {
+        return execStub;
+      });
+      const leanStub = { lean: leanResult };
+      const findResult = jest.fn(() => {
+        return leanStub;
+      });
+      getTweet = jest.spyOn(Tweet, 'find').mockImplementation(findResult);
 
       findUser = jest.spyOn(User, 'findById').mockImplementation(() =>
-        Promise.resolve('Warren Awesomeness'),
+        Promise.resolve(usernameObj),
       );
     });
 
@@ -191,8 +219,8 @@ describe('Tweet Route', () => {
           expect(typeof res.body).toBe('object');
           expect(res.body).toHaveProperty('tweets');
           expect(typeof res.body.tweets).toBe('object');
-          expect(res.body.tweets[0]).toEqual(firstTweet);
-          expect(res.body.tweets[1]).toEqual(secondTweet);
+          expect(res.body.tweets[0]).toEqual(finalFirstTweet);
+          expect(res.body.tweets[1]).toEqual(finalSecondTweet);
           done();
         })
         .catch((err: any) => {
