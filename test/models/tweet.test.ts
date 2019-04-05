@@ -1,6 +1,16 @@
 import { default as Tweet, ITweet } from '../../src/models/tweet';
 
 describe('Tweet Model', () => {
+  let findTweet: jest.Mock;
+
+  beforeEach(() => {
+    findTweet = jest.spyOn(Tweet, 'findById').mockImplementation(() => Promise.resolve(true));
+  });
+
+  afterEach(() => {
+    findTweet.mockRestore();
+  });
+
   describe('saving a tweet with valid inputs', () => {
     it('should save', (done) => {
       const newTweet: any = new Tweet({
@@ -92,6 +102,61 @@ describe('Tweet Model', () => {
         expect(err.errors.message).toHaveProperty('message');
         expect(typeof err.errors.message.message).toBe('string');
         expect(err.errors.message.message).toBe('Text in message exceeds 150 characters');
+        done();
+      });
+    });
+  });
+
+  describe('saving a tweet with an invalid retweet id', () => {
+    beforeEach(() => {
+      findTweet = jest.spyOn(Tweet, 'findById').mockImplementation(() => Promise.resolve(false));
+    });
+
+    it('should throw an error that retweet id doesnt match in database', (done) => {
+      const newInvalidTweet: ITweet = new Tweet({
+        message: 'blah blah blah',
+        ownerId: 'bob',
+        retweetId: 'invalidTweetId123',
+      });
+
+      newInvalidTweet.validate((err: any) => {
+        expect(err).toBeDefined();
+        expect(typeof err).toBe('object');
+        expect(err).toHaveProperty('errors');
+        expect(typeof err.errors).toBe('object');
+        expect(err.errors).toHaveProperty('retweetId');
+        expect(typeof err.errors.retweetId).toBe('object');
+        expect(err.errors.retweetId).toHaveProperty('message');
+        expect(typeof err.errors.retweetId.message).toBe('string');
+        expect(err.errors.retweetId.message).toBe('Matching tweet to retweetId is not found');
+        done();
+      });
+    });
+  });
+
+  describe('saving a tweet with an valid retweet id', () => {
+    beforeEach(() => {
+      findTweet = jest.spyOn(Tweet, 'findById').mockImplementation(() => Promise.resolve(true));
+    });
+
+    it('should save successfuly', (done) => {
+      const newTweet: ITweet = new Tweet({
+        message: 'blah blah blah',
+        ownerId: 'bob',
+        retweetId: 'aRealTweetId',
+      });
+
+      newTweet.validate((err: any) => {
+        expect(err).toBeNull();
+        expect(newTweet).toHaveProperty('message');
+        expect(typeof newTweet.message).toBe('string');
+        expect(newTweet.message).toBe('blah blah blah');
+        expect(newTweet).toHaveProperty('hashtags');
+        expect(typeof newTweet.hashtags).toBe('object');
+        expect(newTweet.hashtags).toBeNull();
+        expect(newTweet).toHaveProperty('mentions');
+        expect(typeof newTweet.mentions).toBe('object');
+        expect(newTweet.mentions).toBeNull();
         done();
       });
     });

@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
+import { rejects } from 'assert';
 const Schema = mongoose.Schema;
+mongoose.Promise = Promise;
 
 export interface ITweet extends mongoose.Document {
   message: string;
   ownerId: string;
   date: number;
-  retweetId: string;
+  retweetId?: string;
   hashtags: string[];
   mentions: string[];
   deleted: boolean;
@@ -28,6 +30,24 @@ const tweetSchema = new Schema({
   retweetId: {
     type: String,
     default: null,
+    validate: {
+      validator(v: string): Promise<any> {
+        return new Promise((resolve: any, reject: any) => {
+          // if a tweet is not found, return false to trigger validation error
+          Tweet.findById(v)
+          .then((res: any) => {
+            if (!res) {
+              resolve(false);
+            }
+            resolve(true);
+          })
+          .catch((err) => {
+            reject(false);
+          });
+        })
+      },
+      message: 'Matching tweet to retweetId is not found',
+    },
   },
   hashtags: [{
     type: String,
