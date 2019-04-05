@@ -44,7 +44,7 @@ const tweetSchema = new Schema({
           .catch((err) => {
             reject(false);
           });
-        })
+        });
       },
       message: 'Matching tweet to retweetId is not found',
     },
