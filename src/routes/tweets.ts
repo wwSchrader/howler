@@ -19,7 +19,8 @@ router.put('/add', ensureAuthenticated, (req, res) => {
     if (
       err.errors.message === 'Text in message is required!' ||
       err.errors.message === 'Text in message exceeds 150 characters' ||
-      err.errors.message === 'Matching tweet to retweetId is not found'
+      err.errors.message === 'Matching tweet to retweetId is not found' ||
+      err.errors.message === 'Matching tweet to replyId is not found'
     ) {
       message = err.errors.message;
     } else {

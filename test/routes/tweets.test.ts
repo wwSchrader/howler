@@ -185,6 +185,45 @@ describe('Tweet Route', () => {
     });
   });
 
+  describe(' PUT /api/tweets/add', () => {
+    let createTweet: jest.Mock;
+
+    beforeEach(() => {
+      createTweet = jest.spyOn(Tweet, 'create').mockImplementation(() =>
+        Promise.reject({
+          errors: {
+            message: 'Matching tweet to replyId is not found',
+          },
+        }),
+      );
+    });
+
+    afterEach(() => {
+      createTweet.mockRestore();
+    });
+
+    it('should throw error due to replyId not being found', (done) => {
+      const tweetMessage = { tweetMessage: 'Just a valid tweet', replyId: 'invalidTweetId' };
+      requester(app)
+        .put(`${apiBaseRoute}add`)
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .send(tweetMessage)
+        .then((res: any) => {
+          expect(res).toBeDefined();
+          expect(res.statusCode).toBe(500);
+          expect(res).toHaveProperty('body');
+          expect(typeof res.body).toBe('object');
+          expect(res.body).toHaveProperty('reason');
+          expect(typeof res.body.reason).toBe('string');
+          expect(res.body.reason).toBe('Matching tweet to replyId is not found');
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
+        });
+    });
+  });
+
   describe(' GET /api/tweets/all', () => {
     let getTweet: jest.Mock;
     let findUser: jest.Mock;
