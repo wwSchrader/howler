@@ -161,4 +161,59 @@ describe('Tweet Model', () => {
       });
     });
   });
+
+  describe('saving a tweet with an invalid reply id', () => {
+    beforeEach(() => {
+      findTweet = jest.spyOn(Tweet, 'findById').mockImplementation(() => Promise.resolve(false));
+    });
+
+    it('should throw an error that reply id doesnt match in database', (done) => {
+      const newInvalidTweet: ITweet = new Tweet({
+        message: 'blah blah blah',
+        ownerId: 'bob',
+        replyId: 'invalidTweetId123',
+      });
+
+      newInvalidTweet.validate((err: any) => {
+        expect(err).toBeDefined();
+        expect(typeof err).toBe('object');
+        expect(err).toHaveProperty('errors');
+        expect(typeof err.errors).toBe('object');
+        expect(err.errors).toHaveProperty('replyId');
+        expect(typeof err.errors.replyId).toBe('object');
+        expect(err.errors.replyId).toHaveProperty('message');
+        expect(typeof err.errors.replyId.message).toBe('string');
+        expect(err.errors.replyId.message).toBe('Matching tweet to replyId is not found');
+        done();
+      });
+    });
+  });
+
+  describe('saving a tweet with an valid reply id', () => {
+    beforeEach(() => {
+      findTweet = jest.spyOn(Tweet, 'findById').mockImplementation(() => Promise.resolve(true));
+    });
+
+    it('should save successfuly', (done) => {
+      const newTweet: ITweet = new Tweet({
+        message: 'blah blah blah',
+        ownerId: 'bob',
+        retweetId: 'aRealTweetId',
+      });
+
+      newTweet.validate((err: any) => {
+        expect(err).toBeNull();
+        expect(newTweet).toHaveProperty('message');
+        expect(typeof newTweet.message).toBe('string');
+        expect(newTweet.message).toBe('blah blah blah');
+        expect(newTweet).toHaveProperty('hashtags');
+        expect(typeof newTweet.hashtags).toBe('object');
+        expect(newTweet.hashtags).toBeNull();
+        expect(newTweet).toHaveProperty('mentions');
+        expect(typeof newTweet.mentions).toBe('object');
+        expect(newTweet.mentions).toBeNull();
+        done();
+      });
+    });
+  });
 });

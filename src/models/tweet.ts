@@ -49,6 +49,28 @@ const tweetSchema = new Schema({
       message: 'Matching tweet to retweetId is not found',
     },
   },
+  replyId: {
+    type: String,
+    default: null,
+    validate: {
+      validator(v: string): Promise<any> {
+        return new Promise((resolve: any, reject: any) => {
+          // if a tweet is not found, return false to trigger validation error
+          Tweet.findById(v)
+          .then((res: any) => {
+            if (!res) {
+              resolve(false);
+            }
+            resolve(true);
+          })
+          .catch((err) => {
+            reject(false);
+          });
+        });
+      },
+      message: 'Matching tweet to replyId is not found',
+    },
+  },
   hashtags: [{
     type: String,
   }],
