@@ -6,7 +6,11 @@ import { default as User } from '../../src/models/user';
 const router = express.Router();
 
 router.put('/add', ensureAuthenticated, (req, res) => {
-  Tweet.create({ message: req.body.tweetMessage, ownerId: req.user._id })
+  Tweet.create({
+    message: req.body.tweetMessage,
+    ownerId: req.user._id,
+    retweetId: req.body.retweetId ? req.body.retweetId : null,
+  })
   .then((result) => {
     res.json({ tweetPosted: true });
   })
@@ -14,7 +18,8 @@ router.put('/add', ensureAuthenticated, (req, res) => {
     let message: string;
     if (
       err.errors.message === 'Text in message is required!' ||
-      err.errors.message === 'Text in message exceeds 150 characters'
+      err.errors.message === 'Text in message exceeds 150 characters' ||
+      err.errors.message === 'Matching tweet to retweetId is not found'
     ) {
       message = err.errors.message;
     } else {
