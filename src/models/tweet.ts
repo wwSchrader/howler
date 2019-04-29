@@ -33,6 +33,11 @@ const tweetSchema = new Schema({
     validate: {
       validator(v: string): Promise<any> {
         return new Promise((resolve: any, reject: any) => {
+          // to handle if no retweetId is supplied
+          if (!v) {
+            resolve(true);
+          }
+
           // if a tweet is not found, return false to trigger validation error
           Tweet.findById(v)
           .then((res: any) => {
@@ -55,6 +60,11 @@ const tweetSchema = new Schema({
     validate: {
       validator(v: string): Promise<any> {
         return new Promise((resolve: any, reject: any) => {
+          // to handle if no replyId is supplied
+          if (!v) {
+            resolve(true);
+          }
+
           // if a tweet is not found, return false to trigger validation error
           Tweet.findById(v)
           .then((res: any) => {
