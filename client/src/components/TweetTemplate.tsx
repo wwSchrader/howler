@@ -1,4 +1,5 @@
 import React from 'react';
+import ReplyTweetModal from './ReplyTweetModal';
 
 export interface IProps {
   date: Date,
@@ -6,7 +7,21 @@ export interface IProps {
   username: string,
 }
 
-export class TweetTemplate extends React.Component<IProps> {
+export interface IState {
+  showReplyTweetModal: boolean,
+};
+
+export class TweetTemplate extends React.Component<IProps, IState> {
+  constructor(props: any) {
+    super(props);
+
+    this.state = {
+      showReplyTweetModal: false,
+    };
+
+    this.onReplyButtonClick = this.onReplyButtonClick.bind(this);
+  };
+
   public render() {
     return (
       <div>
@@ -22,12 +37,19 @@ export class TweetTemplate extends React.Component<IProps> {
           </span>
         </div>
         <div>
-          <button>Reply</button>
+          <button onClick={this.onReplyButtonClick}>Reply</button>
           <button>Retweet</button>
           <button>Like</button>
         </div>
+        <ReplyTweetModal showReplyTweetModal={this.state.showReplyTweetModal}/>
       </div>
     );
+  };
+
+  private onReplyButtonClick() {
+    this.setState({
+      showReplyTweetModal: true,
+    });
   };
 };
 
