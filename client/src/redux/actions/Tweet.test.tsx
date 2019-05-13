@@ -86,6 +86,15 @@ describe('Tweet actions', () => {
     expect(actions.setShowAddTweetModal(true)).toEqual(expectedAction);
   });
 
+  describe('setShowReplyTweetModal action', () => {
+    const expectedAction = {
+      showReplyTweetModal: true,
+      type: types.SHOW_REPLY_TWEET_MODAL,
+    };
+
+    expect(actions.setShowReplyTweetModal(true)).toEqual(expectedAction);
+  });
+
   describe('addTweetApi thunk action', () => {
     let store: MockStore;
     beforeEach(() => {

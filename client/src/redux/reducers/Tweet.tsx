@@ -17,3 +17,12 @@ export function showAddTweetModal(state = false, action: any) {
       return state;
   };
 };
+
+export function showReplyTweetModal(state = false, action: any) {
+  switch (action.type) {
+    case Types.SHOW_REPLY_TWEET_MODAL:
+      return action.showReplyTweetModal;
+    default:
+      return state;
+  };
+};

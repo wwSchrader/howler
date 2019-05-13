@@ -14,6 +14,13 @@ export function setShowAddTweetModal(bool: boolean) {
   };
 };
 
+export function setShowReplyTweetModal(bool: boolean) {
+  return {
+    showReplyTweetModal: bool,
+    type: Types.SHOW_REPLY_TWEET_MODAL,
+  };
+};
+
 export function getAllTweetsApi() {
   return (dispatch: any) => {
     return fetch('/api/tweets/all', {
