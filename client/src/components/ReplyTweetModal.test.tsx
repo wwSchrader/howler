@@ -3,16 +3,23 @@ import * as React from 'react';
 import '../setupTests';
 import ReplyTweetModal from './ReplyTweetModal';
 
-
 describe('ReplyTweetModal', () => {
   let wrapper: ShallowWrapper;
+  let props: any;
 
   beforeEach(() => {
-    wrapper = shallow(<ReplyTweetModal />);
+    props = {
+      toggleModalState: jest.fn(),
+    }
+    wrapper = shallow(<ReplyTweetModal {...props} />);
   });
 
   it('should render <Modal />', () => {
     expect(wrapper.find('Modal').length).toEqual(1);
+  });
+
+  it('should render <ModalHeader />', () => {
+    expect(wrapper.find('ModalHeader').length).toEqual(1);
   });
 
   it('should render <ModalBody />', () => {

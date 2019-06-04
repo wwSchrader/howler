@@ -19,7 +19,7 @@ export class TweetTemplate extends React.Component<IProps, IState> {
       showReplyTweetModal: false,
     };
 
-    this.onReplyButtonClick = this.onReplyButtonClick.bind(this);
+    this.toggleModalState = this.toggleModalState.bind(this);
   };
 
   public render() {
@@ -37,18 +37,21 @@ export class TweetTemplate extends React.Component<IProps, IState> {
           </span>
         </div>
         <div>
-          <button onClick={this.onReplyButtonClick}>Reply</button>
+          <button onClick={this.toggleModalState}>Reply</button>
           <button>Retweet</button>
           <button>Like</button>
         </div>
-        <ReplyTweetModal showReplyTweetModal={this.state.showReplyTweetModal}/>
+        <ReplyTweetModal
+          showReplyTweetModal={this.state.showReplyTweetModal}
+          toggleModalState={this.toggleModalState}
+          />
       </div>
     );
   };
 
-  private onReplyButtonClick() {
+  public toggleModalState() {
     this.setState({
-      showReplyTweetModal: true,
+      showReplyTweetModal: !this.state.showReplyTweetModal,
     });
   };
 };
