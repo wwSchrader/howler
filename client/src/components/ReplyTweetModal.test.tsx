@@ -8,10 +8,14 @@ describe('ReplyTweetModal', () => {
   let wrapper: ShallowWrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<ReplyTweetModal showReplyTweetModal={true}/>);
+    wrapper = shallow(<ReplyTweetModal />);
   });
 
   it('should render <Modal />', () => {
     expect(wrapper.find('Modal').length).toEqual(1);
+  });
+
+  it('should render <ModalBody />', () => {
+    expect(wrapper.find('ModalBody').length).toEqual(1);
   });
 });

@@ -1,15 +1,17 @@
 import React from 'react';
-import {Modal} from 'reactstrap';
+import {Modal, ModalBody} from 'reactstrap';
 
-export interface IProps {
-  showReplyTweetModal: boolean,
+export interface IDispatchFromProps {
+  showReplyTweetModal?: boolean,
 };
 
-export class ReplyTweetModal extends React.Component<IProps> {
+export class ReplyTweetModal extends React.Component<IDispatchFromProps> {
   public render() {
     return (
       <Modal isOpen={this.props.showReplyTweetModal}>
-        'Reply Tweet Modal'
+        <ModalBody>
+          'Reply Tweet Modal'
+        </ModalBody>
       </Modal>
     );
   };
