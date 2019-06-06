@@ -44,6 +44,9 @@ export class TweetTemplate extends React.Component<IProps, IState> {
         <ReplyTweetModal
           showReplyTweetModal={this.state.showReplyTweetModal}
           toggleModalState={this.toggleModalState}
+          date={this.props.date}
+          username={this.props.username}
+          tweetMessage={this.props.tweetMessage}
           />
       </div>
     );
