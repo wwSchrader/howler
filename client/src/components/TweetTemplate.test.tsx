@@ -12,12 +12,12 @@ describe('TweetTemplate', () => {
       date: Date.now(),
       tweetMessage: 'This is a tweet message #test @everyone',
       username: 'someoneSpecial232'
-    }
+    };
     wrapper = shallow(<TweetTemplate {...props}/>);
   });
 
   it('should render <div />', () => {
-    expect(wrapper.find('div').length).toEqual(4);
+    expect(wrapper.find('div').length).toEqual(3);
   });
 
   it('should render <span />', () => {
@@ -30,9 +30,5 @@ describe('TweetTemplate', () => {
 
   it('should render <p />', () => {
     expect(wrapper.find('p').length).toEqual(2);
-  });
-
-  it('should render <ReplyTweetModal />', () => {
-    expect(wrapper.find('ReplyTweetModal').length).toEqual(1);
   });
 });

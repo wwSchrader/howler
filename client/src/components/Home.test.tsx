@@ -2,7 +2,7 @@ import {shallow, ShallowWrapper} from 'enzyme';
 import * as React from 'react';
 import '../setupTests';
 import {Home} from './Home';
-import TweetTemplate from './TweetTemplate';
+import HomePageTweet from './HomePageTweet';
 
 let props: any;
 
@@ -34,10 +34,10 @@ describe('Home', () => {
     expect(wrapper.find('div').length).toEqual(2);
   });
 
-  it('should render <TweetTemplate />', () => {
+  it('should render <HomePageTweet />', () => {
     const passedProps = props.tweetArray.map((prop: any) => {
       return (
-        <TweetTemplate 
+        <HomePageTweet 
             key={prop._id}
             date={prop.date}
             tweetMessage={prop.message}

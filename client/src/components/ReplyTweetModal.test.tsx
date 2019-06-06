@@ -26,19 +26,7 @@ describe('ReplyTweetModal', () => {
     expect(wrapper.find('ModalBody').length).toEqual(1);
   });
 
-  it('should render <div />', () => {
-    expect(wrapper.find('div').length).toEqual(2);
-  });
-
-  it('should render <span />', () => {
-    expect(wrapper.find('span').length).toEqual(2);
-  });
-
-  it('should render <b />', () => {
-    expect(wrapper.find('b').length).toEqual(1);
-  });
-
-  it('should render <p />', () => {
-    expect(wrapper.find('p').length).toEqual(2);
+  it('should render <TweetTemplate />', () => {
+    expect(wrapper.find('TweetTemplate').length).toEqual(1);
   });
 });

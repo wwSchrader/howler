@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Col, Container} from 'reactstrap';
 import {getAllTweetsApi} from '../redux/actions/Tweet';
 import './Home.css';
-import TweetTemplate from './TweetTemplate';
+import HomePageTweet from './HomePageTweet';
 
 interface IProps {
   getAllTweetsApi: () => void,
@@ -27,7 +27,7 @@ export class Home extends React.Component<IProps> {
           {this.props.tweetArray.map((tweet) => {
             return (
               <div className='tweet-container' key={tweet._id + 'span'}>
-                <TweetTemplate
+                <HomePageTweet
                   key={tweet._id}
                   date={tweet.date}
                   tweetMessage={tweet.message}

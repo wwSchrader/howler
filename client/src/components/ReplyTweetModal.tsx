@@ -1,5 +1,6 @@
 import React from 'react';
 import {Modal, ModalBody, ModalHeader} from 'reactstrap';
+import TweetTemplate from './TweetTemplate';
 
 export interface IDispatchFromProps {
   showReplyTweetModal?: boolean,
@@ -15,17 +16,11 @@ export class ReplyTweetModal extends React.Component<IDispatchFromProps> {
       <Modal isOpen={this.props.showReplyTweetModal} toggle={this.props.toggleModalState}>
         <ModalHeader toggle={this.props.toggleModalState}>Reply Tweet Modal</ModalHeader>
         <ModalBody>
-          <div className='TweetHeader'>
-            <span>
-              <b>{this.props.username}</b>
-              <p>{new Date(this.props.date).toDateString()}</p>
-            </span>
-          </div>
-          <div className='TweetBody'>
-            <span>
-              <p>{this.props.tweetMessage}</p>
-            </span>
-          </div>
+          <TweetTemplate
+            date={this.props.date}
+            tweetMessage={this.props.tweetMessage}
+            username={this.props.username}
+          />
         </ModalBody>
       </Modal>
     );
