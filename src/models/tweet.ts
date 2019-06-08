@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { SchemaType, SchemaTypes } from 'mongoose';
 import { rejects } from 'assert';
 const Schema = mongoose.Schema;
 mongoose.Promise = Promise;
@@ -8,6 +8,7 @@ export interface ITweet extends mongoose.Document {
   ownerId: string;
   date: number;
   retweetId?: string;
+  replyId?: string;
   hashtags: string[];
   mentions: string[];
   deleted: boolean;
@@ -31,7 +32,7 @@ const tweetSchema = new Schema({
     type: String,
     default: null,
     validate: {
-      validator(v: string): Promise<any> {
+      validator(v: string): Promise<boolean> {
         return new Promise((resolve: any, reject: any) => {
           // to handle if no retweetId is supplied
           if (!v) {
@@ -51,7 +52,7 @@ const tweetSchema = new Schema({
           });
         });
       },
-      message: 'Matching tweet to retweetId is not found',
+      msg: 'Matching tweet to retweetId is not found',
     },
   },
   replyId: {
@@ -78,7 +79,7 @@ const tweetSchema = new Schema({
           });
         });
       },
-      message: 'Matching tweet to replyId is not found',
+      msg: 'Matching tweet to replyId is not found',
     },
   },
   hashtags: [{
@@ -93,7 +94,7 @@ const tweetSchema = new Schema({
   },
 });
 
-tweetSchema.pre<ITweet>('validate', function (next) {
+tweetSchema.pre<ITweet>('validate', function (this: ITweet, next: any) {
   const hashtagArray: any = this.message.match(/\B(\#[a-zA-Z0-9]+\b)(?!;)/g);
   this.hashtags = hashtagArray;
   const mentionsArray: any = this.message.match(/\B(\@[a-zA-Z0-9]+\b)(?!;)/g);
