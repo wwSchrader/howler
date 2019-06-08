@@ -29,4 +29,20 @@ describe('ReplyTweetModal', () => {
   it('should render <TweetTemplate />', () => {
     expect(wrapper.find('TweetTemplate').length).toEqual(1);
   });
+
+  it('should render <Form />', () => {
+    expect(wrapper.find('Form').length).toEqual(1);
+  });
+
+  it('should render <FormGroup />', () => {
+    expect(wrapper.find('FormGroup').length).toEqual(1);
+  });
+
+  it('should render <Input />', () => {
+    expect(wrapper.find('Input').length).toEqual(1);
+  });
+
+  it('should render <Button />', () => {
+    expect(wrapper.find('Button').length).toEqual(1);
+  });
 });
