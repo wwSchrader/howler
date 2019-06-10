@@ -32,4 +32,8 @@ describe('HomePageTweet', () => {
   it('should render <ReplyTweetModal />', () => {
     expect(wrapper.find('Connect(ReplyTweetModal)').length).toEqual(1);
   });
+
+  it('should render <RetweetModal />', () => {
+    expect(wrapper.find('RetweetModal').length).toEqual(1);
+  });
 });

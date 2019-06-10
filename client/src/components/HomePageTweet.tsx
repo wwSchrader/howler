@@ -1,5 +1,6 @@
 import React from 'react';
 import ReplyTweetModal from './ReplyTweetModal';
+import RetweetModal from './RetweetModal';
 import TweetTemplate from './TweetTemplate';
 
 export interface IProps {
@@ -11,6 +12,7 @@ export interface IProps {
 
 export interface IState {
   showReplyTweetModal: boolean,
+  showRetweetModal: boolean,
 };
 
 export class HomePageTweet extends React.Component<IProps, IState> {
@@ -19,9 +21,11 @@ export class HomePageTweet extends React.Component<IProps, IState> {
 
     this.state = {
       showReplyTweetModal: false,
+      showRetweetModal: false,
     };
 
-    this.toggleModalState = this.toggleModalState.bind(this);
+    this.toggleReplyModalState = this.toggleReplyModalState.bind(this);
+    this.toggleRetweetModalState = this.toggleRetweetModalState.bind(this);
   };
 
   public render() {
@@ -33,25 +37,39 @@ export class HomePageTweet extends React.Component<IProps, IState> {
           username={this.props.username}
         />
         <div>
-          <button onClick={this.toggleModalState}>Reply</button>
-          <button>Retweet</button>
+          <button onClick={this.toggleReplyModalState}>Reply</button>
+          <button onClick={this.toggleRetweetModalState}>Retweet</button>
           <button>Like</button>
         </div>
         <ReplyTweetModal
           showReplyTweetModal={this.state.showReplyTweetModal}
-          toggleModalState={this.toggleModalState}
+          toggleModalState={this.toggleReplyModalState}
           date={this.props.date}
           username={this.props.username}
           tweetMessage={this.props.tweetMessage}
           replyId={this.props.tweetId}
         />
+        <RetweetModal
+          showRetweetModal={this.state.showRetweetModal}
+          toggleModalState={this.toggleRetweetModalState}
+          date={this.props.date}
+          username={this.props.username}
+          tweetMessage={this.props.tweetMessage}
+          retweetId={this.props.tweetId}
+        />
       </div>
     );
   };
 
-  public toggleModalState() {
+  public toggleReplyModalState() {
     this.setState({
       showReplyTweetModal: !this.state.showReplyTweetModal,
+    });
+  };
+
+  public toggleRetweetModalState() {
+    this.setState({
+      showRetweetModal: !this.state.showRetweetModal,
     });
   };
 };
