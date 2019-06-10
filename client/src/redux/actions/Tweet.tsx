@@ -44,10 +44,10 @@ export function getAllTweetsApi() {
   };
 };
 
-export function addTweetApi(tweet: string) {
+export function addTweetApi(tweet: string, replyTweetId: string | null) {
   return (dispatch: any) => {
     return fetch('/api/tweets/add', {
-      body: JSON.stringify({tweetMessage: tweet}),
+      body: JSON.stringify({tweetMessage: tweet, replyId: replyTweetId}),
       credentials: 'include',
       headers: {'Content-Type': 'application/json'},
       method: 'PUT',

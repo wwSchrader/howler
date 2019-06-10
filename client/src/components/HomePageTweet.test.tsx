@@ -10,8 +10,9 @@ describe('HomePageTweet', () => {
   beforeEach(() => {
     props = {
       date: Date.now(),
+      tweetId: '12312asddas',
       tweetMessage: 'Home page Tweet #home',
-      username: 'ortauberman'
+      username: 'ortauberman',
     };
     wrapper = shallow(<HomePageTweet {...props}/>);
   });
@@ -29,6 +30,6 @@ describe('HomePageTweet', () => {
   });
 
   it('should render <ReplyTweetModal />', () => {
-    expect(wrapper.find('ReplyTweetModal').length).toEqual(1);
+    expect(wrapper.find('Connect(ReplyTweetModal)').length).toEqual(1);
   });
 });

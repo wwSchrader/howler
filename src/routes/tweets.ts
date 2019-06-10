@@ -9,6 +9,7 @@ router.put('/add', ensureAuthenticated, (req, res) => {
   Tweet.create({
     message: req.body.tweetMessage,
     ownerId: req.user._id,
+    replyId: req.body.replyId ? req.body.replyId : null,
     retweetId: req.body.retweetId ? req.body.retweetId : null,
   })
   .then((result) => {

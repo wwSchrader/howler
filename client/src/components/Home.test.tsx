@@ -37,8 +37,9 @@ describe('Home', () => {
   it('should render <HomePageTweet />', () => {
     const passedProps = props.tweetArray.map((prop: any) => {
       return (
-        <HomePageTweet 
+        <HomePageTweet
             key={prop._id}
+            tweetId={prop._id}
             date={prop.date}
             tweetMessage={prop.message}
             username={prop.username}

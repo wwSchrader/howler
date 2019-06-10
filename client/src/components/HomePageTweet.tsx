@@ -4,6 +4,7 @@ import TweetTemplate from './TweetTemplate';
 
 export interface IProps {
   date: Date,
+  tweetId: string,
   tweetMessage: string,
   username: string,
 };
@@ -42,7 +43,8 @@ export class HomePageTweet extends React.Component<IProps, IState> {
           date={this.props.date}
           username={this.props.username}
           tweetMessage={this.props.tweetMessage}
-          />
+          replyId={this.props.tweetId}
+        />
       </div>
     );
   };

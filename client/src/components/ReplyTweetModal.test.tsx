@@ -1,7 +1,7 @@
 import {shallow, ShallowWrapper} from 'enzyme';
 import * as React from 'react';
 import '../setupTests';
-import ReplyTweetModal from './ReplyTweetModal';
+import {ReplyTweetModal} from './ReplyTweetModal';
 
 describe('ReplyTweetModal', () => {
   let wrapper: ShallowWrapper;
@@ -9,8 +9,14 @@ describe('ReplyTweetModal', () => {
 
   beforeEach(() => {
     props = {
+      addTweetApi: jest.fn(),
+      date: Date.now(),
+      replyId: 'asdfjn1231',
+      showReplyTweetModal: true,
       toggleModalState: jest.fn(),
-    }
+      tweetMessage: 'Hello there',
+      username: 'someTestGuy',
+    };
     wrapper = shallow(<ReplyTweetModal {...props} />);
   });
 

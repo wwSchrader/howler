@@ -29,6 +29,7 @@ export class Home extends React.Component<IProps> {
               <div className='tweet-container' key={tweet._id + 'span'}>
                 <HomePageTweet
                   key={tweet._id}
+                  tweetId={tweet._id}
                   date={tweet.date}
                   tweetMessage={tweet.message}
                   username={tweet.username}

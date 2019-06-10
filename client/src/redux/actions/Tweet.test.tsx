@@ -115,7 +115,7 @@ describe('Tweet actions', () => {
 
       fetchMock.putOnce('/api/tweets/add', {tweetPosted: true});
 
-      return store.dispatch<any>(actions.addTweetApi(testTweet))
+      return store.dispatch<any>(actions.addTweetApi(testTweet, null))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
