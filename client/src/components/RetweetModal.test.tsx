@@ -5,9 +5,18 @@ import {RetweetModal} from './RetweetModal';
 
 describe('RetweetModal', () => {
   let wrapper: ShallowWrapper;
+  let props: any;
 
   beforeEach(() => {
-    wrapper = shallow(<RetweetModal />);
+    props = {
+      date: Date.now(),
+      replyId: 'asdfjn1231',
+      showRetweetModal: true,
+      toggleModalState: jest.fn(),
+      tweetMessage: 'Hello there',
+      username: 'someTestGuy',
+    };
+    wrapper = shallow(<RetweetModal {...props}/>);
   });
 
   it('Should render <Modal />', () => {
@@ -20,5 +29,9 @@ describe('RetweetModal', () => {
 
   it('should render <ModalBody />', () => {
     expect(wrapper.find('ModalBody').length).toEqual(1);
+  });
+
+  it('should render <TweetTemplate />', () => {
+    expect(wrapper.find('TweetTemplate').length).toEqual(1);
   });
 });
