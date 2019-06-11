@@ -31,6 +31,18 @@ describe('RetweetModal', () => {
     expect(wrapper.find('ModalBody').length).toEqual(1);
   });
 
+  it('Should render <Form />', () => {
+    expect(wrapper.find('Form').length).toEqual(1);
+  });
+
+  it('Should render <FormGroup />', () => {
+    expect(wrapper.find('FormGroup').length).toEqual(1);
+  });
+
+  it('Should render <Input />', () => {
+    expect(wrapper.find('Input').length).toEqual(1);
+  });
+
   it('should render <TweetTemplate />', () => {
     expect(wrapper.find('TweetTemplate').length).toEqual(1);
   });

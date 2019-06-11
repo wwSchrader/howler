@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, ModalBody, ModalHeader} from 'reactstrap';
+import {Button, Form, FormGroup, Input, Modal, ModalBody, ModalHeader} from 'reactstrap';
 import TweetTemplate from './TweetTemplate';
 
 export interface IProps {
@@ -11,7 +11,27 @@ export interface IProps {
   tweetMessage: string,
 };
 
-export class RetweetModal extends React.Component<IProps> {
+export interface IState {
+  tweetInput: string,
+};
+
+export class RetweetModal extends React.Component<IProps, IState> {
+  constructor(props: any) {
+    super(props);
+
+    this.state = {
+      tweetInput: '',
+    };
+  };
+
+  public handleOnTweetInputChange = (e: any) => {
+    this.setState({tweetInput: e.target.value});
+  };
+
+  public onRetweetButtonSubmit = (e: any) => {
+    e.preventDefault();
+  };
+
   public render() {
     return (
       <Modal isOpen={this.props.showRetweetModal} toggle={this.props.toggleModalState}>
@@ -19,11 +39,22 @@ export class RetweetModal extends React.Component<IProps> {
           Rehowl this to EVERYONE
         </ModalHeader>
         <ModalBody>
-          <TweetTemplate
-            date={this.props.date}
-            tweetMessage={this.props.tweetMessage}
-            username={this.props.username}
-          />
+          <Form>
+            <FormGroup>
+              <Input
+                type='textarea'
+                id='tweetInput'
+                value={this.state.tweetInput}
+                onChange={this.handleOnTweetInputChange}
+              />
+            </FormGroup>
+            <TweetTemplate
+              date={this.props.date}
+              tweetMessage={this.props.tweetMessage}
+              username={this.props.username}
+            />
+            <Button type='submit'>Retweet</Button>
+          </Form>
         </ModalBody>
       </Modal>
     );
