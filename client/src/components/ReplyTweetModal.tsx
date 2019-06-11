@@ -68,7 +68,7 @@ export class ReplyTweetModal extends React.Component<IDispatchFromProps, IState>
 
 const mapDispactchToProps = (dispactch: any) => {
   return {
-    addTweetApi: (tweet: string, id: string) => dispactch(addTweetApi(tweet, id)),
+    addTweetApi: (tweet: string, id: string) => dispactch(addTweetApi(tweet, id, null)),
   };
 };
 
