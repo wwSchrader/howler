@@ -34,6 +34,6 @@ describe('HomePageTweet', () => {
   });
 
   it('should render <RetweetModal />', () => {
-    expect(wrapper.find('RetweetModal').length).toEqual(1);
+    expect(wrapper.find('Connect(RetweetModal)').length).toEqual(1);
   });
 });
