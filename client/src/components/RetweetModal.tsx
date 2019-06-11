@@ -1,5 +1,7 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {Button, Form, FormGroup, Input, Modal, ModalBody, ModalHeader} from 'reactstrap';
+import {addTweetApi} from '../redux/actions/Tweet';
 import TweetTemplate from './TweetTemplate';
 
 export interface IProps {
@@ -9,6 +11,7 @@ export interface IProps {
   username: string,
   retweetId: string,
   tweetMessage: string,
+  addTweetApi: (tweet: string, retweetId: string) => void,
 };
 
 export interface IState {
@@ -22,6 +25,9 @@ export class RetweetModal extends React.Component<IProps, IState> {
     this.state = {
       tweetInput: '',
     };
+
+    this.handleOnTweetInputChange = this.handleOnTweetInputChange.bind(this);
+    this.onRetweetButtonSubmit = this.onRetweetButtonSubmit.bind(this);
   };
 
   public handleOnTweetInputChange = (e: any) => {
@@ -30,6 +36,7 @@ export class RetweetModal extends React.Component<IProps, IState> {
 
   public onRetweetButtonSubmit = (e: any) => {
     e.preventDefault();
+    this.props.addTweetApi(this.state.tweetInput, this.props.retweetId);
   };
 
   public render() {
@@ -39,7 +46,7 @@ export class RetweetModal extends React.Component<IProps, IState> {
           Rehowl this to EVERYONE
         </ModalHeader>
         <ModalBody>
-          <Form>
+          <Form onSubmit={this.onRetweetButtonSubmit}>
             <FormGroup>
               <Input
                 type='textarea'
@@ -61,4 +68,10 @@ export class RetweetModal extends React.Component<IProps, IState> {
   };
 };
 
-export default RetweetModal;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    addTweetApi: (tweet: string, id: string) => dispatch(addTweetApi(tweet, null, id)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(RetweetModal);
