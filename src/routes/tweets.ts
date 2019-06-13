@@ -33,7 +33,7 @@ router.put('/add', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/all', (req, res) => {
-  Tweet.find({}).lean().exec()
+  Tweet.find({ replyId: null }).lean().exec()
   .then(async (tweetArray) => {
     const results = tweetArray.map(async (tweet: any) => {
       return await User.findById(tweet.ownerId)
