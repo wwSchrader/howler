@@ -11,6 +11,7 @@
     "watch-ts": "tsc -w",
     "watch-node": "set DEBUG=express:* & nodemon ./build/src/server.js",
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles --runInBand",
+    "watch-test": "jest --forceExit --coverage --verbose --detectOpenHandles --runInBand --watch",
     "heroku-postbuild": "yarn build-ts && cd client && yarn --production=false && yarn run build"
   },
   "engines": {
