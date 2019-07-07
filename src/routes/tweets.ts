@@ -35,13 +35,13 @@ router.put('/add', ensureAuthenticated, (req, res) => {
 router.get('/all', (req, res) => {
   console.log('this is the all route');
   new Promise(async (resolve, reject) => {
-    resolve(Tweet.find({ replyId: null }));
+    resolve(Tweet.find({ replyId: null }).lean());
   })
   .then(async (tweetArray: any) => {
     const results = tweetArray.map((tweet: any) => {
 
       return new Promise(async(resolve, reject) => {
-        resolve(User.findById(tweet.ownerId));
+        resolve(User.findById(tweet.ownerId).lean());
       })
       .then((ownerObject: any) => {
         // athach owner object to tweet
@@ -53,7 +53,7 @@ router.get('/all', (req, res) => {
         // attach retweeted tweets
         // another test line
         if (tweetObject.retweetId) {
-          return Tweet.find({ retweetId: tweetObject.retweetId })
+          return Tweet.find({ retweetId: tweetObject.retweetId }).lean()
           .then((foundTweet) => {
             if (foundTweet) {
               tweetObject.retweet = foundTweet[0];
