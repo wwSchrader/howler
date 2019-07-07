@@ -33,28 +33,45 @@ router.put('/add', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/all', (req, res) => {
-  Tweet.find({ replyId: null }).lean().exec()
-  .then(async (tweetArray) => {
-    const results = tweetArray.map(async (tweet: any) => {
-      return await User.findById(tweet.ownerId)
-      .then((ownerObject) => {
+  console.log('this is the all route');
+  new Promise(async (resolve, reject) => {
+    resolve(Tweet.find({ replyId: null }));
+  })
+  .then(async (tweetArray: any) => {
+    const results = tweetArray.map((tweet: any) => {
+
+      return new Promise(async(resolve, reject) => {
+        resolve(User.findById(tweet.ownerId));
+      })
+      .then((ownerObject: any) => {
+        // athach owner object to tweet
         if (ownerObject) {
-          return { ...tweet, username: ownerObject.username };
+          return ({ ...tweet, username: ownerObject.username });
+        }
+      })
+      .then((tweetObject) => {
+        // attach retweeted tweets
+        // another test line
+        if (tweetObject.retweetId) {
+          return Tweet.find({ retweetId: tweetObject.retweetId })
+          .then((foundTweet) => {
+            if (foundTweet) {
+              tweetObject.retweet = foundTweet[0];
+            }
+
+            return tweetObject;
+          });
         }
 
-        // return tweet with null owner name if not found for some reason
-        return { ...tweet, username: null };
+        return tweetObject;
       });
     });
 
     // wait to resolve all of the .map promises
-    return await Promise.all(results)
+    Promise.all(results)
     .then((finishedTweetArray) => {
-      return finishedTweetArray;
+      res.json({ tweets: finishedTweetArray });
     });
-  })
-  .then((tweetArray) => {
-    res.json({ tweets: tweetArray });
   })
   .catch((err) => {
     console.log('SOMETHING WENT WRONG!!!!!!');

@@ -228,9 +228,11 @@ describe('Tweet Route', () => {
     let getTweet: jest.Mock;
     let findUser: jest.Mock;
     const firstTweet = {
+      _id: '99999999',
       message: 'This tweet is awesome #great @me',
       ownerId: '123',
       date: Date.now(),
+      replyId: null,
       retweetId: null,
       hashtags: ['#great'],
       mentions: ['@me'],
@@ -238,17 +240,42 @@ describe('Tweet Route', () => {
     };
 
     const secondTweet = {
+      _id: '8888888',
       message: 'Another cool #tweet @anyone',
       ownerId: '321',
       date: Date.now(),
+      replyId: null,
       retweetId: null,
       hashtags: ['#tweet'],
       mentions: ['@anyone'],
       deleted: false,
     };
 
+    const thirdTweet = {
+      _id: '777777',
+      message: 'This is a retweet',
+      ownerId: 'abc123',
+      date: Date.now(),
+      replyId: null,
+      retweetId: '99999999',
+      hashtags: [],
+      mentions: [],
+      deleted: false,
+    };
+
     const usernameObj = {
+      ownerId: '123',
       username: 'Warren Awesomeness',
+    };
+
+    const usernameObj2 = {
+      ownerId: '321',
+      username: 'Allen Almighty',
+    };
+
+    const usernameObj3 = {
+      ownerId: 'abc123',
+      username: 'Carol Canouga',
     };
 
     const finalFirstTweet = {
@@ -258,29 +285,58 @@ describe('Tweet Route', () => {
 
     const finalSecondTweet = {
       ...secondTweet,
-      ...usernameObj,
+      ...usernameObj2,
+    };
+
+    const finalThirdTweet = {
+      ...thirdTweet,
+      ...usernameObj3,
+      retweet: firstTweet,
     };
 
     beforeEach(() => {
-      const findTweetArrayResult = new Promise((resolve, reject) => {
-        resolve([firstTweet, secondTweet]);
-      });
-      const findTweetArrayStub = jest.fn(() => {
-        return findTweetArrayResult;
-      });
-      const execStub = { exec: findTweetArrayStub };
-      const leanResult = jest.fn(() => {
-        return execStub;
-      });
-      const leanStub = { lean: leanResult };
-      const findResult = jest.fn(() => {
-        return leanStub;
-      });
-      getTweet = jest.spyOn(Tweet, 'find').mockImplementation(findResult);
+      getTweet = jest.spyOn(Tweet, 'find')
+        .mockImplementation((query: any) => {
 
-      findUser = jest.spyOn(User, 'findById').mockImplementation(() =>
-        Promise.resolve(usernameObj),
-      );
+          if ('replyId' in query && query.replyId === null) {
+            console.log('return all tweets');
+            return Promise.resolve([firstTweet, secondTweet, thirdTweet]);
+          }
+
+          if ('retweetId' in query && query.retweetId === firstTweet._id) {
+            console.log('return the first tweet only');
+            return Promise.resolve([firstTweet]);
+          }
+
+          if ('retweetId' in query && query.retweetId === secondTweet._id) {
+            console.log('return the first tweet only');
+            return Promise.resolve([secondTweet]);
+          }
+
+          if ('retweetId' in query && query.retweetId === thirdTweet._id) {
+            console.log('return the first tweet only');
+            return Promise.resolve([thirdTweet]);
+          }
+
+          return Promise.reject();
+        });
+
+      findUser = jest.spyOn(User, 'findById')
+        .mockImplementation((query) => {
+          console.log('find user mock');
+          // returns user objects
+          if (query === '123') {
+            return (usernameObj);
+          }
+          if (query === '321') {
+            return (usernameObj2);
+          }
+          if (query === 'abc123') {
+            return (usernameObj3);
+          }
+
+          return Promise.reject();
+        });
     });
 
     afterEach(() => {
@@ -299,6 +355,7 @@ describe('Tweet Route', () => {
           expect(typeof res.body.tweets).toBe('object');
           expect(res.body.tweets[0]).toEqual(finalFirstTweet);
           expect(res.body.tweets[1]).toEqual(finalSecondTweet);
+          expect(res.body.tweets[2]).toEqual(finalThirdTweet);
           done();
         })
         .catch((err: any) => {
