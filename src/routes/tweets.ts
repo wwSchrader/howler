@@ -53,7 +53,7 @@ router.get('/all', (req, res) => {
         // attach retweeted tweets
         // another test line
         if (tweetObject.retweetId) {
-          return Tweet.find({ retweetId: tweetObject.retweetId }).lean()
+          return Tweet.find({ _id: tweetObject.retweetId }).lean()
           .then((foundTweet) => {
             if (foundTweet) {
               tweetObject.retweet = foundTweet[0];

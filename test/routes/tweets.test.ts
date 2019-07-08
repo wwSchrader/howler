@@ -302,19 +302,19 @@ describe('Tweet Route', () => {
             return Promise.resolve([firstTweet, secondTweet, thirdTweet]);
           }
 
-          if ('retweetId' in query && query.retweetId === firstTweet._id) {
+          if ('_id' in query && query._id === firstTweet._id) {
             console.log('return the first tweet only');
             return Promise.resolve([firstTweet]);
           }
-          if ('retweetId' in query && query.retweetId === secondTweet._id) {
+          if ('_id' in query && query._id === secondTweet._id) {
             console.log('return the first tweet only');
             return Promise.resolve([secondTweet]);
           }
-          if ('retweetId' in query && query.retweetId === thirdTweet._id) {
+          if ('_id' in query && query._id === thirdTweet._id) {
             console.log('return the first tweet only');
             return Promise.resolve([thirdTweet]);
           }
-          return Promise.reject();
+          return Promise.reject(query);
         })};
       });
 
