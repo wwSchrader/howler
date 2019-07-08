@@ -1,4 +1,5 @@
 import React from 'react';
+import RetweetTemplate from './RetweetTemplate';
 
 export interface IProps {
   date: Date,
@@ -29,6 +30,7 @@ export class TweetTemplate extends React.Component<IProps> {
             <p>{this.props.tweetMessage}</p>
           </span>
         </div>
+        <RetweetTemplate />
       </div>
     );
   };

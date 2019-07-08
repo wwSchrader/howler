@@ -31,4 +31,8 @@ describe('TweetTemplate', () => {
   it('should render <p />', () => {
     expect(wrapper.find('p').length).toEqual(2);
   });
+
+  it('should remder <RetweetTemplate />', () => {
+    expect(wrapper.find('RetweetTemplate').length).toEqual(1);
+  });
 });
