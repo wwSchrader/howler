@@ -10,7 +10,9 @@ export class RetweetTemplate extends React.Component<IProps> {
   public render() {
     return (
       <div>
-        RetweetTemplate is here
+        <b>{this.props.username}</b>
+        <p>{new Date(this.props.date).toDateString()}</p>
+        <p>{this.props.message}</p>
       </div>
     );
   };

@@ -19,4 +19,8 @@ describe('RetweetTemplate', () => {
   it('should render <div />', () => {
     expect(wrapper.find('div').length).toEqual(1);
   });
+
+  it('should render <p />', () => {
+    expect(wrapper.find('p').length).toEqual(2);
+  });
 });
