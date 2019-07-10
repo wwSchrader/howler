@@ -8,6 +8,12 @@ export interface IProps {
   tweetId: string,
   tweetMessage: string,
   username: string,
+  retweet?: {
+    _id: string,
+    date: Date,
+    message: string,
+    username: string,
+  },
 };
 
 export interface IState {
@@ -35,6 +41,7 @@ export class HomePageTweet extends React.Component<IProps, IState> {
           date={this.props.date}
           tweetMessage={this.props.tweetMessage}
           username={this.props.username}
+          retweet={this.props.retweet}
         />
         <div>
           <button onClick={this.toggleReplyModalState}>Reply</button>

@@ -5,6 +5,12 @@ export interface IProps {
   date: Date,
   tweetMessage: string,
   username: string,
+  retweet?: {
+    _id: string,
+    date: Date,
+    message: string,
+    username: string,
+  },
 }
 
 export class TweetTemplate extends React.Component<IProps> {
@@ -14,7 +20,23 @@ export class TweetTemplate extends React.Component<IProps> {
     this.state = {
       showReplyTweetModal: false,
     };
+
+    this.showRetweet = this.showRetweet.bind(this);
   };
+
+  public showRetweet() {
+    if (this.props.retweet) {
+      return (
+        <RetweetTemplate
+          date={this.props.retweet.date}
+          message={this.props.retweet.message}
+          username={this.props.retweet.username}
+        />
+      );
+    }
+
+    return null;
+  }
 
   public render() {
     return (
@@ -29,8 +51,8 @@ export class TweetTemplate extends React.Component<IProps> {
           <span>
             <p>{this.props.tweetMessage}</p>
           </span>
+          {this.showRetweet()}
         </div>
-        <RetweetTemplate />
       </div>
     );
   };

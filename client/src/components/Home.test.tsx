@@ -43,6 +43,7 @@ describe('Home', () => {
             date={prop.date}
             tweetMessage={prop.message}
             username={prop.username}
+            retweet={prop.retweet}
         />
       );
     });

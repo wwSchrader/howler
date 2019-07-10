@@ -1,10 +1,16 @@
 import React from 'react';
 
-export class RetweetTemplate extends React.Component {
+export interface IProps {
+  date: Date,
+  message: string,
+  username: string,
+};
+
+export class RetweetTemplate extends React.Component<IProps> {
   public render() {
     return (
       <div>
-        RetweetTemplate
+        RetweetTemplate is here
       </div>
     );
   };
