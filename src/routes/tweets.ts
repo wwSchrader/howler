@@ -51,15 +51,29 @@ router.get('/all', (req, res) => {
       })
       .then((tweetObject) => {
         // attach retweeted tweets
-        // another test line
         if (tweetObject.retweetId) {
-          return Tweet.find({ _id: tweetObject.retweetId }).lean()
-          .then((foundTweet) => {
+          return new Promise(async(resolve, reject) => {
+            resolve(Tweet.find({ _id: tweetObject.retweetId }).lean());
+          })
+          .then((foundTweet: any) => {
             if (foundTweet) {
               tweetObject.retweet = foundTweet[0];
             }
-
+            console.log(tweetObject);
             return tweetObject;
+          })
+          .then((tweetWithRetweet: any) => {
+            // find and attacher username to tweet object
+            return new Promise(async (resolve, reject) => {
+              resolve(User.findById(tweetWithRetweet.retweet.ownerId).lean());
+            })
+            .then((userObject: any) => {
+              if (userObject) {
+                tweetWithRetweet.retweet.username = userObject.username;
+              }
+
+              return tweetWithRetweet;
+            });
           });
         }
 
