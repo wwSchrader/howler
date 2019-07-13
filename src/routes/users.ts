@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import { default as User } from '../models/user';
 import bcrypt from 'bcrypt';
-import { loginUser, passport } from '../component-passport';
+import { loginUser, passport, checkSession } from '../component-passport';
 const saltRounds = 12;
 
 const router = express.Router();
@@ -67,6 +67,16 @@ router.post(
     })(req, res, next);
   },
   loginUser,
+);
+
+router.get(
+  '/checksession', (req: express.Request, res: express.Response) => {
+    if (checkSession(req)) {
+      res.status(200).json({ isLoggedIn: true });
+    } else {
+      res.status(200).json({ isLoggedIn: false });
+    }
+  },
 );
 
 router.get('/logout', (req, res) => {

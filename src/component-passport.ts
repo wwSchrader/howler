@@ -80,6 +80,10 @@ const ensureAuthenticated = (req: any, res: any, next: NextFunction) => {
   res.sendStatus(401);
 };
 
+const checkSession = (req: any) => {
+  return req.isAuthenticated();
+};
+
 const loginUser = (req: any, res: any, next: NextFunction) => {
   console.log('loginUser called');
   req.logIn(req.user, (error: any) => {
@@ -98,4 +102,5 @@ export {
   ensureAuthenticated,
   loginUser,
   authenticate,
+  checkSession,
 };

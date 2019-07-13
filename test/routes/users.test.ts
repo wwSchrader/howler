@@ -6,6 +6,7 @@ import passport from 'passport';
 let app: any;
 let loginUser: jest.Mock;
 let authenticate: jest.Mock;
+let checkSession: jest.Mock;
 
 describe('User Route', () => {
 
@@ -372,6 +373,50 @@ describe('User Route', () => {
           done();
         })
         .catch((err: any) => done(err));
+    });
+  });
+
+  describe('GET /api/users/checksession', () => {
+
+    checkSession = jest
+    .spyOn(componentPassport, 'checkSession')
+    .mockImplementationOnce((req) => {
+      return true;
+    })
+    .mockImplementationOnce((req) => {
+      return false;
+    });
+
+    it('successfuly found session', (done) => {
+      requester(app)
+      .get('/api/users/checksession')
+      .then((res: any) => {
+        expect(res).toBeDefined();
+        expect(res.status).toBe(200);
+        expect(res).toHaveProperty('body');
+        expect(typeof res.body).toBe('object');
+        expect(res.body).toHaveProperty('isLoggedIn');
+        expect(typeof res.body.isLoggedIn).toBe('boolean');
+        expect(res.body.isLoggedIn).toBe(true);
+        done();
+      })
+      .catch((err: any) => done(err));
+    });
+
+    it('not able to find a session', (done) => {
+      requester(app)
+      .get('/api/users/checksession')
+      .then((res: any) => {
+        expect(res).toBeDefined();
+        expect(res.status).toBe(200);
+        expect(res).toHaveProperty('body');
+        expect(typeof res.body).toBe('object');
+        expect(res.body).toHaveProperty('isLoggedIn');
+        expect(typeof res.body.isLoggedIn).toBe('boolean');
+        expect(res.body.isLoggedIn).toBe(false);
+        done();
+      })
+      .catch((err: any) => done(err));
     });
   });
 });
