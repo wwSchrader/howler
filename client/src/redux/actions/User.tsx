@@ -122,3 +122,30 @@ export function logoutUser() {
     });
   };
 }
+
+export function checkSession() {
+  return (dispatch: any) => {
+    return fetch('/api/users/checksession', {
+      credentials: 'include',
+      method: 'GET',
+    })
+    .then((response) => {
+      if(!response.ok) {
+        throw Error(response.statusText);
+      }
+
+      return response;
+    })
+    .then((res) => res.json())
+    .then((body) => {
+      if(!body.isLoggedIn) {
+        return dispatch(isLoggedIn(false));
+      } else {
+        return dispatch(isLoggedIn(true));
+      }
+    })
+    .catch((err) => {
+      return err;
+    });
+  };
+};
