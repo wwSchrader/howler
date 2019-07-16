@@ -1,5 +1,4 @@
 import './env';
-// tslint:disable-next-line:ordered-imports
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';

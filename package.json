@@ -10,8 +10,8 @@
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",
     "watch-ts": "tsc -w",
     "watch-node": "set DEBUG=express:* & nodemon ./build/src/server.js",
-    "test": "jest --forceExit --coverage --verbose --detectOpenHandles --runInBand",
-    "watch-test": "jest --forceExit --coverage --verbose --detectOpenHandles --runInBand --watch",
+    "test": "jest --forceExit --coverage --detectOpenHandles --runInBand",
+    "watch-test": "jest --forceExit --coverage --detectOpenHandles --runInBand --watch",
     "heroku-postbuild": "yarn build-ts && cd client && yarn --production=false && yarn run build"
   },
   "engines": {
@@ -36,6 +36,8 @@
     "@types/passport": "^0.4.7",
     "@types/passport-local": "^1.0.33",
     "@types/sinon": "^7.0.0",
+    "@types/socket.io": "^2.1.2",
+    "@types/socket.io-client": "^1.4.32",
     "@types/supertest": "^2.0.7",
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
@@ -49,6 +51,7 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "socket.io": "^2.2.0",
     "typescript": "^3.2.2"
   },
   "devDependencies": {
@@ -60,6 +63,7 @@
     "mocha": "^5.2.0",
     "mocha-isolation": "^0.1.5",
     "sinon": "^7.1.1",
+    "socket.io-client": "^2.2.0",
     "superagent": "^4.1.0",
     "supertest": "^3.4.2",
     "ts-jest": "^23.10.5",
