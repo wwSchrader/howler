@@ -2,6 +2,7 @@ import express, { Router } from 'express';
 import { ensureAuthenticated } from '../component-passport';
 import { default as Tweet } from '../../src/models/tweet';
 import { default as User } from '../../src/models/user';
+import { sendAddedTweet } from '../component-socket';
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ router.put('/add', ensureAuthenticated, (req, res) => {
     retweetId: req.body.retweetId ? req.body.retweetId : null,
   })
   .then((result) => {
+    sendAddedTweet(result);
     res.json({ tweetPosted: true });
   })
   .catch((err) => {
