@@ -1,9 +1,11 @@
 import openSocket from 'socket.io-client';
 
-const socket = openSocket();
+export const socket = openSocket();
 
-export function subscribeToAddTweet(cb: any) {
-  socket.on('addTweet', (newTweet: any) => cb(null, newTweet));
+export function subscribeToAddTweet(addTweetToArray: any) {
+  socket.on('addTweet', (newTweet: any) => {
+    addTweetToArray(newTweet);
+  });
 };
 
 export default {
