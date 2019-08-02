@@ -8,7 +8,12 @@ export function subscribeToAddTweet(addTweetToArray: any) {
   });
 };
 
+export function unSubscribeAddTweet() {
+  socket.off('addTweet');
+};
+
 export default {
   socket,
-  subscribeToAddTweet
+  subscribeToAddTweet,
+  unSubscribeAddTweet,
 };

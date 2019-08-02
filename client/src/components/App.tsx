@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {setTweetArray} from '../redux/actions/Tweet';
 import {checkSession} from '../redux/actions/User';
-import {subscribeToAddTweet} from '../socket';
+import {subscribeToAddTweet, unSubscribeAddTweet} from '../socket';
 import AddTweetModal from './AddTweetModal';
 import Home from './Home';
 import NavigationBar from './NavigationBar';
@@ -34,6 +34,10 @@ export class App extends React.Component<IProps> {
   public componentDidMount() {
     this.props.checkSession();
     subscribeToAddTweet(this.addTweetToArrayLogic);
+  };
+
+  public componentWillUnmount() {
+    unSubscribeAddTweet();
   };
 
   public addTweetToArrayLogic(newTweet: any) {
