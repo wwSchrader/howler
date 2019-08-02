@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {setTweetArray} from 'src/redux/actions/Tweet';
+import {setTweetArray} from '../redux/actions/Tweet';
 import {checkSession} from '../redux/actions/User';
 import {subscribeToAddTweet} from '../socket';
 import AddTweetModal from './AddTweetModal';
