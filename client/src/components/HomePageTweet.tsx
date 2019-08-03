@@ -46,7 +46,6 @@ export class HomePageTweet extends React.Component<IProps, IState> {
         <div>
           <button onClick={this.toggleReplyModalState}>Reply</button>
           <button onClick={this.toggleRetweetModalState}>Retweet</button>
-          <button>Like</button>
         </div>
         <ReplyTweetModal
           showReplyTweetModal={this.state.showReplyTweetModal}

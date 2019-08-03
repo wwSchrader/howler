@@ -26,7 +26,7 @@ describe('HomePageTweet', () => {
   });
 
   it('should render <button />', () => {
-    expect(wrapper.find('button').length).toEqual(3);
+    expect(wrapper.find('button').length).toEqual(2);
   });
 
   it('should render <ReplyTweetModal />', () => {
