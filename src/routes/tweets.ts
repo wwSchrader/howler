@@ -37,7 +37,7 @@ router.put('/add', ensureAuthenticated, (req, res) => {
 router.get('/all', (req, res) => {
   console.log('this is the all route');
   new Promise(async (resolve, reject) => {
-    resolve(Tweet.find({ replyId: null }).lean());
+    resolve(Tweet.find({ replyId: null }).sort('desc').lean());
   })
   .then(async (tweetArray: any) => {
     const results = tweetArray.map((tweet: any) => {
@@ -55,7 +55,7 @@ router.get('/all', (req, res) => {
         // attach retweeted tweets
         if (tweetObject.retweetId) {
           return new Promise(async(resolve, reject) => {
-            resolve(Tweet.find({ _id: tweetObject.retweetId }).lean());
+            resolve(Tweet.find({ _id: tweetObject.retweetId }).sort('desc').lean());
           })
           .then((foundTweet: any) => {
             if (foundTweet) {

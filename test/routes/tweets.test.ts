@@ -295,13 +295,12 @@ describe('Tweet Route', () => {
     };
 
     beforeEach(() => {
-      const findResult = jest.fn((query) => {
-        return { lean: jest.fn(() => {
+      const findResult: any = jest.fn((query) => {
+        return {lean: jest.fn(() => {
           if ('replyId' in query && query.replyId === null) {
             console.log('return all tweets');
             return Promise.resolve([firstTweet, secondTweet, thirdTweet]);
           }
-
           if ('_id' in query && query._id === firstTweet._id) {
             console.log('return the first tweet only');
             return Promise.resolve([firstTweet]);
@@ -314,16 +313,20 @@ describe('Tweet Route', () => {
             console.log('return the first tweet only');
             return Promise.resolve([thirdTweet]);
           }
+          console.log('mock reject');
           return Promise.reject(query);
         })};
       });
 
+      const sortResult: any = jest.fn((query) => {
+        return { sort: jest.fn(() => findResult(query)) };
+      });
+
       getTweet = jest.spyOn(Tweet, 'find')
-        .mockImplementation((query: any) => findResult(query));
+        .mockImplementation((query: any) => sortResult(query));
 
       const findByIdResult = jest.fn((query) => {
         return { lean: jest.fn(() => {
-          // returns user objects
           if (query === '123') {
             return (usernameObj);
           }
@@ -334,7 +337,7 @@ describe('Tweet Route', () => {
             return (usernameObj3);
           }
           return Promise.reject();
-        }) };
+        })};
       });
       findUser = jest.spyOn(User, 'findById')
         .mockImplementation((query: any) => findByIdResult(query));
