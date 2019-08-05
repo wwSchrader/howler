@@ -102,6 +102,52 @@ describe('Tweet actions', () => {
     });
   });
 
+  describe('get reply tweets api call', () => {
+    afterEach(() => {
+      fetchMock.restore()
+    });
+
+    it('should create set reply tweets action', () => {
+      const store = mockStore({});
+      const testTweets = [
+        {
+          date: 2132015,
+          deleted: false,
+          hastags: ['#first'],
+          mentions: [],
+          message: 'A sample tweet! #first',
+          ownerId: 'abc123',
+          replyId: '98545',
+          retweet: null,
+          retweetId: null,
+          username: 'JoeAwesomeness',
+        },
+        {
+          date: 5165465165,
+          deleted: false,
+          hastags: ['#second'],
+          mentions: [],
+          message: 'A sample tweet! #second',
+          ownerId: '5464jhfgd',
+          replyId: '98545',
+          retweet: null,
+          retweetId: null,
+          username: 'CaralCoolness',
+        }
+      ];
+
+      const expectedActions = [{
+        replies: testTweets,
+        type: types.REPLY_ARRAY,
+      }];
+
+      fetchMock.getOnce('/api/tweets/replies', {replies: testTweets});
+
+      return store.dispatch<any>(actions.getReplyTweetsApi('123456'))
+      .then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+  });
+
   describe('setShowAddTweetModal action', () => {
     const expectedAction = {
       showAddTweetModal: true,

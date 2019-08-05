@@ -51,6 +51,30 @@ export function getAllTweetsApi() {
   };
 };
 
+export function getReplyTweetsApi(SingleReplyId) {
+  return (dispatch: any) => {
+    return fetch('/api/tweets/replies', {
+      body: JSON.stringify({replyId: SingleReplyId})
+      credentials: "include",
+      method: 'GET',
+    })
+    .then((response) => {
+      if(!response.ok) {
+        throw Error(response.statusText);
+      }
+
+      return response;
+    })
+    .then((resp) => resp.json())
+    .then((body) => {
+      return dispatch(setReplyTweetArray(body.replies));
+    })
+    .catch((err) => {
+      return null;
+    });
+  };
+};
+
 export function addTweetApi(tweet: string, replyTweetId: string | null, retweetTweetId: string | null) {
   return (dispatch: any) => {
     return fetch('/api/tweets/add', {
