@@ -41,46 +41,7 @@ router.get('/all', (req, res) => {
   })
   .then(async (tweetArray: any) => {
     const results = tweetArray.map((tweet: any) => {
-
-      return new Promise(async(resolve, reject) => {
-        resolve(User.findById(tweet.ownerId).lean());
-      })
-      .then((ownerObject: any) => {
-        // athach owner object to tweet
-        if (ownerObject) {
-          return ({ ...tweet, username: ownerObject.username });
-        }
-      })
-      .then((tweetObject) => {
-        // attach retweeted tweets
-        if (tweetObject.retweetId) {
-          return new Promise(async(resolve, reject) => {
-            resolve(Tweet.find({ _id: tweetObject.retweetId }).sort('desc').lean());
-          })
-          .then((foundTweet: any) => {
-            if (foundTweet) {
-              tweetObject.retweet = foundTweet[0];
-            }
-            console.log(tweetObject);
-            return tweetObject;
-          })
-          .then((tweetWithRetweet: any) => {
-            // find and attacher username to tweet object
-            return new Promise(async (resolve, reject) => {
-              resolve(User.findById(tweetWithRetweet.retweet.ownerId).lean());
-            })
-            .then((userObject: any) => {
-              if (userObject) {
-                tweetWithRetweet.retweet.username = userObject.username;
-              }
-
-              return tweetWithRetweet;
-            });
-          });
-        }
-
-        return tweetObject;
-      });
+      return findATweet(tweet);
     });
 
     // wait to resolve all of the .map promises
@@ -95,5 +56,47 @@ router.get('/all', (req, res) => {
     res.sendStatus(500);
   });
 });
+
+const findATweet = (tweet: any) => {
+  return new Promise(async(resolve, reject) => {
+    resolve(User.findById(tweet.ownerId).lean());
+  })
+  .then((ownerObject: any) => {
+    // athach owner object to tweet
+    if (ownerObject) {
+      return ({ ...tweet, username: ownerObject.username });
+    }
+  })
+  .then((tweetObject) => {
+    // attach retweeted tweets
+    if (tweetObject.retweetId) {
+      return new Promise(async(resolve, reject) => {
+        resolve(Tweet.find({ _id: tweetObject.retweetId }).sort('desc').lean());
+      })
+      .then((foundTweet: any) => {
+        if (foundTweet) {
+          tweetObject.retweet = foundTweet[0];
+        }
+        console.log(tweetObject);
+        return tweetObject;
+      })
+      .then((tweetWithRetweet: any) => {
+        // find and attacher username to tweet object
+        return new Promise(async (resolve, reject) => {
+          resolve(User.findById(tweetWithRetweet.retweet.ownerId).lean());
+        })
+        .then((userObject: any) => {
+          if (userObject) {
+            tweetWithRetweet.retweet.username = userObject.username;
+          }
+
+          return tweetWithRetweet;
+        });
+      });
+    }
+
+    return tweetObject;
+  });
+};
 
 export const tweets: Router = router;
