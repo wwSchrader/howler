@@ -344,7 +344,8 @@ describe('Tweet Route', () => {
     });
 
     afterEach(() => {
-      getTweet.mockRestore();
+      getTweet.mockReset();
+      findUser.mockReset();
     });
 
     it('get all tweets without error', (done) => {
@@ -360,6 +361,152 @@ describe('Tweet Route', () => {
           expect(res.body.tweets[0]).toEqual(finalFirstTweet);
           expect(res.body.tweets[1]).toEqual(finalSecondTweet);
           expect(res.body.tweets[2]).toEqual(finalThirdTweet);
+          done();
+        })
+        .catch((err: any) => {
+          done(err);
+        });
+    });
+  });
+
+  describe(' GET /api/tweets/replies', () => {
+    let getReplies: jest.Mock;
+    let findUser: jest.Mock;
+    const firstTweet = {
+      _id: '99999999',
+      message: 'This tweet is awesome #great @me',
+      ownerId: '123',
+      date: Date.now(),
+      replyId: 32158,
+      retweetId: null,
+      hashtags: ['#great'],
+      mentions: ['@me'],
+      deleted: false,
+    };
+
+    const secondTweet = {
+      _id: '8888888',
+      message: 'Another cool #tweet @anyone',
+      ownerId: '321',
+      date: Date.now(),
+      replyId: 32158,
+      retweetId: null,
+      hashtags: ['#tweet'],
+      mentions: ['@anyone'],
+      deleted: false,
+    };
+
+    const thirdTweet = {
+      _id: '777777',
+      message: 'This is a retweet',
+      ownerId: 'abc123',
+      date: Date.now(),
+      replyId: null,
+      retweetId: '99999999',
+      hashtags: [],
+      mentions: [],
+      deleted: false,
+    };
+
+    const usernameObj = {
+      ownerId: '123',
+      username: 'Warren Awesomeness',
+    };
+
+    const usernameObj2 = {
+      ownerId: '321',
+      username: 'Allen Almighty',
+    };
+
+    const usernameObj3 = {
+      ownerId: 'abc123',
+      username: 'Carol Canouga',
+    };
+
+    const finalFirstTweet = {
+      ...firstTweet,
+      ...usernameObj,
+    };
+
+    const finalSecondTweet = {
+      ...secondTweet,
+      ...usernameObj2,
+    };
+
+    const finalThirdTweet = {
+      ...thirdTweet,
+      ...usernameObj3,
+      retweet: firstTweet,
+    };
+
+    beforeEach(() => {
+      const findRepliesResult: any = jest.fn((query) => {
+        return {lean: jest.fn(() => {
+          console.log('find result query');
+          console.log(query);
+          if ('replyId' in query && query.replyId !== null) {
+            console.log('return all replies');
+            return Promise.resolve([firstTweet, secondTweet]);
+          }
+          if ('_id' in query && query._id === firstTweet._id) {
+            console.log('return the first tweet only');
+            return Promise.resolve([firstTweet]);
+          }
+          if ('_id' in query && query._id === secondTweet._id) {
+            console.log('return the first tweet only');
+            return Promise.resolve([secondTweet]);
+          }
+          if ('_id' in query && query._id === thirdTweet._id) {
+            console.log('return the first tweet only');
+            return Promise.resolve([thirdTweet]);
+          }
+          console.log('mock reject');
+          return Promise.reject(query);
+        })};
+      });
+
+      const sortRepliesResult: any = jest.fn((query) => {
+        return { sort: jest.fn(() => findRepliesResult(query)) };
+      });
+
+      getReplies = jest.spyOn(Tweet, 'find')
+        .mockImplementation((query: any) => sortRepliesResult(query));
+
+      const findByIdResult = jest.fn((query) => {
+        return { lean: jest.fn(() => {
+          if (query === '123') {
+            return (usernameObj);
+          }
+          if (query === '321') {
+            return (usernameObj2);
+          }
+          if (query === 'abc123') {
+            return (usernameObj3);
+          }
+          return Promise.reject();
+        })};
+      });
+      findUser = jest.spyOn(User, 'findById')
+        .mockImplementation((query: any) => findByIdResult(query));
+    });
+
+    afterEach(() => {
+      getReplies.mockReset();
+      findUser.mockReset();
+    });
+
+    it('get all reply tweets without error', (done) => {
+      requester(app)
+        .get(`${apiBaseRoute}replies`)
+        .then((res: any) => {
+          expect(res).toBeDefined();
+          expect(res.statusCode).toBe(200);
+          expect(res).toHaveProperty('body');
+          expect(typeof res.body).toBe('object');
+          expect(res.body).toHaveProperty('replies');
+          expect(typeof res.body.replies).toBe('object');
+          expect(res.body.replies[0]).toEqual(finalFirstTweet);
+          expect(res.body.replies[1]).toEqual(finalSecondTweet);
           done();
         })
         .catch((err: any) => {

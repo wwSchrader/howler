@@ -3,6 +3,7 @@ import { ensureAuthenticated } from '../component-passport';
 import { default as Tweet } from '../../src/models/tweet';
 import { default as User } from '../../src/models/user';
 import { sendAddedTweet } from '../component-socket';
+import { rejects } from 'assert';
 
 const router = express.Router();
 
@@ -52,6 +53,29 @@ router.get('/all', (req, res) => {
   })
   .catch((err) => {
     console.log('SOMETHING WENT WRONG!!!!!!');
+    console.log(err);
+    res.sendStatus(500);
+  });
+});
+
+router.get('/replies', (req, res) => {
+  console.log('this is the reply route');
+  new Promise(async (resolve, reject) => {
+    resolve(Tweet.find({ replyId: req.body.replyId }).sort('desc').lean());
+  })
+  .then(async (tweetArray: any) => {
+    console.log('Tweet Array');
+    console.log(tweetArray);
+    const results = tweetArray.map((tweet: any) => {
+      return findATweet(tweet);
+    });
+    Promise.all(results)
+    .then((finishedTweetArray) => {
+      res.json({ replies: finishedTweetArray });
+    });
+  })
+  .catch((err) => {
+    console.log('Error in /replies route');
     console.log(err);
     res.sendStatus(500);
   });
