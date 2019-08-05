@@ -9,6 +9,15 @@ export function setTweetArray(state = [], action: any) {
   };
 };
 
+export function setReplyTweetArray(state = [], action: any) {
+  switch (action.type) {
+    case Types.REPLY_ARRAY:
+      return action.replies;
+    default:
+      return state;
+  };
+};
+
 export function showAddTweetModal(state = false, action: any) {
   switch (action.type) {
     case Types.SHOW_ADD_TWEET_MODAL:

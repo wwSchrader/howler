@@ -54,6 +54,44 @@ describe('Tweet reducers', () => {
     });
   });
 
+  describe('replyArray', () => {
+    it('should return initial state', () => {
+      expect(Tweet.setReplyTweetArray([], {})).toEqual([]);
+    });
+
+    it('should handle reply tweet array action', () => {
+      const testTweets = [
+        {
+          date: 2132015,
+          deleted: false,
+          hastags: ['#first'],
+          mentions: [],
+          message: 'A sample tweet! #first',
+          ownerId: 'abc123',
+          retweet: null,
+          retweetId: null,
+        },
+        {
+          date: 5165465165,
+          deleted: false,
+          hastags: ['#second'],
+          mentions: [],
+          message: 'A sample tweet! #second',
+          ownerId: '5464jhfgd',
+          retweet: null,
+          retweetId: null,
+        }
+      ];
+
+      const testAction = {
+        tweets: testTweets,
+        type: Types.TWEET_ARRAY,
+      };
+
+      expect(Tweet.setTweetArray([],testAction)).toEqual(testTweets);
+    });
+  });
+
   describe('showReplyTweetModal', () => {
     it('should return initial state', () => {
       expect(Tweet.showReplyTweetModal(false, {})).toEqual(false);
