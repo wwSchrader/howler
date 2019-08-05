@@ -7,6 +7,13 @@ export function setTweetArray(tweetArray: any) {
   };
 };
 
+export function setReplyTweetArray(replyArray: any) {
+  return {
+    replies: replyArray,
+    type: Types.REPLY_ARRAY,
+  };
+};
+
 export function setShowAddTweetModal(bool: boolean) {
   return {
     showAddTweetModal: bool,

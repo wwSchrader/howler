@@ -33,6 +33,31 @@ describe('Tweet actions', () => {
     });
   });
 
+  describe('reply tweet array', () => {
+    it('should create an action to set the reply tweet array', () => {
+      const testTweets = [
+        {
+          date: 2132015,
+          deleted: false,
+          hastags: ['#first'],
+          mentions: [],
+          message: 'A sample tweet! #first',
+          ownerId: 'abc123',
+          retweet: null,
+          retweetId: null,
+          username: 'JoeAwesomeness',
+        }
+      ];
+
+      const expectedAction = {
+        replies: testTweets,
+        type: types.REPLY_ARRAY,
+      };
+
+      expect(actions.setReplyTweetArray(testTweets)).toEqual(expectedAction);
+    });
+  });
+
   describe('get all tweets api call', () => {
     afterEach(() => {
       fetchMock.restore()
