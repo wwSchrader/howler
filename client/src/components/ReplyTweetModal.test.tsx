@@ -11,6 +11,12 @@ describe('ReplyTweetModal', () => {
     props = {
       addTweetApi: jest.fn(),
       date: Date.now(),
+      replyArray: [{
+        _id: '123456789',
+        date: 65465487978,
+        message: 'reply tweet'.length,
+        username: 'mr test a lot',
+      }],
       replyId: 'asdfjn1231',
       showReplyTweetModal: true,
       toggleModalState: jest.fn(),
@@ -33,7 +39,7 @@ describe('ReplyTweetModal', () => {
   });
 
   it('should render <TweetTemplate />', () => {
-    expect(wrapper.find('TweetTemplate').length).toEqual(1);
+    expect(wrapper.find('TweetTemplate').length).toEqual(2);
   });
 
   it('should render <Form />', () => {

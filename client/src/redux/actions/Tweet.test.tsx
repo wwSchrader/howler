@@ -141,7 +141,7 @@ describe('Tweet actions', () => {
         type: types.REPLY_ARRAY,
       }];
 
-      fetchMock.getOnce('/api/tweets/replies', {replies: testTweets});
+      fetchMock.getOnce('/api/tweets/replies/123456', {replies: testTweets});
 
       return store.dispatch<any>(actions.getReplyTweetsApi('123456'))
       .then(() => expect(store.getActions()).toEqual(expectedActions));

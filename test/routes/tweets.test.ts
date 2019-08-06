@@ -497,7 +497,7 @@ describe('Tweet Route', () => {
 
     it('get all reply tweets without error', (done) => {
       requester(app)
-        .get(`${apiBaseRoute}replies`)
+        .get(`${apiBaseRoute}replies/32158`)
         .then((res: any) => {
           expect(res).toBeDefined();
           expect(res.statusCode).toBe(200);

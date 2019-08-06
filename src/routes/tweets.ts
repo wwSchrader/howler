@@ -58,10 +58,10 @@ router.get('/all', (req, res) => {
   });
 });
 
-router.get('/replies', (req, res) => {
+router.get('/replies/:replyId', (req, res) => {
   console.log('this is the reply route');
   new Promise(async (resolve, reject) => {
-    resolve(Tweet.find({ replyId: req.body.replyId }).sort('desc').lean());
+    resolve(Tweet.find({ replyId: req.params.replyId }).sort('desc').lean());
   })
   .then(async (tweetArray: any) => {
     console.log('Tweet Array');

@@ -51,10 +51,9 @@ export function getAllTweetsApi() {
   };
 };
 
-export function getReplyTweetsApi(SingleReplyId) {
+export function getReplyTweetsApi(SingleReplyId: any) {
   return (dispatch: any) => {
-    return fetch('/api/tweets/replies', {
-      body: JSON.stringify({replyId: SingleReplyId})
+    return fetch(`/api/tweets/replies/${SingleReplyId}`, {
       credentials: "include",
       method: 'GET',
     })

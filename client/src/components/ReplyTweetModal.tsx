@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Button, Form, FormGroup, Input, Modal, ModalBody, ModalHeader} from 'reactstrap';
-import {addTweetApi} from '../redux/actions/Tweet';
+import {addTweetApi, getReplyTweetsApi, setReplyTweetArray} from '../redux/actions/Tweet';
 import TweetTemplate from './TweetTemplate';
 
 export interface IDispatchFromProps {
@@ -12,6 +12,9 @@ export interface IDispatchFromProps {
   replyId: string,
   tweetMessage: string,
   addTweetApi: (tweet: string, replyId: string) => void,
+  getReplyTweetsApi: (id: string) => void,
+  replyArray: any,
+  clearReplyTweets: () => void,
 };
 
 export interface IState {
@@ -28,6 +31,16 @@ export class ReplyTweetModal extends React.Component<IDispatchFromProps, IState>
 
     this.handleOnTweetInputChange = this.handleOnTweetInputChange.bind(this);
     this.onReplyButtonSubmit = this.onReplyButtonSubmit.bind(this);
+  };
+
+  public componentDidUpdate(prevProps: any) {
+    if (this.props.showReplyTweetModal !== prevProps.showReplyTweetModal) {
+      if (this.props.showReplyTweetModal) {
+        this.props.getReplyTweetsApi(this.props.replyId);
+      } else {
+        this.props.clearReplyTweets();
+      };
+    };
   };
 
   public handleOnTweetInputChange = (e: any) => {
@@ -60,16 +73,32 @@ export class ReplyTweetModal extends React.Component<IDispatchFromProps, IState>
             </FormGroup>
             <Button type='submit'>Reply</Button>
           </Form>
+          {this.props.replyArray.map((replyTweet: any) => {
+            return (<TweetTemplate
+              key={replyTweet._id}
+              date={replyTweet.date}
+              tweetMessage={replyTweet.message}
+              username={replyTweet.username}
+            />);
+          })}
         </ModalBody>
       </Modal>
     );
   };
 };
 
-const mapDispactchToProps = (dispactch: any) => {
+const mapStateToProps = (state: any) => {
   return {
-    addTweetApi: (tweet: string, id: string) => dispactch(addTweetApi(tweet, id, null)),
+    replyArray: state.setReplyTweetArray,
   };
 };
 
-export default connect(null, mapDispactchToProps)(ReplyTweetModal);
+const mapDispactchToProps = (dispactch: any) => {
+  return {
+    addTweetApi: (tweet: string, id: string) => dispactch(addTweetApi(tweet, id, null)),
+    clearReplyTweets: () => dispactch(setReplyTweetArray([])),
+    getReplyTweetsApi: (id: string) => dispactch(getReplyTweetsApi(id)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispactchToProps)(ReplyTweetModal);
