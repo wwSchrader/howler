@@ -10,3 +10,6 @@ export const TWEET_ARRAY = 'TWEET_ARRAY';
 export const REPLY_ARRAY = 'REPLY_ARRAY';
 export const SHOW_ADD_TWEET_MODAL = 'SHOW_ADD_TWEET_MODAL';
 export const SHOW_REPLY_TWEET_MODAL = 'SHOW_REPLY_TWEET_MODAL';
+
+// Navigation actions
+export const NAVIGATION_SELECTION = 'NAVIGATION_SELECTION';
