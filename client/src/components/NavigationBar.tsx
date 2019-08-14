@@ -7,11 +7,14 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
+import {setNavigationState} from '../redux/actions/Navigation';
 import {setShowAddTweetModal} from '../redux/actions/Tweet';
 import {logoutUser, setShowUserRegOrLoginModal} from '../redux/actions/User';
 
 export interface IProps {
   logoutUser: () => void,
+  navigationState: string,
+  setNavigationState: (state: string) => void,
   setShowAddTweetModal: (bool: boolean) => void,
   setShowUserRegOrLoginModal: (bool: boolean) => void,
   userIsLoggedIn: boolean,
@@ -30,6 +33,14 @@ export class NavigationBar extends React.Component<IProps> {
     this.props.setShowAddTweetModal(true);
   };
 
+  public handleHomeNavClick = () => {
+    this.props.setNavigationState('Home');
+  };
+
+  public handleMyHowlsNavClick = () => {
+    this.props.setNavigationState('User');
+  };
+
   public determineToShowLoginOrLogoutButton = () => {
     if (this.props.userIsLoggedIn) {
       return <NavLink onClick={this.handleLogoutClick}>Logout</NavLink>;
@@ -42,7 +53,7 @@ export class NavigationBar extends React.Component<IProps> {
     if (this.props.userIsLoggedIn) {
       return (
         <NavItem>
-          <NavLink href='#'>My Howls</NavLink>
+          <NavLink active={this.props.navigationState === 'User'} href='#' onClick={this.handleMyHowlsNavClick}>My Howls</NavLink>
         </NavItem>
       );
     };
@@ -55,8 +66,8 @@ export class NavigationBar extends React.Component<IProps> {
       <Navbar className="d-flex" color='primary' dark={true} role='navigation' expand='md'>
         <Nav className="mr-auto" navbar={true}>
           <NavbarBrand>Howler</NavbarBrand>
-          <NavItem active={true}>
-            <NavLink href='#'>Home</NavLink>
+          <NavItem active={this.props.navigationState === 'Home'}>
+            <NavLink href='#' onClick={this.handleHomeNavClick}>Home</NavLink>
           </NavItem>
           {this.determinToShowMyHowlsButton()}
         </Nav>
@@ -75,6 +86,7 @@ export class NavigationBar extends React.Component<IProps> {
 
 const mapStateToProps = (state: any) => {
   return {
+    navigationState: state.setNavigationState,
     userIsLoggedIn: state.userIsLoggedIn,
   };
 };
@@ -82,6 +94,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     logoutUser: () => dispatch(logoutUser()),
+    setNavigationState: (state: string) => dispatch(setNavigationState(state)),
     setShowAddTweetModal: (bool: boolean) => dispatch(setShowAddTweetModal(bool)),
     setShowUserRegOrLoginModal: (bool: boolean) => dispatch(setShowUserRegOrLoginModal(bool)),
   };
