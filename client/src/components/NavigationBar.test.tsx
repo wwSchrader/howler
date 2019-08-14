@@ -37,9 +37,9 @@ describe('NavigationBar', () => {
     expect(wrapper.find('NavLink').length).toEqual(2);
   });
 
-  it('should render 3 <NavLink /> when user is logged in', () => {
+  it('should render 4 <NavLink /> when user is logged in', () => {
     wrapper.setProps({userIsLoggedIn: true});
-    expect(wrapper.find('NavLink').length).toEqual(3);
+    expect(wrapper.find('NavLink').length).toEqual(4);
   });
 
   describe('handleLoginClick function', () => {

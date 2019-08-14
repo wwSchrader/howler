@@ -38,14 +38,27 @@ export class NavigationBar extends React.Component<IProps> {
     return <NavLink onClick={this.handleLoginClick}>Login</NavLink>;
   };
 
+  public determinToShowMyHowlsButton = () => {
+    if (this.props.userIsLoggedIn) {
+      return (
+        <NavItem>
+          <NavLink href='#'>My Howls</NavLink>
+        </NavItem>
+      );
+    };
+
+    return null;
+  };
+
   public render() {
     return (
       <Navbar className="d-flex" color='primary' dark={true} role='navigation' expand='md'>
         <Nav className="mr-auto" navbar={true}>
           <NavbarBrand>Howler</NavbarBrand>
           <NavItem active={true}>
-            <NavLink href=''>Home</NavLink>
+            <NavLink href='#'>Home</NavLink>
           </NavItem>
+          {this.determinToShowMyHowlsButton()}
         </Nav>
         <Nav navbar={true}>
           <NavItem>
