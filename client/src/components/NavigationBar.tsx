@@ -45,10 +45,10 @@ export class NavigationBar extends React.Component<IProps> {
 
   public determineToShowLoginOrLogoutButton = () => {
     if (this.props.userIsLoggedIn) {
-      return <NavLink onClick={this.handleLogoutClick}>Logout</NavLink>;
+      return <NavLink href='#' onClick={this.handleLogoutClick}>Logout</NavLink>;
     }
 
-    return <NavLink onClick={this.handleLoginClick}>Login</NavLink>;
+    return <NavLink href='#' onClick={this.handleLoginClick}>Login</NavLink>;
   };
 
   public determinToShowMyHowlsButton = () => {
@@ -78,7 +78,7 @@ export class NavigationBar extends React.Component<IProps> {
         </Nav>
         <Nav navbar={true}>
           <NavItem>
-            {this.props.userIsLoggedIn ? <NavLink onClick={this.handleAddTweetClick}>Add Tweet</NavLink> : null}            
+            {this.props.userIsLoggedIn ? <NavLink href='#' onClick={this.handleAddTweetClick}>Add Tweet</NavLink> : null}            
           </NavItem>
           <NavItem>
             {this.determineToShowLoginOrLogoutButton()}
