@@ -25,12 +25,12 @@ describe('HomePageTweet', () => {
     expect(wrapper.find('TweetTemplate').length).toEqual(1);
   });
 
-  it('should render <button />', () => {
-    expect(wrapper.find('button').length).toEqual(1);
+  it('should render <img />', () => {
+    expect(wrapper.find('img').length).toEqual(1);
   });
 
-  it('should render <img />', () => {
-    expect(wrapper.find('button').length).toEqual(1);
+  it('should render <input />', () => {
+    expect(wrapper.find('input').length).toEqual(1);
   });
 
   it('should render <ReplyTweetModal />', () => {

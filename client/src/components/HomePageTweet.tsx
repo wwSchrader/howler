@@ -1,5 +1,6 @@
 import React from 'react';
 import chat from '../assets/chat.svg';
+import exchange from '../assets/exchange.svg'
 import './HomePageTweet.css';
 import ReplyTweetModal from './ReplyTweetModal';
 import RetweetModal from './RetweetModal';
@@ -47,7 +48,7 @@ export class HomePageTweet extends React.Component<IProps, IState> {
         />
         <div>
           <img className='ReplyButton' src={chat} onClick={this.toggleReplyModalState}/>
-          <button onClick={this.toggleRetweetModalState}>Retweet</button>
+          <input className='RetweetButton' type='image' src={exchange} onClick={this.toggleRetweetModalState}/>
         </div>
         <ReplyTweetModal
           showReplyTweetModal={this.state.showReplyTweetModal}
