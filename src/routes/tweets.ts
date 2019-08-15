@@ -38,7 +38,7 @@ router.put('/add', ensureAuthenticated, (req, res) => {
 router.get('/all', (req, res) => {
   console.log('this is the all route');
   new Promise(async (resolve, reject) => {
-    resolve(Tweet.find({ replyId: null }).sort('desc').lean());
+    resolve(Tweet.find({ replyId: null }).sort({ date: 'desc' }).lean());
   })
   .then(async (tweetArray: any) => {
     const results = tweetArray.map((tweet: any) => {
@@ -61,7 +61,7 @@ router.get('/all', (req, res) => {
 router.get('/replies/:replyId', (req, res) => {
   console.log('this is the reply route');
   new Promise(async (resolve, reject) => {
-    resolve(Tweet.find({ replyId: req.params.replyId }).sort('desc').lean());
+    resolve(Tweet.find({ replyId: req.params.replyId }).sort('asc').lean());
   })
   .then(async (tweetArray: any) => {
     console.log('Tweet Array');
