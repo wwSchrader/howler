@@ -1,4 +1,5 @@
 import React from 'react';
+import './RetweetTemplate.css';
 
 export interface IProps {
   date: Date,
@@ -9,7 +10,7 @@ export interface IProps {
 export class RetweetTemplate extends React.Component<IProps> {
   public render() {
     return (
-      <div>
+      <div className='Retweet'>
         <b>{this.props.username}</b>
         <p>{new Date(this.props.date).toDateString()}</p>
         <p>{this.props.message}</p>
