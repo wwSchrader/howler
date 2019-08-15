@@ -7,9 +7,11 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
+import coyote from '../assets/coyote.jpg';
 import {setNavigationState} from '../redux/actions/Navigation';
 import {setShowAddTweetModal} from '../redux/actions/Tweet';
 import {logoutUser, setShowUserRegOrLoginModal} from '../redux/actions/User';
+import './NavigationBar.css';
 
 export interface IProps {
   logoutUser: () => void,
@@ -65,7 +67,10 @@ export class NavigationBar extends React.Component<IProps> {
     return (
       <Navbar className="d-flex" color='primary' dark={true} role='navigation' expand='md'>
         <Nav className="mr-auto" navbar={true}>
-          <NavbarBrand>Howler</NavbarBrand>
+          <img className='Coyote' src={coyote}/>
+          <NavbarBrand>
+            Howler
+          </NavbarBrand>
           <NavItem active={this.props.navigationState === 'Home'}>
             <NavLink href='#' onClick={this.handleHomeNavClick}>Home</NavLink>
           </NavItem>
