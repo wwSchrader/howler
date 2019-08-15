@@ -47,7 +47,7 @@ export class HomePageTweet extends React.Component<IProps, IState> {
           retweet={this.props.retweet}
         />
         <div>
-          <img className='ReplyButton' src={chat} onClick={this.toggleReplyModalState}/>
+          <input className='ReplyButton' type='image' src={chat} onClick={this.toggleReplyModalState}/>
           <input className='RetweetButton' type='image' src={exchange} onClick={this.toggleRetweetModalState}/>
         </div>
         <ReplyTweetModal
