@@ -7,7 +7,7 @@ export function isLoggedIn(userLoginStat: boolean) {
   };
 };
 
-export function setUsername(usernam: string) {
+export function setUsername(usernam: undefined|null|string) {
   return {
     type: Types.USERNAME,
     username:usernam
@@ -86,6 +86,7 @@ export function loginUser(usernam: string, userPassword: string) {
     .then((resp) => resp.json())
     .then((body) => {
       if(body.isLoggedIn) {
+        dispatch(setUsername(body.userId));
         dispatch(setShowUserRegOrLoginModal(false));
         return dispatch(isLoggedIn(true));
       } else {
@@ -112,6 +113,7 @@ export function logoutUser() {
     .then((resp) => resp.json())
     .then((body) => {
       if(!body.isLoggedIn) {
+        dispatch(setUsername(null));
         return dispatch(isLoggedIn(false));
       } else {
         throw Error('Something went wroing: ' + body);
@@ -139,8 +141,10 @@ export function checkSession() {
     .then((res) => res.json())
     .then((body) => {
       if(!body.isLoggedIn) {
+        dispatch(setUsername(null));
         return dispatch(isLoggedIn(false));
       } else {
+        dispatch(setUsername(body.userId))
         return dispatch(isLoggedIn(true));
       }
     })

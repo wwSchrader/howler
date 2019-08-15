@@ -72,7 +72,7 @@ router.post(
 router.get(
   '/checksession', (req: express.Request, res: express.Response) => {
     if (checkSession(req)) {
-      res.status(200).json({ isLoggedIn: true });
+      res.status(200).json({ isLoggedIn: true, userId: req.user });
     } else {
       res.status(200).json({ isLoggedIn: false });
     }

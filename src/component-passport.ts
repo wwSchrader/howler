@@ -91,7 +91,7 @@ const loginUser = (req: any, res: any, next: NextFunction) => {
       console.log('Error in logIn');
       throw error;
     } else {
-      res.json({ isLoggedIn: true });
+      res.json({ isLoggedIn: true, userId: req.user });
     }
   });
 };

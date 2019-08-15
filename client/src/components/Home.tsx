@@ -7,10 +7,12 @@ import HomePageTweet from './HomePageTweet';
 
 interface IProps {
   getAllTweetsApi: () => void,
+  navigationState: string,
   tweetArray: [{
     _id: string,
     date: Date,
     message: string,
+    ownerId: string,
     username: string,
     retweet?: {
       _id: string,
@@ -19,6 +21,9 @@ interface IProps {
       username: string,
     },
   }],
+  username: {
+    _id: string,
+  },
 };
 
 export class Home extends React.Component<IProps> {
@@ -31,6 +36,10 @@ export class Home extends React.Component<IProps> {
       <Container fluid={true}>
         <Col sm={{size: 12}} md={{size: 6, offset: 3}}>
           {this.props.tweetArray.map((tweet) => {
+            // filters out other tweets if User navigation state is active
+            if (this.props.navigationState === 'User' && this.props.username._id !== tweet.ownerId) {
+              return null;
+            };
             return (
               <div className='tweet-container' key={tweet._id + 'span'}>
                 <HomePageTweet
@@ -42,7 +51,7 @@ export class Home extends React.Component<IProps> {
                   retweet={tweet.retweet}
                 />
               </ div>
-            )
+            );
           })}
         </Col>
       </Container>
@@ -52,7 +61,9 @@ export class Home extends React.Component<IProps> {
 
 const mapStateToProps = (state: any) => {
   return {
+    navigationState: state.setNavigationMode,
     tweetArray: state.setTweetArray,
+    username: state.setUsername,
   };
 };
 

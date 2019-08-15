@@ -118,6 +118,10 @@ describe('User actions', () => {
       const store = mockStore({});
       const expectedActions = [
         {
+          type: types.USERNAME,
+          username: 'asd123',
+        },
+        {
           showUserRegOrLoginModal: false,
           type: types.SHOW_USER_OR_REG_LOGIN_MODAL,
         },
@@ -127,7 +131,7 @@ describe('User actions', () => {
         },
       ];
 
-      fetchMock.postOnce('/api/users/login', {isLoggedIn: true});
+      fetchMock.postOnce('/api/users/login', {isLoggedIn: true, userId: 'asd123'});
 
       return store.dispatch<any>(actions.loginUser('sampleusername', 'samplepassword'))
       .then(() => expect(store.getActions()).toEqual(expectedActions));
@@ -158,6 +162,10 @@ describe('User actions', () => {
       const store = mockStore({});
       const expectedActions = [
         {
+          type: types.USERNAME,
+          username: null,
+        },
+        {
           type: types.USER_LOGIN,
           userLoginStatus: false,
         },
@@ -178,6 +186,10 @@ describe('User actions', () => {
     it('should create a false userlogin action', () => {
       const store = mockStore({});
       const expectedActions = [
+        {
+          type: types.USERNAME,
+          username: null,
+        },
         {
           type: types.USER_LOGIN,
           userLoginStatus: false,
