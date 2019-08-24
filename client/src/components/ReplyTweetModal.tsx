@@ -11,7 +11,7 @@ export interface IDispatchFromProps {
   username: string,
   replyId: string,
   tweetMessage: string,
-  addTweetApi: (tweet: string, replyId: string) => void,
+  addTweetApi: (tweet: string, replyId: string, toggleModal: () => void,) => void,
   getReplyTweetsApi: (id: string) => void,
   replyArray: any,
   clearReplyTweets: () => void,
@@ -49,7 +49,7 @@ export class ReplyTweetModal extends React.Component<IDispatchFromProps, IState>
 
   public onReplyButtonSubmit = (e: any) => {
     e.preventDefault();
-    this.props.addTweetApi(this.state.tweetInput, this.props.replyId);
+    this.props.addTweetApi(this.state.tweetInput, this.props.replyId, this.props.toggleModalState);
   };
 
   public render() {
@@ -95,7 +95,7 @@ const mapStateToProps = (state: any) => {
 
 const mapDispactchToProps = (dispactch: any) => {
   return {
-    addTweetApi: (tweet: string, id: string) => dispactch(addTweetApi(tweet, id, null)),
+    addTweetApi: (tweet: string, id: string, toggleModal: () => void) => dispactch(addTweetApi(tweet, id, null, toggleModal)),
     clearReplyTweets: () => dispactch(setReplyTweetArray([])),
     getReplyTweetsApi: (id: string) => dispactch(getReplyTweetsApi(id)),
   };

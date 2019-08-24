@@ -11,7 +11,7 @@ export interface IProps {
   username: string,
   retweetId: string,
   tweetMessage: string,
-  addTweetApi: (tweet: string, retweetId: string) => void,
+  addTweetApi: (tweet: string, retweetId: string, toggleModal: () => void,) => void,
 };
 
 export interface IState {
@@ -36,7 +36,7 @@ export class RetweetModal extends React.Component<IProps, IState> {
 
   public onRetweetButtonSubmit = (e: any) => {
     e.preventDefault();
-    this.props.addTweetApi(this.state.tweetInput, this.props.retweetId);
+    this.props.addTweetApi(this.state.tweetInput, this.props.retweetId, this.props.toggleModalState);
   };
 
   public render() {
@@ -70,7 +70,7 @@ export class RetweetModal extends React.Component<IProps, IState> {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    addTweetApi: (tweet: string, id: string) => dispatch(addTweetApi(tweet, null, id)),
+    addTweetApi: (tweet: string, id: string, toggleModal: () => void) => dispatch(addTweetApi(tweet, null, id, toggleModal)),
   };
 };
 

@@ -54,7 +54,7 @@ export class AddTweetForm extends React.Component<IPropsFromRedux, IProps> {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    addTweetApi: (tweet: string) => dispatch(addTweetApi(tweet, null, null)),
+    addTweetApi: (tweet: string) => dispatch(addTweetApi(tweet, null, null, null)),
   };
 };
 
