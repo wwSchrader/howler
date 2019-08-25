@@ -1,6 +1,8 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import chat from '../assets/chat.svg';
 import exchange from '../assets/exchange.svg'
+import {setShowUserRegOrLoginModal} from '../redux/actions/User';
 import './HomePageTweet.css';
 import ReplyTweetModal from './ReplyTweetModal';
 import RetweetModal from './RetweetModal';
@@ -8,6 +10,8 @@ import TweetTemplate from './TweetTemplate';
 
 export interface IProps {
   date: Date,
+  isLoggedIn: boolean,
+  showLoginModal: () => void,
   tweetId: string,
   tweetMessage: string,
   username: string,
@@ -71,16 +75,38 @@ export class HomePageTweet extends React.Component<IProps, IState> {
   };
 
   public toggleReplyModalState() {
-    this.setState({
-      showReplyTweetModal: !this.state.showReplyTweetModal,
-    });
+    if (!this.props.isLoggedIn) {
+      // if not logged in, launch login modal
+      this.props.showLoginModal();
+    } else {
+      this.setState({
+        showReplyTweetModal: !this.state.showReplyTweetModal,
+      });
+    };
   };
 
   public toggleRetweetModalState() {
-    this.setState({
-      showRetweetModal: !this.state.showRetweetModal,
-    });
+    if (!this.props.isLoggedIn) {
+      // if not logged in, launch login modal
+      this.props.showLoginModal();
+    } else {
+      this.setState({
+        showRetweetModal: !this.state.showRetweetModal,
+      });
+    };
   };
 };
 
-export default HomePageTweet;
+const mapStateToProps = (state: any) => {
+  return {
+    isLoggedIn: state.userIsLoggedIn,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    showLoginModal: () => dispatch(setShowUserRegOrLoginModal(true)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePageTweet);
