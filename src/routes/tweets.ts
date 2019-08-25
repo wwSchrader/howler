@@ -90,11 +90,11 @@ router.get('/replies/:replyId', (req, res) => {
 
 const findATweet = (tweet: any) => {
   return new Promise(async(resolver, reject) => {
-    if(tweet) {
+    if (tweet) {
       resolver(User.findById(tweet.ownerId).lean());
     } else {
       reject(null);
-    };
+    }
   })
   .then((ownerObject: any) => {
     // athach owner object to tweet
@@ -122,7 +122,7 @@ const findATweet = (tweet: any) => {
             resolver(User.findById(tweetWithRetweet.retweet.ownerId).lean());
           } else {
             reject(null);
-          };
+          }
         })
         .then((userObject: any) => {
           if (userObject) {
