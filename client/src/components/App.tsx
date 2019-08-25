@@ -60,8 +60,6 @@ export class App extends React.Component<IProps> {
 };
 
 const mapStateToProps = (state: any) => {
-  // tslint:disable-next-line: no-console
-  console.log(state);
   return {
     tweetArray: state.setTweetArray,
   };
