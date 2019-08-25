@@ -14,13 +14,6 @@ router.put('/add', ensureAuthenticated, (req, res) => {
     retweetId: req.body.retweetId ? req.body.retweetId : null,
   })
   .then((result) => {
-    // new Promise(async(resolver, reject) => {
-    //   resolver(findATweet(result.toObject()));
-    // })
-    // .then((finishedResults) => {
-    //   sendAddedTweet(finishedResults);
-    // });
-
     socket.sendAddedTweet(findATweet(result.toObject()));
 
     res.json({ tweetPosted: true });
