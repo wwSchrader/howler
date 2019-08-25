@@ -2,8 +2,7 @@ import express, { Router } from 'express';
 import { ensureAuthenticated } from '../component-passport';
 import { default as Tweet } from '../../src/models/tweet';
 import { default as User } from '../../src/models/user';
-import { sendAddedTweet } from '../component-socket';
-import { rejects } from 'assert';
+import * as socket from '../component-socket';
 
 const router = express.Router();
 
@@ -15,7 +14,15 @@ router.put('/add', ensureAuthenticated, (req, res) => {
     retweetId: req.body.retweetId ? req.body.retweetId : null,
   })
   .then((result) => {
-    sendAddedTweet(result);
+    // new Promise(async(resolver, reject) => {
+    //   resolver(findATweet(result.toObject()));
+    // })
+    // .then((finishedResults) => {
+    //   sendAddedTweet(finishedResults);
+    // });
+
+    socket.sendAddedTweet(findATweet(result.toObject()));
+
     res.json({ tweetPosted: true });
   })
   .catch((err) => {
@@ -37,8 +44,8 @@ router.put('/add', ensureAuthenticated, (req, res) => {
 
 router.get('/all', (req, res) => {
   console.log('this is the all route');
-  new Promise(async (resolve, reject) => {
-    resolve(Tweet.find({ replyId: null }).sort({ date: 'desc' }).lean());
+  new Promise(async (resolver, reject) => {
+    resolver(Tweet.find({ replyId: null }).sort({ date: 'desc' }).lean());
   })
   .then(async (tweetArray: any) => {
     const results = tweetArray.map((tweet: any) => {
@@ -60,8 +67,8 @@ router.get('/all', (req, res) => {
 
 router.get('/replies/:replyId', (req, res) => {
   console.log('this is the reply route');
-  new Promise(async (resolve, reject) => {
-    resolve(Tweet.find({ replyId: req.params.replyId }).sort('asc').lean());
+  new Promise(async (resolver, reject) => {
+    resolver(Tweet.find({ replyId: req.params.replyId }).sort('asc').lean());
   })
   .then(async (tweetArray: any) => {
     console.log('Tweet Array');
@@ -82,8 +89,12 @@ router.get('/replies/:replyId', (req, res) => {
 });
 
 const findATweet = (tweet: any) => {
-  return new Promise(async(resolve, reject) => {
-    resolve(User.findById(tweet.ownerId).lean());
+  return new Promise(async(resolver, reject) => {
+    if(tweet) {
+      resolver(User.findById(tweet.ownerId).lean());
+    } else {
+      reject(null);
+    };
   })
   .then((ownerObject: any) => {
     // athach owner object to tweet
@@ -94,8 +105,8 @@ const findATweet = (tweet: any) => {
   .then((tweetObject) => {
     // attach retweeted tweets
     if (tweetObject.retweetId) {
-      return new Promise(async(resolve, reject) => {
-        resolve(Tweet.find({ _id: tweetObject.retweetId }).sort('desc').lean());
+      return new Promise(async(resolver, reject) => {
+        resolver(Tweet.find({ _id: tweetObject.retweetId }).sort('desc').lean());
       })
       .then((foundTweet: any) => {
         if (foundTweet) {
@@ -106,8 +117,12 @@ const findATweet = (tweet: any) => {
       })
       .then((tweetWithRetweet: any) => {
         // find and attacher username to tweet object
-        return new Promise(async (resolve, reject) => {
-          resolve(User.findById(tweetWithRetweet.retweet.ownerId).lean());
+        return new Promise(async (resolver, reject) => {
+          if (tweetWithRetweet.retweet) {
+            resolver(User.findById(tweetWithRetweet.retweet.ownerId).lean());
+          } else {
+            reject(null);
+          };
         })
         .then((userObject: any) => {
           if (userObject) {
@@ -118,8 +133,11 @@ const findATweet = (tweet: any) => {
         });
       });
     }
-
     return tweetObject;
+  })
+  .catch((err) => {
+    console.log('Find a tweet function errored');
+    console.log(err);
   });
 };
 

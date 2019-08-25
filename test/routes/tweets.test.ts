@@ -2,6 +2,7 @@ import { default as Tweet } from '../../src/models/tweet';
 import { default as User } from '../../src/models/user';
 import * as componentPassport from '../../src/component-passport';
 import { default as requester } from 'supertest';
+import * as socket from '../../src/component-socket';
 
 const apiBaseRoute = '/api/tweets/';
 
@@ -32,14 +33,19 @@ describe('Tweet Route', () => {
 
   describe(' PUT /api/tweets/add', () => {
     let createTweet: jest.Mock;
+    let sendAddedTweet: jest.Mock;
 
     beforeEach(() => {
-      createTweet = jest.spyOn(Tweet, 'create').mockImplementation(() => Promise.resolve(null),
+      createTweet = jest.spyOn(Tweet, 'create')
+      .mockImplementation(() => Promise.resolve({ toObject: jest.fn() }),
       );
+      sendAddedTweet = jest.spyOn(socket, 'sendAddedTweet')
+      .mockImplementation(() => Promise.resolve(null));
     });
 
     afterEach(() => {
       createTweet.mockRestore();
+      sendAddedTweet.mockRestore();
     });
 
     it('should add Tweet with no error', (done) => {
