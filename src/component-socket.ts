@@ -7,7 +7,10 @@ io.on('connection', (socket) => {
 });
 
 const sendAddedTweet = (tweet: any) => {
-  io.emit('addTweet', tweet);
+  if (tweet.replyId === null) {
+    // only send tweets if they are not replies
+    io.emit('addTweet', tweet);
+  }
 };
 
 export {
