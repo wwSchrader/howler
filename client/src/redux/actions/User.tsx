@@ -142,14 +142,16 @@ export function checkSession() {
     .then((body) => {
       if(!body.isLoggedIn) {
         dispatch(setUsername(null));
-        return dispatch(isLoggedIn(false));
+        dispatch(isLoggedIn(false));
+        return true;
       } else {
         dispatch(setUsername(body.userId))
-        return dispatch(isLoggedIn(true));
+        dispatch(isLoggedIn(true));
+        return true;
       }
     })
     .catch((err) => {
-      return err;
+      return false;
     });
   };
 };
