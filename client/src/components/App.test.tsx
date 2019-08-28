@@ -13,13 +13,14 @@ describe('App', () => {
 
   beforeEach(() => {
     props = {
-      checkSession: jest.fn(),
+      addTweetToArray: jest.fn(),
+      checkSession: jest.fn().mockImplementation(() => Promise.resolve(true)),
     };
     wrapper = shallow(<App {...props}/>)
   });
 
   it('should render a <div />', () => {
-    expect(wrapper.find('div').length).toEqual(2);
+    expect(wrapper.find('div').length).toEqual(1);
   });
 
   it('should render the NavigationBar component', () => {

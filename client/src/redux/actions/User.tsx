@@ -143,11 +143,15 @@ export function checkSession() {
       if(!body.isLoggedIn) {
         dispatch(setUsername(null));
         dispatch(isLoggedIn(false));
-        return true;
+        return new Promise((resolver) => {
+          resolver(true);
+        });
       } else {
         dispatch(setUsername(body.userId))
         dispatch(isLoggedIn(true));
-        return true;
+        return new Promise((resolver) => {
+          resolver(true);
+        });
       }
     })
     .catch((err) => {

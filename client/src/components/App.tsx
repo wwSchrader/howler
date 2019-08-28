@@ -12,7 +12,7 @@ import UserRegOrLoginModal from './UserRegOrLoginModal';
 
 interface IProps {
   addTweetToArray: (newArray: any) => void,
-  checkSession: () => boolean,
+  checkSession: () => Promise<boolean>,
   tweetArray: [{
     _id: string,
     date: Date,
@@ -50,10 +50,11 @@ export class App extends React.Component<IProps, IState> {
   }
 
   public componentDidMount() {
-    if(this.props.checkSession()) {
+    this.props.checkSession()
+    .then((result: boolean) => {
       // when check session is done, disable load spinner;
       this.setState({loader: false});
-    };
+    });
     subscribeToAddTweet(this.addTweetToArrayLogic);
   };
 
